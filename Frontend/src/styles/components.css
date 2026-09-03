@@ -37,10 +37,13 @@
   font-weight: 600;
 }
 
+<<<<<<< HEAD
 .intro-copy--tight {
   margin-bottom: -0.9rem;
 }
 
+=======
+>>>>>>> origin/main
 .intro-words {
   display: flex;
   flex-wrap: wrap;
@@ -69,6 +72,7 @@
   position: relative;
 }
 
+<<<<<<< HEAD
 .intro-media-frame {
   position: relative;
   width: 100%;
@@ -85,6 +89,13 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+=======
+.intro-media img {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  filter: saturate(0.7) sepia(0.12) contrast(1.02);
+>>>>>>> origin/main
 }
 
 .intro-media::after {
@@ -92,7 +103,10 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(90deg, rgba(247, 242, 232, 0.35), transparent 30%);
+<<<<<<< HEAD
   pointer-events: none;
+=======
+>>>>>>> origin/main
 }
 
 .intro-media-caption {
@@ -102,9 +116,15 @@
   gap: 1rem;
   flex-wrap: wrap;
   margin-top: 0.9rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -141,9 +161,15 @@
 
 .intro-stat-label {
   margin-top: 0.7rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -205,9 +231,15 @@
 }
 
 .why-index {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   color: var(--brass-400);
 }
 
@@ -262,8 +294,13 @@
 .why-panel-text {
   max-width: 26rem;
   color: var(--stone-400);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.95rem;
+  line-height: 1.75;
+>>>>>>> origin/main
 }
 
 .why-tags {
@@ -343,7 +380,11 @@
 
 .exp-title {
   font-family: var(--font-serif);
+<<<<<<< HEAD
   font-size: var(--fs-card-title);
+=======
+  font-size: 1.5rem;
+>>>>>>> origin/main
   margin-top: 1.6rem;
   color: var(--ink-950);
 }
@@ -351,8 +392,13 @@
 .exp-desc {
   margin-top: 0.8rem;
   color: var(--stone-600);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.92rem;
+  line-height: 1.7;
+>>>>>>> origin/main
 }
 
 /* ── Categories ────────────────────────────────────────────── */
@@ -433,9 +479,15 @@
 }
 
 .cat-index {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   color: var(--stone-500);
   transition: color 0.5s ease;
 }
@@ -452,9 +504,15 @@
 }
 
 .cat-tagline {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--brass-500);
 }
@@ -466,8 +524,13 @@
 
 .cat-desc {
   color: var(--stone-600);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.95rem;
+  line-height: 1.7;
+>>>>>>> origin/main
   max-width: 26rem;
 }
 
@@ -596,9 +659,15 @@
 }
 
 .school-note-label {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--ivory-50);
 }
@@ -628,9 +697,15 @@
 }
 
 .school-row-status {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-400);
 }
@@ -676,9 +751,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-400);
 }
@@ -710,9 +791,15 @@
 }
 
 .how-step {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -728,7 +815,11 @@
 
 .how-title {
   font-family: var(--font-serif);
+<<<<<<< HEAD
   font-size: var(--fs-card-title);
+=======
+  font-size: 1.4rem;
+>>>>>>> origin/main
   color: var(--ivory-50);
   margin-top: 1.5rem;
 }
@@ -736,8 +827,13 @@
 .how-desc {
   margin-top: 0.8rem;
   color: var(--stone-400);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.9rem;
+  line-height: 1.7;
+>>>>>>> origin/main
 }
 
 .how-foot {
@@ -746,9 +842,15 @@
   align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -844,9 +946,15 @@
   position: absolute;
   top: 1.1rem;
   left: 1.2rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   color: var(--stone-400);
 }
 
@@ -894,9 +1002,15 @@
 
 .guest-role {
   margin-top: 0.7rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--emerald-700);
 }
@@ -904,8 +1018,13 @@
 .guest-desc {
   margin-top: 0.9rem;
   color: var(--stone-600);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.9rem;
+  line-height: 1.7;
+>>>>>>> origin/main
 }
 
 .guests-foot {
@@ -917,9 +1036,15 @@
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -980,24 +1105,39 @@
 }
 
 .qa-step-index {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   color: var(--brass-400);
   padding-top: 0.3rem;
 }
 
 .qa-step-title {
   font-family: var(--font-serif);
+<<<<<<< HEAD
   font-size: var(--fs-card-title);
+=======
+  font-size: 1.5rem;
+>>>>>>> origin/main
   color: var(--ivory-50);
 }
 
 .qa-step-text {
   margin-top: 0.5rem;
   color: var(--stone-400);
+<<<<<<< HEAD
   font-size: var(--fs-body-sm);
   line-height: var(--lh-body-sm);
+=======
+  font-size: 0.92rem;
+  line-height: 1.7;
+>>>>>>> origin/main
   max-width: 26rem;
 }
 
@@ -1015,14 +1155,24 @@
 
 .qa-host-name {
   font-family: var(--font-serif);
+<<<<<<< HEAD
   font-size: var(--fs-card-title);
+=======
+  font-size: 1.5rem;
+>>>>>>> origin/main
   color: var(--ivory-50);
 }
 
 .qa-host-label {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -1143,9 +1293,15 @@
 
 .jaipur-caption {
   margin-top: 1.9rem;
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--rose-300);
 }
@@ -1182,9 +1338,15 @@
 }
 
 .jaipur-row-label {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
   flex: none;
@@ -1277,9 +1439,15 @@
 }
 
 .reg-glance-title {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
@@ -1345,9 +1513,15 @@
 }
 
 .reg-panel-step {
+<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
+=======
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+>>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
 }
