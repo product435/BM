@@ -1,0 +1,11 @@
+-- Initial Database Schema Migration
+-- Write your CREATE TABLE, ALTER TABLE, and Row Level Security (RLS) policies here.
+
+-- Example:
+-- CREATE TABLE IF NOT EXISTS public.registrations (
+--   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+--   startup_name TEXT NOT NULL,
+--   founder_name TEXT NOT NULL,
+--   email TEXT NOT NULL UNIQUE,
+--   created_at TIMESTAMPTZ DEFAULT NOW()
+-- );
