@@ -19,10 +19,10 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                 title={
                   <span id="register-title">
                     Ready to be{" "}
-                    <span className="t-italic t-emerald">part of the room?</span>
+                    <span className="t-italic t-emerald">part of the event?</span>
                   </span>
                 }
-                lede="Seats are limited and the room is curated. Tell us who's coming — and how you want to show up."
+                lede="Seats are limited and the event is curated. Tell us who's coming — and how you want to show up."
               />
             </Reveal>
 
@@ -31,8 +31,8 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                 <li className="reg-step">
                   <span className="reg-step-index">01</span>
                   <span className="reg-step-text">
-                    <strong>Choose your category.</strong> Student, startup,
-                    school or visitor.
+                    <strong>Choose your category.</strong> Student, visitor,
+                    entrepreneur or business tycoon.
                   </span>
                 </li>
                 <li className="reg-step">
@@ -46,7 +46,7 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                   <span className="reg-step-index">03</span>
                   <span className="reg-step-text">
                     <strong>We confirm your seat.</strong> You show up on the{" "}
-                    {EVENT.date} and make the room count.
+                    {EVENT.date} and make the event count.
                   </span>
                 </li>
               </ol>
@@ -54,7 +54,7 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
 
             <Reveal delay={180}>
               <aside className="reg-glance" aria-label="Event capacity at a glance">
-                <p className="reg-glance-title">The room at a glance</p>
+                <p className="reg-glance-title">The event at a glance</p>
                 <div className="reg-glance-rows">
                   <div className="reg-glance-row">
                     <span>Invitations planned</span>

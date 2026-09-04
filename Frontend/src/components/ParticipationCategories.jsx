@@ -19,7 +19,7 @@ export default function ParticipationCategories({ onSelectCategory }) {
                 Choose <span className="t-italic t-emerald">your path.</span>
               </span>
             }
-            lede="Four ways to enter the room. Pick yours — the registration form adapts to how you'll show up."
+            lede="Four ways to enter the event. Pick yours — the registration form adapts to how you'll show up."
             className="sec-head--inline"
           />
         </div>
@@ -29,7 +29,7 @@ export default function ParticipationCategories({ onSelectCategory }) {
             <Reveal key={category.id} delay={i * 80}>
               <CategoryCard
                 category={category}
-                inverted={category.id === "startup"}
+                inverted={category.id === "entrepreneur"}
                 onSelect={onSelectCategory}
               />
             </Reveal>

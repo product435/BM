@@ -15,7 +15,7 @@ export default function WhyItMatters({ onExploreCategories }) {
               eyebrow="02 — Why It Matters"
               title={
                 <span id="why-title">
-                  Why this <span className="t-italic t-brass">room</span>{" "}
+                  Why this <span className="t-italic t-brass">event</span>{" "}
                   matters.
                 </span>
               }

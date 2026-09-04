@@ -1,17 +1,24 @@
 import { EVENT, NAV_LINKS } from "../data/eventData.js";
+import {
+  InstagramIcon,
+  LinkedinIcon,
+  XIcon,
+  YoutubeIcon,
+} from "./SocialIcons.jsx";
 
 const PARTICIPATE_LINKS = [
   { label: "Student", href: "#categories" },
-  { label: "Startup", href: "#categories" },
-  { label: "School", href: "#categories" },
   { label: "Visitor", href: "#categories" },
+  { label: "Entrepreneur", href: "#categories" },
+  { label: "Business Tycoon", href: "#categories" },
 ];
 
-const SOCIAL_LINKS = [
-  { label: "LinkedIn", href: "#" },
-  { label: "Instagram", href: "#" },
-  { label: "X / Twitter", href: "#" },
-  { label: "YouTube", href: "#" },
+/* Update URLs here once the real social profiles are ready. */
+const socialLinks = [
+  { name: "LinkedIn", url: "#", icon: LinkedinIcon },
+  { name: "Instagram", url: "#", icon: InstagramIcon },
+  { name: "X / Twitter", url: "#", icon: XIcon },
+  { name: "YouTube", url: "#", icon: YoutubeIcon },
 ];
 
 export default function Footer({ onNavigate }) {
@@ -76,15 +83,16 @@ export default function Footer({ onNavigate }) {
           <nav className="footer-col" aria-label="Footer — connect">
             <p className="footer-title">Connect</p>
             <div className="footer-links">
-              {SOCIAL_LINKS.map((link) => (
+              {socialLinks.map(({ name, url, icon: Icon }) => (
                 <a
-                  className="footer-link"
-                  key={link.label}
-                  href={link.href}
+                  className="footer-link footer-link--social"
+                  key={name}
+                  href={url}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                 >
-                  {link.label}
+                  <Icon className="footer-link-icon" />
+                  {name}
                   <span className="ext" aria-hidden="true">
                     ↗
                   </span>

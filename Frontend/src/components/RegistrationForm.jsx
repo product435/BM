@@ -54,9 +54,9 @@ function buildInitialValues(fields) {
 
 const CATEGORY_LABEL = {
   student: "Student",
-  startup: "Startup",
-  school: "School",
   visitor: "Visitor",
+  entrepreneur: "Entrepreneur",
+  businessTycoon: "Business Tycoon",
 };
 
 export default function RegistrationForm({ initialCategory, onCategoryChanged }) {
@@ -151,7 +151,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged })
   return (
     <div className="reg-panel">
       <div className="reg-panel-head">
-        <h3 className="reg-panel-title">Register for the room</h3>
+        <h3 className="reg-panel-title">Register for the event</h3>
         <p className="reg-panel-step">Step 01 — Choose category</p>
       </div>
 
@@ -173,7 +173,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged })
           <h3 className="reg-success-title">Application received.</h3>
           <p className="reg-success-copy">
             Thank you{firstName ? `, ${firstName}` : ""} — you're one step
-            closer to the room. Our team will be in touch with confirmation
+            closer to the event. Our team will be in touch with confirmation
             details and next steps.
           </p>
           <div className="reg-success-meta">

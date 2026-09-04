@@ -8,13 +8,13 @@ export default function Hero({ onRegister, onExplore }) {
       <div className="hero-media">
         <video
           className="hero-video"
-          src="/images/Apna_Jaipur.mp4"
+          src="/images/Apna_Jaipur_.mp4"
           poster={IMAGES.hero}
           autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           aria-hidden="true"
         />
       </div>
@@ -24,7 +24,7 @@ export default function Hero({ onRegister, onExplore }) {
       <div className="container hero-inner">
         <Reveal>
           <p className="eyebrow">
-            {EVENT.orgFull} — Startups · Business · Investment
+            Capital. Capability. Connections.
           </p>
         </Reveal>
 
@@ -41,8 +41,9 @@ export default function Hero({ onRegister, onExplore }) {
 
         <Reveal delay={220}>
           <p className="hero-sub">
-            A platform where ambitious ideas, emerging startups, business
-            leaders, students and innovators come together — in{" "}
+            A curated platform for founders, innovators, operating
+            businesses, industry leaders and strategic partners to connect,
+            build and scale. — in{" "}
             <strong>{EVENT.city}</strong>, on the{" "}
             <strong>{EVENT.date}</strong> — to explore what comes next.
           </p>

@@ -1,4 +1,4 @@
-import { EVENT } from "../data/eventData.js";
+import { EVENT, SECTOR_FOCUS, SECTOR_FOCUS_HEADING } from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 
 export default function FinalCTA({ onRegister, onExploreCategories }) {
@@ -23,7 +23,10 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
 
         <Reveal delay={200}>
           <p className="cta-final-sub">
-            The room is being assembled. The conversations are being planned.
+            BMI focuses on scalable businesses and innovative startups across
+            high-growth sectors driving our economy forward.
+            <br />
+            The event is being assembled. The conversations are being planned.
             The only thing missing is you.
           </p>
         </Reveal>
@@ -52,6 +55,24 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
             <span>{EVENT.city}</span>
             <span>Venue {EVENT.venue.status}</span>
           </p>
+        </Reveal>
+      </div>
+
+      <div className="container sector-focus">
+        <Reveal>
+          <h3 className="sector-focus-title">{SECTOR_FOCUS_HEADING}</h3>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <div className="sector-track">
+            {SECTOR_FOCUS.map((sector) => (
+              <div className="sector-card" key={sector.index}>
+                <span className="sector-card-index">{sector.index}</span>
+                <p className="sector-card-title">{sector.title}</p>
+                <p className="sector-card-desc">{sector.description}</p>
+              </div>
+            ))}
+          </div>
         </Reveal>
       </div>
     </section>

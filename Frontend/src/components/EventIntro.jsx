@@ -1,4 +1,10 @@
-import { EVENT, IMAGES, INTRO_STATS, INTRO_WORDS } from "../data/eventData.js";
+import {
+  EVENT,
+  IMAGES,
+  INTRO_MEDIA_CAPTION,
+  INTRO_STATS,
+  INTRO_WORDS,
+} from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
@@ -22,10 +28,13 @@ export default function EventIntro() {
 
           <Reveal className="intro-copy-col" delay={120}>
             <p className="intro-copy intro-copy--tight">
-              {EVENT.org} is where <strong>ambitious minds</strong> come
-              together — founders with ideas, investors looking for
-              opportunity, <strong>students ready to learn and build</strong>,
-              and businesses ready to grow.
+              {EVENT.org} Startup &amp; Business Launch brings together{" "}
+              <strong>promising ideas</strong>, executing startups, operating
+              businesses, entrepreneurs, industry experts and{" "}
+              <strong>strategic partners</strong> on one curated platform. The
+              objective goes beyond investment — selected ventures may also
+              receive access to management guidance, technology, networks,
+              operational support and strategic expertise.
             </p>
             <p className="intro-copy">
               One city. One powerful gathering. A space to connect, learn,
@@ -50,10 +59,17 @@ export default function EventIntro() {
               loading="lazy"
             />
           </div>
-          <p className="intro-media-caption">
-            <span>The place — networking, conversations &amp; real connections</span>
-            <span>{EVENT.city}, Rajasthan</span>
-          </p>
+          <div className="intro-media-caption">
+            <div className="intro-media-caption-main">
+              <p className="intro-media-headline">{INTRO_MEDIA_CAPTION.headline}</p>
+              <ul className="intro-media-pills" aria-label="What this platform offers">
+                {INTRO_MEDIA_CAPTION.pills.map((pill) => (
+                  <li key={pill}>{pill}</li>
+                ))}
+              </ul>
+            </div>
+            <span className="intro-media-location">{EVENT.city}, Rajasthan</span>
+          </div>
         </Reveal>
 
         <Reveal className="intro-stats" delay={60}>

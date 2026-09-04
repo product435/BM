@@ -13,7 +13,7 @@ export default function HowItWorks({ onRegister }) {
               From intention to <span className="t-italic t-brass">invitation.</span>
             </span>
           }
-          lede="Four steps between you and the room. No forms behind glass — just a clear path in."
+          lede="Four steps between you and the event. No forms behind glass — just a clear path in."
           dark
         />
 

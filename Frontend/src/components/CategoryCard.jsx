@@ -7,14 +7,14 @@ const ICONS = {
       <path d="M21.5 8.5V14" />
     </svg>
   ),
-  startup: (
+  entrepreneur: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
       <path d="M4 17 10 11l3.5 3.5L20 8" />
       <path d="M14 8h6v6" />
       <path d="M4 21h16" />
     </svg>
   ),
-  school: (
+  businessTycoon: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
       <path d="M3 21h18" />
       <path d="M4 21V10l8-6 8 6v11" />

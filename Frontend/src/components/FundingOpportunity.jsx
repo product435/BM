@@ -1,4 +1,4 @@
-import { FUNDING_THEMES, IMAGES, SCHOOL_FUNDING } from "../data/eventData.js";
+import { BMI_SUPPORT_MODEL, FUNDING_AUDIENCE, IMAGES } from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
@@ -13,10 +13,10 @@ export default function FundingOpportunity({ onRegister }) {
         <div className="funding-content">
           <Reveal>
             <SectionHeading
-              eyebrow="05 — Funding & Opportunity"
+              eyebrow="05 — Funding & BMI Support"
               title={
                 <span id="funding-title" className="funding-title">
-                  Big ideas deserve{" "}
+                  Every idea deserves{" "}
                   <span className="t-italic t-brass">a bigger stage.</span>
                 </span>
               }
@@ -26,39 +26,43 @@ export default function FundingOpportunity({ onRegister }) {
 
           <Reveal delay={120}>
             <p className="funding-copy">
-              The heart of the event: <strong>opportunity conversations</strong>{" "}
-              that turn interest into momentum. Startups exploring funding,
-              businesses planning their next scale, and investors looking for
-              what comes next.
+              BMI believes in supporting ideas and businesses with the right
+              blend of <strong>capital, capability, and connections</strong>{" "}
+              to help them grow and scale.
             </p>
           </Reveal>
 
           <Reveal delay={200}>
-            <ul className="funding-themes" aria-label="Opportunity themes">
-              {FUNDING_THEMES.map((theme) => (
-                <li className="funding-theme" key={theme}>
-                  {theme}
+            <p className="funding-list-label">Who is this for?</p>
+            <ul className="funding-themes" aria-label="Who this is for">
+              {FUNDING_AUDIENCE.map((item) => (
+                <li className="funding-theme" key={item.index}>
+                  <span className="funding-theme-index">{item.index}</span>
+                  <span className="funding-theme-copy">
+                    <span className="funding-theme-title">{item.title}</span>
+                    <span className="funding-theme-desc">{item.description}</span>
+                  </span>
                 </li>
               ))}
             </ul>
           </Reveal>
 
           <Reveal delay={280}>
-            <aside className="school-note" aria-label="School funding initiative">
+            <aside className="school-note" aria-label="The BMI support model">
               <div className="school-note-head">
-                <span className="school-note-count">{SCHOOL_FUNDING.count}</span>
-                <span className="school-note-label">{SCHOOL_FUNDING.label}</span>
+                <span className="school-note-label">{BMI_SUPPORT_MODEL.label}</span>
               </div>
-              <p className="school-note-body">{SCHOOL_FUNDING.body}</p>
               <ul className="school-list">
-                {SCHOOL_FUNDING.schools.map((school) => (
-                  <li className="school-row" key={school.name}>
-                    <span>{school.name}</span>
-                    <span className="school-row-status">{school.status}</span>
+                {BMI_SUPPORT_MODEL.items.map((item) => (
+                  <li className="school-row" key={item.index}>
+                    <span className="school-row-index">{item.index}</span>
+                    <span className="school-row-copy">
+                      <span className="school-row-title">{item.title}</span>
+                      <span className="school-row-desc">{item.description}</span>
+                    </span>
                   </li>
                 ))}
               </ul>
-              <p className="school-note-foot">{SCHOOL_FUNDING.note}</p>
             </aside>
           </Reveal>
         </div>
@@ -66,8 +70,8 @@ export default function FundingOpportunity({ onRegister }) {
         <Reveal className="funding-media" delay={160}>
           <div className="funding-media-frame">
             <img
-              src={IMAGES.pitch}
-              alt="An entrepreneur presenting a startup plan to a room of listeners"
+              src="/images/image2.jpg"
+              alt="An entrepreneur presenting a startup plan to listeners at the event"
               loading="lazy"
             />
           </div>
