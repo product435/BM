@@ -30,23 +30,12 @@ export default function Footer({ onNavigate }) {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-<<<<<<< HEAD
             <a className="footer-brand-mark" {...linkProps("home")} aria-label="BMI — back to top">
               <img
                 className="footer-logo"
                 src="/images/Full_Logo.png"
                 alt={`${EVENT.org} — Investment. Ideas, Execution, Growth.`}
               />
-=======
-            <a className="nav-brand" {...linkProps("home")}>
-              <span className="nav-monogram" aria-hidden="true">
-                B
-              </span>
-              <span className="nav-wordmark">
-                {EVENT.org}
-                <small>{EVENT.city}</small>
-              </span>
->>>>>>> origin/main
             </a>
             <p className="footer-tagline">
               Where ideas meet opportunity. A startup, business and investment

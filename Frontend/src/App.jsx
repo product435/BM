@@ -1,8 +1,5 @@
 import { useCallback, useState } from "react";
-<<<<<<< HEAD
-=======
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
->>>>>>> origin/main
 import Navbar from "./components/Navbar.jsx";
 import Hero from "./components/Hero.jsx";
 import EventIntro from "./components/EventIntro.jsx";
@@ -18,16 +15,11 @@ import JaipurSection from "./components/JaipurSection.jsx";
 import Registration from "./components/Registration.jsx";
 import FinalCTA from "./components/FinalCTA.jsx";
 import Footer from "./components/Footer.jsx";
-<<<<<<< HEAD
-
-export default function App() {
-=======
 import AdminLogin from "./components/AdminLogin.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const LandingPage = () => {
->>>>>>> origin/main
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const scrollTo = useCallback((id) => {
@@ -76,8 +68,6 @@ const LandingPage = () => {
       <Footer onNavigate={scrollTo} />
     </>
   );
-<<<<<<< HEAD
-=======
 };
 
 export default function App() {
@@ -92,5 +82,4 @@ export default function App() {
       </Routes>
     </Router>
   );
->>>>>>> origin/main
 }

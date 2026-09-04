@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 @import "tailwindcss";
 
->>>>>>> origin/main
 /* ═══════════════════════════════════════════════════════════════
    BMI PRESENTS — DESIGN SYSTEM
    Disciplined palette: ink · ivory · emerald · brass · rose
@@ -53,7 +50,6 @@
   --font-sans: "Archivo", "Helvetica Neue", sans-serif;
 
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
-<<<<<<< HEAD
 
   /* ── Typography scale ──────────────────────────────────────
      Shared tokens for roles that repeat across sections, so
@@ -75,8 +71,6 @@
   /* Body regular — section ledes, intro/funding/jaipur paragraphs */
   --fs-body: clamp(0.95rem, 1.25vw, 1.05rem);
   --lh-body: 1.75;
-=======
->>>>>>> origin/main
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
@@ -276,11 +270,7 @@ footer[id] {
   gap: 0.9rem;
   font-family: var(--font-sans);
   font-weight: 600;
-<<<<<<< HEAD
   font-size: var(--fs-label);
-=======
-  font-size: 0.66rem;
->>>>>>> origin/main
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--brass-400);
@@ -422,7 +412,6 @@ footer[id] {
 .nav-brand {
   display: flex;
   align-items: center;
-<<<<<<< HEAD
   min-width: 0;
 }
 
@@ -436,47 +425,6 @@ footer[id] {
 
 .nav-brand:hover .nav-logo {
   opacity: 0.85;
-=======
-  gap: 0.85rem;
-  min-width: 0;
-}
-
-.nav-monogram {
-  width: 2.6rem;
-  height: 2.6rem;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--brass-400);
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  color: var(--ivory-50);
-  transition: background-color 0.35s ease, color 0.35s ease;
-}
-
-.nav-brand:hover .nav-monogram {
-  background: var(--brass-400);
-  color: var(--ink-950);
-}
-
-.nav-wordmark {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  letter-spacing: 0.08em;
-  color: var(--ivory-50);
-  line-height: 1;
-}
-
-.nav-wordmark small {
-  display: block;
-  font-family: var(--font-sans);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--stone-400);
-  margin-top: 0.32rem;
->>>>>>> origin/main
 }
 
 .nav-links {
@@ -569,13 +517,9 @@ footer[id] {
   position: fixed;
   inset: 0;
   z-index: 80;
-<<<<<<< HEAD
   background: rgba(12, 11, 9, 0.6);
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
   backdrop-filter: blur(18px) saturate(1.1);
-=======
-  background: var(--ink-950);
->>>>>>> origin/main
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -648,13 +592,8 @@ footer[id] {
 }
 
 .mobile-menu-meta {
-<<<<<<< HEAD
   font-size: var(--fs-label);
   letter-spacing: var(--ls-label);
-=======
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
->>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-400);
 }
@@ -676,19 +615,12 @@ footer[id] {
   inset: 0;
 }
 
-<<<<<<< HEAD
 .hero-media img,
 .hero-media video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-=======
-.hero-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
->>>>>>> origin/main
   opacity: 0.52;
   filter: saturate(0.72) contrast(1.06);
 }
@@ -780,11 +712,7 @@ footer[id] {
 }
 
 .hero-meta-label {
-<<<<<<< HEAD
   font-size: var(--fs-label);
-=======
-  font-size: 0.6rem;
->>>>>>> origin/main
   font-weight: 600;
   letter-spacing: 0.34em;
   text-transform: uppercase;
@@ -878,7 +806,6 @@ footer[id] {
   grid-column: 1 / 6;
 }
 
-<<<<<<< HEAD
 .footer-brand-mark {
   display: block;
   width: fit-content;
@@ -895,8 +822,6 @@ footer[id] {
   opacity: 0.85;
 }
 
-=======
->>>>>>> origin/main
 .footer-tagline {
   margin-top: 1.4rem;
   max-width: 20rem;
@@ -914,15 +839,9 @@ footer[id] {
 }
 
 .footer-title {
-<<<<<<< HEAD
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
-=======
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.32em;
->>>>>>> origin/main
   text-transform: uppercase;
   color: var(--stone-500);
   margin-bottom: 1.4rem;

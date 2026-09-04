@@ -48,21 +48,11 @@ export default function Navbar({ onNavigate }) {
               go("home");
             }}
           >
-<<<<<<< HEAD
             <img
               className="nav-logo"
               src="/images/BMI_Logo.png"
               alt={`${EVENT.org} logo`}
             />
-=======
-            <span className="nav-monogram" aria-hidden="true">
-              B
-            </span>
-            <span className="nav-wordmark">
-              {EVENT.org}
-              <small>{EVENT.city}</small>
-            </span>
->>>>>>> origin/main
           </a>
 
           <nav className="nav-links" aria-label="Primary">
