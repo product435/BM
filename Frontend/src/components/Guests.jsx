@@ -1,4 +1,5 @@
 import { GUESTS_NOTE } from "../data/guests.js";
+import Carousel from "./Carousel.jsx";
 import GuestCard from "./GuestCard.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
@@ -25,13 +26,27 @@ export default function Guests() {
           <p className="guests-note">{GUESTS_NOTE}</p>
         </div>
 
-        <div className="guest-grid">
-          {guests.map((guest, i) => (
-            <Reveal key={guest.id} delay={(i % 3) * 90}>
-              <GuestCard guest={guest} index={i} />
-            </Reveal>
-          ))}
-        </div>
+        {guests.length > 1 ? (
+          <Carousel
+            items={guests}
+            trackClassName="guest-grid"
+            variant="light"
+            ariaLabel="Guests"
+            renderItem={(guest, i) => (
+              <Reveal delay={(i % 3) * 90}>
+                <GuestCard guest={guest} index={i} />
+              </Reveal>
+            )}
+          />
+        ) : (
+          <div className="guest-grid">
+            {guests.map((guest, i) => (
+              <Reveal key={guest.id} delay={(i % 3) * 90}>
+                <GuestCard guest={guest} index={i} />
+              </Reveal>
+            ))}
+          </div>
+        )}
 
         <div className="guests-foot">
           <span>Roles &amp; session details — being finalized</span>

@@ -34,45 +34,47 @@ export default function QnASection() {
             </Reveal>
           </div>
 
-          <Reveal className="qa-quote" delay={120}>
-            <blockquote>“{qaSession.quote}”</blockquote>
-          </Reveal>
+          <div className="qa-right">
+            <Reveal className="qa-quote" delay={120}>
+              <blockquote>“{qaSession.quote}”</blockquote>
+            </Reveal>
 
-          <Reveal className="qa-faq" delay={160}>
-            <p className="qa-faq-title">FAQ</p>
-            <div className="qa-faq-list">
-              {QA_FAQ.map((item, i) => {
-                const open = openIndex === i;
-                return (
-                  <div className="qa-faq-item" key={item.question}>
-                    <button
-                      type="button"
-                      className="qa-faq-toggle"
-                      aria-expanded={open}
-                      aria-controls={`qa-faq-panel-${i}`}
-                      onClick={() => setOpenIndex(open ? -1 : i)}
-                    >
-                      <span className="qa-faq-question">{item.question}</span>
-                      <span
-                        className={`qa-faq-icon ${open ? "is-open" : ""}`}
-                        aria-hidden="true"
+            <Reveal className="qa-faq" delay={160}>
+              <p className="qa-faq-title">FAQ</p>
+              <div className="qa-faq-list">
+                {QA_FAQ.map((item, i) => {
+                  const open = openIndex === i;
+                  return (
+                    <div className="qa-faq-item" key={item.question}>
+                      <button
+                        type="button"
+                        className="qa-faq-toggle"
+                        aria-expanded={open}
+                        aria-controls={`qa-faq-panel-${i}`}
+                        onClick={() => setOpenIndex(open ? -1 : i)}
                       >
-                        +
-                      </span>
-                    </button>
-                    <div
-                      id={`qa-faq-panel-${i}`}
-                      className={`qa-faq-panel ${open ? "is-open" : ""}`}
-                    >
-                      <div className="qa-faq-panel-inner">
-                        <p className="qa-faq-answer">{item.answer}</p>
+                        <span className="qa-faq-question">{item.question}</span>
+                        <span
+                          className={`qa-faq-icon ${open ? "is-open" : ""}`}
+                          aria-hidden="true"
+                        >
+                          +
+                        </span>
+                      </button>
+                      <div
+                        id={`qa-faq-panel-${i}`}
+                        className={`qa-faq-panel ${open ? "is-open" : ""}`}
+                      >
+                        <div className="qa-faq-panel-inner">
+                          <p className="qa-faq-answer">{item.answer}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Reveal>
+                  );
+                })}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

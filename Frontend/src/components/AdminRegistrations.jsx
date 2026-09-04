@@ -30,7 +30,7 @@ const StatusBadge = ({ status }) => {
   );
 };
 
-export default function AdminRegistrations() {
+export default function AdminRegistrations({ openRegistrationId, onOpenRegistrationHandled } = {}) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -43,6 +43,18 @@ export default function AdminRegistrations() {
   useEffect(() => {
     fetchRegistrations();
   }, []);
+
+  // Opened from a bell notification: once the table has loaded,
+  // find that registration and open its existing detail drawer.
+  useEffect(() => {
+    if (!openRegistrationId || loading) return;
+    const match = data.find((app) => app.id === openRegistrationId);
+    if (match) {
+      openDrawer(match);
+    }
+    if (onOpenRegistrationHandled) onOpenRegistrationHandled();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openRegistrationId, loading, data]);
 
   const fetchRegistrations = async () => {
     setLoading(true);

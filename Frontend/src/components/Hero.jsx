@@ -8,7 +8,7 @@ export default function Hero({ onRegister, onExplore }) {
       <div className="hero-media">
         <video
           className="hero-video"
-          src="/images/Apna_Jaipur_.mp4"
+          src="/images/Apna_Jaipur.mp4"
           poster={IMAGES.hero}
           autoPlay
           muted

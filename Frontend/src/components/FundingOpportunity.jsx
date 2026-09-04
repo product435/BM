@@ -1,4 +1,5 @@
 import { BMI_SUPPORT_MODEL, FUNDING_AUDIENCE, IMAGES } from "../data/eventData.js";
+import Carousel from "./Carousel.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
@@ -52,17 +53,23 @@ export default function FundingOpportunity({ onRegister }) {
               <div className="school-note-head">
                 <span className="school-note-label">{BMI_SUPPORT_MODEL.label}</span>
               </div>
-              <ul className="school-list">
-                {BMI_SUPPORT_MODEL.items.map((item) => (
-                  <li className="school-row" key={item.index}>
+              <Carousel
+                items={BMI_SUPPORT_MODEL.items}
+                trackClassName="school-list"
+                itemClassName="school-row"
+                variant="dark"
+                bleed={false}
+                ariaLabel="The BMI support model"
+                renderItem={(item) => (
+                  <>
                     <span className="school-row-index">{item.index}</span>
                     <span className="school-row-copy">
                       <span className="school-row-title">{item.title}</span>
                       <span className="school-row-desc">{item.description}</span>
                     </span>
-                  </li>
-                ))}
-              </ul>
+                  </>
+                )}
+              />
             </aside>
           </Reveal>
         </div>
@@ -70,8 +77,8 @@ export default function FundingOpportunity({ onRegister }) {
         <Reveal className="funding-media" delay={160}>
           <div className="funding-media-frame">
             <img
-              src="/images/image2.jpg"
-              alt="An entrepreneur presenting a startup plan to listeners at the event"
+              src="/images/vikas sir.png"
+              alt="Vikas — speaker at the BMI event"
               loading="lazy"
             />
           </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, ClipboardCheck, CreditCard,
   Ticket, BarChart3, Settings, Bell, Search,
@@ -55,6 +55,29 @@ const NAV = [
 const fade = { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } };
 const stagger = { visible: { transition: { staggerChildren: 0.08 } } };
 
+// Short, human label for a notification line, e.g. "Track 1
+// (Students)" -> "Student". Falls back to the raw track value.
+const trackLabel = (track) => {
+  if (!track) return 'New';
+  if (track.includes('Student')) return 'Student';
+  if (track.includes('Startup')) return 'Startup';
+  if (track.includes('Scale')) return 'Business';
+  if (track.includes('Visitor')) return 'Visitor';
+  return track;
+};
+
+const timeAgo = (isoDate) => {
+  if (!isoDate) return '';
+  const diffMs = Date.now() - new Date(isoDate).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+};
+
 // ── Sub-components ────────────────────────────────────────────
 
 const Divider = () => (
@@ -96,9 +119,114 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const navigate = useNavigate();
 
+  // ── Registration notifications (bell) ────────────────────────
+  const [notifications, setNotifications] = useState([]);
+  const [unreadIds, setUnreadIds] = useState(() => new Set());
+  const [bellOpen, setBellOpen] = useState(false);
+  const [openRegistrationId, setOpenRegistrationId] = useState(null);
+  const bellRef = useRef(null);
+  const knownIdsRef = useRef(new Set());
+
   useEffect(() => {
     fetchDashboardStats();
   }, []);
+
+  // Initial load: most recent registrations populate the dropdown
+  // immediately, before any realtime event has a chance to fire.
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadInitialNotifications = async () => {
+      const { data, error } = await supabase
+        .from('registrations')
+        .select('id, name, track, created_at')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error loading registration notifications:', error);
+        return;
+      }
+      if (cancelled || !data) return;
+
+      data.forEach((row) => knownIdsRef.current.add(row.id));
+      setNotifications(data);
+    };
+
+    loadInitialNotifications();
+
+    // Realtime: new registration rows land here the moment they're
+    // inserted, without a manual refresh.
+    const channel = supabase
+      .channel('admin-registrations-inserts')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'registrations' },
+        (payload) => {
+          const row = payload.new;
+          if (!row || knownIdsRef.current.has(row.id)) return;
+          knownIdsRef.current.add(row.id);
+          setNotifications((prev) => [row, ...prev].slice(0, 10));
+          setUnreadIds((prev) => new Set(prev).add(row.id));
+        }
+      )
+      .subscribe();
+
+    // Fallback safety net: if Realtime isn't enabled/reachable for
+    // this table, a light poll still surfaces new registrations
+    // (read-only — no inserts, no duplicate rows) without a manual
+    // page refresh.
+    const pollId = setInterval(async () => {
+      const { data, error: pollError } = await supabase
+        .from('registrations')
+        .select('id, name, track, created_at')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      if (pollError || !data || cancelled) return;
+
+      const fresh = data.filter((row) => !knownIdsRef.current.has(row.id));
+      if (fresh.length === 0) return;
+
+      fresh.forEach((row) => knownIdsRef.current.add(row.id));
+      setNotifications((prev) => [...fresh, ...prev].slice(0, 10));
+      setUnreadIds((prev) => {
+        const next = new Set(prev);
+        fresh.forEach((row) => next.add(row.id));
+        return next;
+      });
+    }, 20000);
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+      clearInterval(pollId);
+    };
+  }, []);
+
+  // Close the dropdown on outside click.
+  useEffect(() => {
+    if (!bellOpen) return;
+    const onClick = (e) => {
+      if (bellRef.current && !bellRef.current.contains(e.target)) {
+        setBellOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [bellOpen]);
+
+  const unreadCount = unreadIds.size;
+
+  const handleNotificationClick = (row) => {
+    setUnreadIds((prev) => {
+      const next = new Set(prev);
+      next.delete(row.id);
+      return next;
+    });
+    setBellOpen(false);
+    setOpenRegistrationId(row.id);
+    setActive('Registrations');
+  };
 
   const fetchDashboardStats = async () => {
     const { data: regs, error } = await supabase.from('registrations').select('*');
@@ -304,13 +432,87 @@ export default function AdminDashboard() {
             </div>
 
             {/* Bell */}
-            <button style={{ position: 'relative', padding: '8px', background: 'transparent', border: 'none', cursor: 'pointer', color: C.stone400, borderRadius: '3px' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(247,242,232,0.05)'; e.currentTarget.style.color = C.ivory50; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.stone400; }}
-            >
-              <Bell size={18} />
-              <span style={{ position: 'absolute', top: '7px', right: '7px', width: '7px', height: '7px', background: C.rose400, borderRadius: '50%', border: `1px solid ${C.ink900}` }} />
-            </button>
+            <div ref={bellRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setBellOpen(v => !v)}
+                style={{ position: 'relative', padding: '8px', background: bellOpen ? 'rgba(247,242,232,0.05)' : 'transparent', border: 'none', cursor: 'pointer', color: bellOpen ? C.ivory50 : C.stone400, borderRadius: '3px' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(247,242,232,0.05)'; e.currentTarget.style.color = C.ivory50; }}
+                onMouseLeave={e => { if (!bellOpen) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.stone400; } }}
+              >
+                <Bell size={18} />
+                {unreadCount > 0 && (
+                  <span style={{ position: 'absolute', top: '5px', right: '5px', minWidth: '14px', height: '14px', padding: '0 3px', background: C.rose400, borderRadius: '7px', border: `1px solid ${C.ink900}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: 700, color: C.ink950, fontFamily: SANS, lineHeight: 1 }}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {bellOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    style={{
+                      position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: '340px',
+                      background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '4px',
+                      boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 60, overflow: 'hidden',
+                    }}
+                  >
+                    <div style={{ padding: '14px 16px', borderBottom: `1px solid ${C.lineDark}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontFamily: SERIF, fontSize: '15px', color: C.ivory50, fontWeight: 600 }}>Notifications</span>
+                      {unreadCount > 0 && (
+                        <span style={{ fontSize: '10px', letterSpacing: '0.08em', textTransform: 'uppercase', color: C.brass400, fontWeight: 700 }}>{unreadCount} new</span>
+                      )}
+                    </div>
+
+                    <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
+                      {notifications.length === 0 ? (
+                        <div style={{ padding: '28px 16px', textAlign: 'center', fontSize: '13px', color: C.stone500 }}>
+                          No registrations yet.
+                        </div>
+                      ) : (
+                        notifications.map((row) => {
+                          const isUnread = unreadIds.has(row.id);
+                          return (
+                            <button
+                              key={row.id}
+                              onClick={() => handleNotificationClick(row)}
+                              style={{
+                                width: '100%', display: 'block', textAlign: 'left',
+                                padding: '12px 16px', border: 'none', borderBottom: `1px solid ${C.lineDark}`,
+                                background: isUnread ? 'rgba(198,164,98,0.06)' : 'transparent',
+                                cursor: 'pointer', fontFamily: SANS,
+                              }}
+                              onMouseEnter={e => e.currentTarget.style.background = 'rgba(247,242,232,0.05)'}
+                              onMouseLeave={e => e.currentTarget.style.background = isUnread ? 'rgba(198,164,98,0.06)' : 'transparent'}
+                            >
+                              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                                {isUnread && <span style={{ marginTop: '5px', width: '6px', height: '6px', borderRadius: '50%', background: C.rose400, flexShrink: 0 }} />}
+                                <div style={{ minWidth: 0 }}>
+                                  <p style={{ fontSize: '13px', color: C.ivory50, fontWeight: isUnread ? 600 : 400, marginBottom: '3px' }}>
+                                    New {trackLabel(row.track)} registration — {row.name}
+                                  </p>
+                                  <p style={{ fontSize: '11px', color: C.stone500 }}>{timeAgo(row.created_at)}</p>
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })
+                      )}
+                    </div>
+
+                    <button
+                      onClick={() => { setBellOpen(false); setActive('Registrations'); }}
+                      style={{ width: '100%', padding: '11px', background: 'transparent', border: 'none', borderTop: `1px solid ${C.lineDark}`, color: C.brass400, fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: SANS }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(247,242,232,0.04)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      View all registrations
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Avatar */}
             <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: C.em700, border: `1px solid ${C.em600}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
@@ -321,7 +523,10 @@ export default function AdminDashboard() {
 
         {/* Content area */}
         {active === 'Registrations' ? (
-          <AdminRegistrations />
+          <AdminRegistrations
+            openRegistrationId={openRegistrationId}
+            onOpenRegistrationHandled={() => setOpenRegistrationId(null)}
+          />
         ) : active === 'CMS' ? (
           <AdminCMS />
         ) : active === 'Tickets & Check-in' ? (

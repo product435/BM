@@ -1,7 +1,7 @@
 import { EVENT, NAV_LINKS } from "../data/eventData.js";
 import {
+  FacebookIcon,
   InstagramIcon,
-  LinkedinIcon,
   XIcon,
   YoutubeIcon,
 } from "./SocialIcons.jsx";
@@ -15,7 +15,7 @@ const PARTICIPATE_LINKS = [
 
 /* Update URLs here once the real social profiles are ready. */
 const socialLinks = [
-  { name: "LinkedIn", url: "#", icon: LinkedinIcon },
+  { name: "Facebook", url: "#", icon: FacebookIcon },
   { name: "Instagram", url: "#", icon: InstagramIcon },
   { name: "X / Twitter", url: "#", icon: XIcon },
   { name: "YouTube", url: "#", icon: YoutubeIcon },
@@ -93,9 +93,6 @@ export default function Footer({ onNavigate }) {
                 >
                   <Icon className="footer-link-icon" />
                   {name}
-                  <span className="ext" aria-hidden="true">
-                    ↗
-                  </span>
                 </a>
               ))}
             </div>

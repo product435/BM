@@ -1,23 +1,49 @@
-import { EVENT, SECTOR_FOCUS, SECTOR_FOCUS_HEADING } from "../data/eventData.js";
+import { EVENT, SECTOR_FOCUS } from "../data/eventData.js";
+import Carousel from "./Carousel.jsx";
 import Reveal from "./Reveal.jsx";
 
 export default function FinalCTA({ onRegister, onExploreCategories }) {
   return (
     <section className="cta-final" id="cta" aria-labelledby="cta-title">
+      <div className="container sector-focus">
+        <Reveal>
+          <p className="eyebrow eyebrow--center">Last call — {EVENT.city}</p>
+        </Reveal>
+
+        <Reveal>
+          <h3 className="cta-final-title">
+            Investing in India's
+            <br />
+            <span className="t-italic">tomorrow.</span>
+          </h3>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <Carousel
+            items={SECTOR_FOCUS}
+            trackClassName="sector-track"
+            itemClassName="sector-card"
+            variant="dark"
+            ariaLabel="Investing in India's tomorrow — sectors"
+            renderItem={(sector) => (
+              <>
+                <span className="sector-card-index">{sector.index}</span>
+                <p className="sector-card-title">{sector.title}</p>
+                <p className="sector-card-desc">{sector.description}</p>
+              </>
+            )}
+          />
+        </Reveal>
+      </div>
+
       <div className="cta-final-inner">
         <span className="cta-ghost" aria-hidden="true">
           {EVENT.city} · {EVENT.date}
         </span>
 
-        <Reveal>
-          <p className="eyebrow eyebrow--center">Last call — {EVENT.city}</p>
-        </Reveal>
-
         <Reveal delay={100}>
-          <h2 className="cta-final-title" id="cta-title">
-            Your next idea
-            <br />
-            could <span className="t-italic">start here.</span>
+          <h2 className="sector-focus-title" id="cta-title">
+            Your next idea could start here.
           </h2>
         </Reveal>
 
@@ -25,9 +51,6 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
           <p className="cta-final-sub">
             BMI focuses on scalable businesses and innovative startups across
             high-growth sectors driving our economy forward.
-            <br />
-            The event is being assembled. The conversations are being planned.
-            The only thing missing is you.
           </p>
         </Reveal>
 
@@ -55,24 +78,6 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
             <span>{EVENT.city}</span>
             <span>Venue {EVENT.venue.status}</span>
           </p>
-        </Reveal>
-      </div>
-
-      <div className="container sector-focus">
-        <Reveal>
-          <h3 className="sector-focus-title">{SECTOR_FOCUS_HEADING}</h3>
-        </Reveal>
-
-        <Reveal delay={80}>
-          <div className="sector-track">
-            {SECTOR_FOCUS.map((sector) => (
-              <div className="sector-card" key={sector.index}>
-                <span className="sector-card-index">{sector.index}</span>
-                <p className="sector-card-title">{sector.title}</p>
-                <p className="sector-card-desc">{sector.description}</p>
-              </div>
-            ))}
-          </div>
         </Reveal>
       </div>
     </section>

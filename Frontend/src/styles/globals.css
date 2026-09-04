@@ -385,6 +385,19 @@ footer[id] {
   }
 }
 
+/* ── Shared carousel ───────────────────────────────────────────
+   One reusable pattern for every repeated card group. Base rules
+   here; responsive track/arrow behavior lives in components.css
+   (loaded after this file) so it can override each section's own
+   tablet-width grid rules there. */
+.carousel {
+  position: relative;
+}
+
+.carousel-arrow {
+  display: none;
+}
+
 /* ── Navigation ────────────────────────────────────────────── */
 .header {
   position: fixed;

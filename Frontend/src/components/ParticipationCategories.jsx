@@ -1,4 +1,5 @@
 import { CATEGORIES } from "../data/eventData.js";
+import Carousel from "./Carousel.jsx";
 import CategoryCard from "./CategoryCard.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
@@ -24,17 +25,21 @@ export default function ParticipationCategories({ onSelectCategory }) {
           />
         </div>
 
-        <div className="cat-grid">
-          {CATEGORIES.map((category, i) => (
-            <Reveal key={category.id} delay={i * 80}>
+        <Carousel
+          items={CATEGORIES}
+          trackClassName="cat-grid"
+          variant="light"
+          ariaLabel="Choose your path"
+          renderItem={(category, i) => (
+            <Reveal delay={i * 80}>
               <CategoryCard
                 category={category}
                 inverted={category.id === "entrepreneur"}
                 onSelect={onSelectCategory}
               />
             </Reveal>
-          ))}
-        </div>
+          )}
+        />
       </div>
     </section>
   );

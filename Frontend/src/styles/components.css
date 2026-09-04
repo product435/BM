@@ -1116,8 +1116,23 @@
   margin-bottom: 2.4rem;
 }
 
-.qa-quote {
+/* .qa-right is the single grid cell for the whole right column —
+   quote and FAQ are stacked inside it with a normal flex gap, so
+   they can never be split across separate (differently sized)
+   grid rows the way they were before. That auto-placement split
+   was the actual cause of the large empty gap: .qa-left (tall)
+   and .qa-quote (short) shared row 1, sized to .qa-left's height,
+   so .qa-faq (needing the same columns as .qa-quote) was pushed
+   into a new row 2 — leaving dead space under the short quote for
+   the rest of row 1's height, on top of the row-gap itself. */
+.qa-right {
   grid-column: 7 / 13;
+  display: flex;
+  flex-direction: column;
+  gap: 2.75rem;
+}
+
+.qa-quote {
   font-family: var(--font-serif);
   font-style: italic;
   font-weight: 400;
@@ -1125,11 +1140,6 @@
   line-height: 1.18;
   color: var(--ivory-50);
   max-width: 30rem;
-}
-
-.qa-faq {
-  grid-column: 7 / 13;
-  margin-top: 2.6rem;
 }
 
 .qa-faq-title {
@@ -1994,6 +2004,7 @@ textarea.field-input {
   color: var(--ivory-50);
   overflow: hidden;
   text-align: center;
+  padding-top: clamp(5rem, 11vw, 9.5rem);
 }
 
 .cta-final-inner {
@@ -2002,7 +2013,7 @@ textarea.field-input {
   flex-direction: column;
   align-items: center;
   gap: 2.4rem;
-  padding-block: clamp(5rem, 11vw, 9.5rem);
+  padding-bottom: clamp(5rem, 11vw, 9.5rem);
 }
 
 .cta-ghost {
@@ -2080,6 +2091,10 @@ textarea.field-input {
   margin-top: clamp(1rem, 3vw, 2rem);
   padding-bottom: clamp(3.5rem, 7vw, 5.5rem);
   text-align: center;
+}
+
+.sector-focus .eyebrow--center {
+  margin-bottom: 2.4rem;
 }
 
 .sector-focus-title {
@@ -2164,12 +2179,9 @@ textarea.field-input {
     grid-column: 1 / -1;
   }
 
-  .qa-quote,
-  .qa-faq {
+  .qa-right {
     grid-column: 1 / -1;
-  }
-
-  .qa-quote {
+    gap: 2.6rem;
     margin-top: -1rem;
   }
 
@@ -2220,77 +2232,6 @@ textarea.field-input {
 }
 
 @media (max-width: 760px) {
-  .exp-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .exp-highlights {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--brass-400) transparent;
-    padding-bottom: 0.6rem;
-  }
-
-  .exp-highlights::-webkit-scrollbar {
-    height: 5px;
-  }
-
-  .exp-highlights::-webkit-scrollbar-track {
-    background: var(--line-light);
-  }
-
-  .exp-highlights::-webkit-scrollbar-thumb {
-    background: var(--brass-400);
-    border-radius: 3px;
-  }
-
-  .exp-highlight {
-    flex: 0 0 10rem;
-    scroll-snap-align: start;
-  }
-
-  .sector-track {
-    display: flex;
-    gap: 0;
-    background: none;
-    border: 0;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--brass-400) transparent;
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    padding-bottom: 0.6rem;
-  }
-
-  .sector-track::-webkit-scrollbar {
-    height: 5px;
-  }
-
-  .sector-track::-webkit-scrollbar-track {
-    background: rgba(247, 242, 232, 0.1);
-  }
-
-  .sector-track::-webkit-scrollbar-thumb {
-    background: var(--brass-400);
-    border-radius: 3px;
-  }
-
-  .sector-card {
-    flex: 0 0 82vw;
-    max-width: 20rem;
-    scroll-snap-align: start;
-    border: 1px solid var(--line-dark);
-  }
-
-  .sector-card + .sector-card {
-    margin-left: -1px;
-  }
-
   .exp-expect {
     flex-direction: column;
     align-items: flex-start;
@@ -2307,22 +2248,6 @@ textarea.field-input {
 
   .exp-cell {
     min-height: 0;
-  }
-
-  .special-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .value-strip {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .agenda-item {
-    flex-basis: 10.5rem;
-  }
-
-  .cat-grid {
-    grid-template-columns: 1fr;
   }
 
   .intro-stats {
@@ -2362,20 +2287,12 @@ textarea.field-input {
     width: 100%;
   }
 
-  .guest-grid {
-    grid-template-columns: 1fr;
-  }
-
   .guests-note {
     text-align: left;
   }
 
   .highlights .marquee-item {
     font-size: clamp(1.4rem, 7vw, 2rem);
-  }
-
-  .special-grid {
-    grid-template-columns: 1fr;
   }
 
   .reg-cats {
@@ -2408,5 +2325,139 @@ textarea.field-input {
 
   .form-note {
     max-width: none;
+  }
+}
+
+/* ── Shared carousel — responsive track/arrows ───────────────
+   Wins over each section's own tablet-width grid rules above
+   (this file loads after globals.css, so equal-specificity rules
+   here take priority at the same breakpoint). Desktop is left
+   completely alone: .carousel-item and .carousel-arrow declare
+   nothing outside these media blocks. */
+@media (max-width: 1024px) {
+  .carousel-track {
+    display: flex;
+    gap: 0.9rem;
+    background: none;
+    border: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--brass-400) transparent;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-bottom: 0.6rem;
+  }
+
+  .carousel-track--contained {
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  .carousel-track::-webkit-scrollbar-track {
+    background: var(--line-light);
+  }
+
+  .carousel-track::-webkit-scrollbar-thumb {
+    background: var(--brass-400);
+    border-radius: 3px;
+  }
+
+  .carousel-item {
+    flex: 0 0 84%;
+    max-width: 20rem;
+    scroll-snap-align: start;
+  }
+
+  .carousel-item.exp-cell,
+  .carousel-item.exp-highlight,
+  .carousel-item.special-item,
+  .carousel-item.value-strip-item {
+    border: 1px solid var(--line-light);
+  }
+
+  .carousel-item.sector-card {
+    border: 1px solid var(--line-dark);
+  }
+
+  /* Agenda cards keep their own compact, always-horizontal sizing
+     rather than the standard 84%/20rem carousel card width. */
+  .carousel-item.agenda-item {
+    flex: 0 0 12.5rem;
+    max-width: none;
+    border: 1px solid var(--line-light);
+  }
+
+  /* Arrows overlay the track — absolutely positioned, they take
+     no layout space and never resize/push the cards. */
+  .carousel-arrow {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    transition: opacity 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .carousel-arrow--prev {
+    left: 0.3rem;
+  }
+
+  .carousel-arrow--next {
+    right: 0.3rem;
+  }
+
+  .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .carousel-arrow--light {
+    background: var(--ivory-50);
+    border: 1px solid var(--line-light);
+    color: var(--ink-950);
+  }
+
+  .carousel-arrow--light:hover:not(.is-disabled) {
+    background: var(--brass-300);
+    border-color: var(--brass-300);
+  }
+
+  .carousel-arrow--dark {
+    background: var(--ink-950);
+    border: 1px solid var(--line-dark);
+    color: var(--ivory-50);
+  }
+
+  .carousel-arrow--dark:hover:not(.is-disabled) {
+    background: var(--brass-400);
+    border-color: var(--brass-400);
+    color: var(--ink-950);
+  }
+
+  .carousel-arrow.is-disabled {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-arrow {
+    width: 2.1rem;
+    height: 2.1rem;
+  }
+
+  .carousel-arrow svg {
+    width: 0.9rem;
+    height: 0.9rem;
   }
 }

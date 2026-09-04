@@ -1,10 +1,10 @@
 /* Lightweight inline brand marks — sized to inherit currentColor,
    matching the footer's existing text-color/hover system. */
 
-export function LinkedinIcon(props) {
+export function FacebookIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
-      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6.5 0h3.83v1.64h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-5.93c0-1.41-.03-3.23-1.97-3.23-1.97 0-2.27 1.54-2.27 3.13V21h-4V9Z" />
+      <path d="M14.5 8.5H16.5V5.2C16.17 5.15 15.03 5 13.7 5C10.9 5 9 6.66 9 9.7V12.5H6V16.2H9V22H12.9V16.2H15.79L16.25 12.5H12.9V10.05C12.9 9 13.18 8.5 14.5 8.5Z" />
     </svg>
   );
 }

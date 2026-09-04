@@ -4,6 +4,7 @@ import {
   EXPERIENCE_SPECIAL,
   HIGHLIGHTS,
 } from "../data/eventData.js";
+import Carousel from "./Carousel.jsx";
 import Marquee from "./Marquee.jsx";
 import Reveal from "./Reveal.jsx";
 
@@ -31,43 +32,58 @@ export default function Highlights() {
           <div className="agenda-head">
             <p className="agenda-title">Event Agenda</p>
           </div>
-          <div className="agenda-track">
-            {EVENT_AGENDA.map((item) => (
-              <div className="agenda-item" key={item.time + item.title}>
+          <Carousel
+            items={EVENT_AGENDA}
+            trackClassName="agenda-track"
+            itemClassName="agenda-item"
+            variant="light"
+            ariaLabel="Event agenda"
+            renderItem={(item) => (
+              <>
                 <p className="agenda-time">{item.time}</p>
                 <p className="agenda-item-title">{item.title}</p>
                 <p className="agenda-item-desc">{item.description}</p>
-              </div>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </Reveal>
 
         <Reveal className="special" delay={100}>
           <p className="special-title">What Makes It Special?</p>
-          <div className="special-grid">
-            {EXPERIENCE_SPECIAL.map((item) => (
-              <div className="special-item" key={item.index}>
+          <Carousel
+            items={EXPERIENCE_SPECIAL}
+            trackClassName="special-grid"
+            itemClassName="special-item"
+            variant="light"
+            ariaLabel="What makes it special"
+            renderItem={(item) => (
+              <>
                 <span className="special-index">{item.index}</span>
                 <p className="special-item-title">{item.title}</p>
                 <p className="special-item-desc">{item.description}</p>
-              </div>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </Reveal>
 
         <Reveal className="value-strip-block" delay={140}>
           <p className="special-title">What's in the event</p>
-          <div className="value-strip">
-            {EVENT_VALUE_STRIP.map((item, i) => (
-              <div className="value-strip-item" key={item.title}>
+          <Carousel
+            items={EVENT_VALUE_STRIP}
+            trackClassName="value-strip"
+            itemClassName="value-strip-item"
+            variant="light"
+            ariaLabel="What's in the event"
+            renderItem={(item, i) => (
+              <>
                 <span className="value-strip-index">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <p className="value-strip-title">{item.title}</p>
                 <p className="value-strip-desc">{item.description}</p>
-              </div>
-            ))}
-          </div>
+              </>
+            )}
+          />
         </Reveal>
       </div>
 
