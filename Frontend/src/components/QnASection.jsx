@@ -1,8 +1,12 @@
-import { QA_SESSION } from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
+import { useSiteContent } from "../context/SiteContext.jsx";
 
 export default function QnASection() {
+  const { content } = useSiteContent();
+  const qaSession = content?.faq;
+
+  if (!qaSession) return null;
   return (
     <section className="qa section" id="qa" aria-labelledby="qa-title">
       <div className="container">
@@ -27,11 +31,11 @@ export default function QnASection() {
           </div>
 
           <Reveal className="qa-quote" delay={120}>
-            <blockquote>“{QA_SESSION.quote}”</blockquote>
+            <blockquote>“{qaSession.quote}”</blockquote>
           </Reveal>
 
           <Reveal className="qa-steps" delay={160}>
-            {QA_SESSION.steps.map((step) => (
+            {qaSession.steps.map((step) => (
               <div className="qa-step" key={step.index}>
                 <span className="qa-step-index">{step.index}</span>
                 <div>
@@ -45,9 +49,9 @@ export default function QnASection() {
           <Reveal className="qa-host" delay={200}>
             <div>
               <p className="qa-host-label">On the floor</p>
-              <p className="qa-host-name">{QA_SESSION.host}</p>
+              <p className="qa-host-name">{qaSession.host}</p>
             </div>
-            <p className="qa-host-note">{QA_SESSION.hostNote}</p>
+            <p className="qa-host-note">{qaSession.hostNote}</p>
           </Reveal>
         </div>
       </div>

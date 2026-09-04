@@ -86,10 +86,16 @@ const AdminLogin = () => {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.15, duration: 0.5 }}
           >
-            {/* Logo box — matches frontend navbar */}
-            <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: '2px', border: `1px solid ${brand.brass400}`, padding: '8px 16px', marginBottom: '20px' }}>
-              <span style={{ fontFamily: '"Fraunces","Georgia",serif', fontSize: '22px', fontWeight: 700, color: brand.ivory50, letterSpacing: '0.1em', lineHeight: 1 }}>BMI</span>
-              <span style={{ fontSize: '9px', letterSpacing: '0.25em', textTransform: 'uppercase', color: brand.brass400, fontWeight: 600 }}>JAIPUR</span>
+            {/* Logo */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <img
+                src="/Full_Logo.png"
+                alt="BM Investment"
+                style={{
+                  width: '180px',
+                  filter: `drop-shadow(0 0 12px rgba(198,164,98,0.3))`,
+                }}
+              />
             </div>
             <h1 style={{ fontFamily: '"Fraunces","Georgia",serif', fontSize: '28px', fontWeight: 600, color: brand.ivory50, lineHeight: 1.2, marginBottom: '8px' }}>
               Admin Portal

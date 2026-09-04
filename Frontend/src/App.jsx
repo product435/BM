@@ -18,6 +18,7 @@ import Footer from "./components/Footer.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { SiteProvider } from "./context/SiteContext.jsx";
 
 const LandingPage = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -72,14 +73,16 @@ const LandingPage = () => {
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<ProtectedRoute />}>
-          <Route index element={<AdminDashboard />} />
-        </Route>
-      </Routes>
-    </Router>
+    <SiteProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<ProtectedRoute />}>
+            <Route index element={<AdminDashboard />} />
+          </Route>
+        </Routes>
+      </Router>
+    </SiteProvider>
   );
 }
