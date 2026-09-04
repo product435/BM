@@ -1,9 +1,12 @@
-import { GUESTS, GUESTS_NOTE } from "../data/guests.js";
+import { GUESTS_NOTE } from "../data/guests.js";
 import GuestCard from "./GuestCard.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
+import { useSiteContent } from "../context/SiteContext.jsx";
 
 export default function Guests() {
+  const { content } = useSiteContent();
+  const guests = content?.guests || [];
   return (
     <section className="guests section" id="guests" aria-labelledby="guests-title">
       <div className="container">
@@ -23,7 +26,7 @@ export default function Guests() {
         </div>
 
         <div className="guest-grid">
-          {GUESTS.map((guest, i) => (
+          {guests.map((guest, i) => (
             <Reveal key={guest.id} delay={(i % 3) * 90}>
               <GuestCard guest={guest} index={i} />
             </Reveal>

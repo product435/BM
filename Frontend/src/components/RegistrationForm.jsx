@@ -1,22 +1,38 @@
 import { useEffect, useRef, useState } from "react";
 import { CATEGORIES, CATEGORY_SHORT, FORM_FIELDS } from "../data/eventData.js";
+import { supabase } from "../lib/supabase.js";
 
-/* ─────────────────────────────────────────────────────────────
-   SUBMIT HANDLER — backend-ready placeholder.
-   The form is frontend-only for now. To connect a real API
-   later, replace the body of `submitRegistration` with a
-   fetch call — the payload shape below already matches the
-   field definitions in data/eventData.js.
-   ───────────────────────────────────────────────────────────── */
 async function submitRegistration(payload) {
-  // TODO: connect your backend here, e.g.
-  // const res = await fetch("/api/registrations", {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(payload),
-  // });
-  // if (!res.ok) throw new Error("Registration failed. Please try again.");
-  await new Promise((resolve) => setTimeout(resolve, 1400)); // simulate network
+  const { category, email, phone, city, ...rest } = payload;
+  const name = rest.fullName || rest.founderName || rest.contactPerson || "";
+  
+  // Extract remaining fields for details JSONB
+  const { fullName, founderName, contactPerson, ...details } = rest;
+
+  let track = "Visitor";
+  if (category === "student") track = "Track 1 (Students)";
+  if (category === "startup") track = "Track 2 (Startups)";
+  if (category === "school") track = "Track 3 (Scale)";
+
+  const registration_id = 'REG-' + Math.floor(10000 + Math.random() * 90000);
+
+  const { error } = await supabase.from("registrations").insert([{
+    registration_id,
+    name,
+    email,
+    phone,
+    city,
+    track,
+    status: 'Pending',
+    payment_status: 'Pending',
+    details
+  }]);
+
+  if (error) {
+    console.error("Supabase insert error:", error);
+    throw new Error("Registration failed. Please try again.");
+  }
+  
   return { ok: true };
 }
 

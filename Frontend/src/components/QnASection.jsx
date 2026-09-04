@@ -1,10 +1,15 @@
 import { useState } from "react";
-import { QA_FAQ, QA_SESSION } from "../data/eventData.js";
+import { QA_FAQ } from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
+import { useSiteContent } from "../context/SiteContext.jsx";
 
 export default function QnASection() {
   const [openIndex, setOpenIndex] = useState(0);
+  const { content } = useSiteContent();
+  const qaSession = content?.faq;
+
+  if (!qaSession) return null;
 
   return (
     <section className="qa section" id="qa" aria-labelledby="qa-title">
@@ -30,7 +35,7 @@ export default function QnASection() {
           </div>
 
           <Reveal className="qa-quote" delay={120}>
-            <blockquote>“{QA_SESSION.quote}”</blockquote>
+            <blockquote>“{qaSession.quote}”</blockquote>
           </Reveal>
 
           <Reveal className="qa-faq" delay={160}>
