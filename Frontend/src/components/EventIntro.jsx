@@ -13,24 +13,23 @@ export default function EventIntro() {
               title={
                 <span id="about-title">
                   More than an event.{" "}
-                  <span className="t-italic t-emerald">A room full</span> of
-                  possibilities.
+                  <span className="t-italic t-emerald">A place</span> where
+                  ambition meets opportunity.
                 </span>
               }
             />
           </div>
 
           <Reveal className="intro-copy-col" delay={120}>
-            <p className="intro-copy">
-              {EVENT.org} is bringing {EVENT.city} a different kind of gathering —
-              one where the room is built for <strong>ideas</strong>,{" "}
-              <strong>startups</strong> and <strong>business</strong>, and the
-              agenda runs on <strong>ambition</strong>.
+            <p className="intro-copy intro-copy--tight">
+              {EVENT.org} is where <strong>ambitious minds</strong> come
+              together — founders with ideas, investors looking for
+              opportunity, <strong>students ready to learn and build</strong>,
+              and businesses ready to grow.
             </p>
             <p className="intro-copy">
-              Entrepreneurs pitch. Investors listen. Students learn. Businesses
-              connect. One city, one day — on the {EVENT.date} — for everyone
-              who believes an idea can become something bigger.
+              One city. One powerful gathering. A space to connect, learn,
+              collaborate and create what comes next.
             </p>
             <ul className="intro-words" aria-label="What the event is about">
               {INTRO_WORDS.map((word, i) => (
@@ -43,13 +42,16 @@ export default function EventIntro() {
         </div>
 
         <Reveal className="intro-media" delay={80}>
-          <img
-            src={IMAGES.networking}
-            alt="People in conversation at an indoor business event"
-            loading="lazy"
-          />
+          <div className="intro-media-frame">
+            <img
+              className="intro-media-fg"
+              src={IMAGES.networking}
+              alt="BM Sir — Belief, Consistency & Hard Work, the ultimate mantra of success"
+              loading="lazy"
+            />
+          </div>
           <p className="intro-media-caption">
-            <span>The room — networking, conversations &amp; real connections</span>
+            <span>The place — networking, conversations &amp; real connections</span>
             <span>{EVENT.city}, Rajasthan</span>
           </p>
         </Reveal>

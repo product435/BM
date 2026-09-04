@@ -50,6 +50,27 @@
   --font-sans: "Archivo", "Helvetica Neue", sans-serif;
 
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
+
+  /* ── Typography scale ──────────────────────────────────────
+     Shared tokens for roles that repeat across sections, so
+     same-role text (labels, card titles, body copy) stays in
+     lockstep instead of drifting component-to-component. */
+
+  /* Eyebrow / overline / metadata label — small uppercase tag */
+  --fs-label: 0.62rem;
+  --ls-label: 0.3em;
+
+  /* Card / cell heading (H3 role): exp-title, how-title, qa-step-title,
+     qa-host-name, cat-title (own larger scale), guest-name (own scale) */
+  --fs-card-title: clamp(1.4rem, 2.1vw, 1.65rem);
+
+  /* Body small — card/panel descriptions and supporting copy */
+  --fs-body-sm: 0.92rem;
+  --lh-body-sm: 1.7;
+
+  /* Body regular — section ledes, intro/funding/jaipur paragraphs */
+  --fs-body: clamp(0.95rem, 1.25vw, 1.05rem);
+  --lh-body: 1.75;
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
@@ -249,7 +270,7 @@ footer[id] {
   gap: 0.9rem;
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 0.66rem;
+  font-size: var(--fs-label);
   letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--brass-400);
@@ -391,45 +412,19 @@ footer[id] {
 .nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
   min-width: 0;
 }
 
-.nav-monogram {
-  width: 2.6rem;
-  height: 2.6rem;
-  flex: none;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--brass-400);
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  color: var(--ivory-50);
-  transition: background-color 0.35s ease, color 0.35s ease;
-}
-
-.nav-brand:hover .nav-monogram {
-  background: var(--brass-400);
-  color: var(--ink-950);
-}
-
-.nav-wordmark {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  letter-spacing: 0.08em;
-  color: var(--ivory-50);
-  line-height: 1;
-}
-
-.nav-wordmark small {
+.nav-logo {
   display: block;
-  font-family: var(--font-sans);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.42em;
-  text-transform: uppercase;
-  color: var(--stone-400);
-  margin-top: 0.32rem;
+  width: clamp(5.5rem, 9vw, 7.5rem);
+  height: auto;
+  flex: none;
+  transition: opacity 0.35s ease;
+}
+
+.nav-brand:hover .nav-logo {
+  opacity: 0.85;
 }
 
 .nav-links {
@@ -522,7 +517,9 @@ footer[id] {
   position: fixed;
   inset: 0;
   z-index: 80;
-  background: var(--ink-950);
+  background: rgba(12, 11, 9, 0.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.1);
+  backdrop-filter: blur(18px) saturate(1.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -595,8 +592,8 @@ footer[id] {
 }
 
 .mobile-menu-meta {
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--stone-400);
 }
@@ -618,10 +615,12 @@ footer[id] {
   inset: 0;
 }
 
-.hero-media img {
+.hero-media img,
+.hero-media video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   opacity: 0.52;
   filter: saturate(0.72) contrast(1.06);
 }
@@ -713,7 +712,7 @@ footer[id] {
 }
 
 .hero-meta-label {
-  font-size: 0.6rem;
+  font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: 0.34em;
   text-transform: uppercase;
@@ -807,6 +806,22 @@ footer[id] {
   grid-column: 1 / 6;
 }
 
+.footer-brand-mark {
+  display: block;
+  width: fit-content;
+}
+
+.footer-logo {
+  display: block;
+  width: clamp(9rem, 16vw, 13rem);
+  height: auto;
+  transition: opacity 0.35s ease;
+}
+
+.footer-brand-mark:hover .footer-logo {
+  opacity: 0.85;
+}
+
 .footer-tagline {
   margin-top: 1.4rem;
   max-width: 20rem;
@@ -824,9 +839,9 @@ footer[id] {
 }
 
 .footer-title {
-  font-size: 0.62rem;
+  font-size: var(--fs-label);
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--stone-500);
   margin-bottom: 1.4rem;

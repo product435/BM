@@ -6,10 +6,16 @@ export default function Hero({ onRegister, onExplore }) {
   return (
     <section className="hero" id="home" aria-label="Event introduction">
       <div className="hero-media">
-        <img
-          src={IMAGES.hero}
-          alt="A packed auditorium with stage lights during a live business presentation"
-          fetchPriority="high"
+        <video
+          className="hero-video"
+          src="/images/Apna_Jaipur.mp4"
+          poster={IMAGES.hero}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
         />
       </div>
       <div className="hero-shade" aria-hidden="true" />

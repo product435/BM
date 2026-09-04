@@ -26,8 +26,7 @@ export const EVENT = {
 
 export const IMAGES = {
   hero: "https://images.pexels.com/photos/9275222/pexels-photo-9275222.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800",
-  networking:
-    "https://images.pexels.com/photos/34623526/pexels-photo-34623526.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1600",
+  networking: "/images/Image1.jpeg",
   pitch:
     "https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=900",
   jaipur:
@@ -51,7 +50,7 @@ export const HERO_TICKER = [
   "Innovation",
 ];
 
-export const INTRO_WORDS = ["Ideas", "Startups", "Business", "Investment", "Innovation"];
+export const INTRO_WORDS = ["IDEAS", "STARTUPS", "NETWORKING", "INVESTMENT", "INNOVATION"];
 
 export const INTRO_STATS = [
   { value: "04", label: "Ways to participate" },
