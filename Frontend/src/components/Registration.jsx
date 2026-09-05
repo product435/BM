@@ -1,9 +1,18 @@
-import { EVENT } from "../data/eventData.js";
 import RegistrationForm from "./RegistrationForm.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
-export default function Registration({ selectedCategory, onCategoryChanged }) {
+export default function Registration({ 
+  selectedCategory, 
+  onCategoryChanged,
+  eventAmountData = null
+}) {
+  const amountData = eventAmountData || {
+    invitations_planned: "≈ 500–600",
+    businesses_expected: "≈ 30",
+    visitor_capacity: "≈ 100",
+    note: "Indicative figures — subject to confirmation."
+  };
   return (
     <section
       className="registration section"
@@ -46,7 +55,7 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                   <span className="reg-step-index">03</span>
                   <span className="reg-step-text">
                     <strong>We confirm your seat.</strong> You show up on the{" "}
-                    {EVENT.date} and make the event count.
+                    day and make the event count.
                   </span>
                 </li>
               </ol>
@@ -58,18 +67,18 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                 <div className="reg-glance-rows">
                   <div className="reg-glance-row">
                     <span>Invitations planned</span>
-                    <span>{EVENT.capacity.invitations}</span>
+                    <span>{amountData.invitations_planned}</span>
                   </div>
                   <div className="reg-glance-row">
                     <span>Businesses expected</span>
-                    <span>{EVENT.capacity.businesses}</span>
+                    <span>{amountData.businesses_expected}</span>
                   </div>
                   <div className="reg-glance-row">
                     <span>Visitor capacity</span>
-                    <span>{EVENT.capacity.visitors}</span>
+                    <span>{amountData.visitor_capacity}</span>
                   </div>
                 </div>
-                <p className="reg-glance-note">{EVENT.capacity.note}</p>
+                <p className="reg-glance-note">{amountData.note}</p>
               </aside>
             </Reveal>
           </div>

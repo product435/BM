@@ -1,14 +1,17 @@
-import {
-  EVENT_AGENDA,
-  EVENT_VALUE_STRIP,
-  EXPERIENCE_SPECIAL,
-  HIGHLIGHTS,
-} from "../data/eventData.js";
+import { HIGHLIGHTS } from "../data/eventData.js";
 import Carousel from "./Carousel.jsx";
 import Marquee from "./Marquee.jsx";
 import Reveal from "./Reveal.jsx";
 
-export default function Highlights() {
+export default function Highlights({ experienceData = null }) {
+  const content = experienceData || {
+    eyebrow: '09 — Event Day Experience',
+    heading: 'A full day of ideas, insights & impact.',
+    subheading: 'Curated sessions, expert interactions, founder pitches, business networking and investment opportunities — all in one powerful experience.',
+    agenda: [],
+    special_items: [],
+    value_strip: []
+  };
   return (
     <section
       className="highlights"
@@ -17,14 +20,12 @@ export default function Highlights() {
     >
       <div className="container">
         <Reveal className="highlights-intro">
-          <p className="eyebrow eyebrow--emerald">09 — Event Day Experience</p>
+          <p className="eyebrow eyebrow--emerald">{content.eyebrow}</p>
           <h2 className="highlights-heading">
-            A full day of ideas, insights &amp; impact.
+            {content.heading}
           </h2>
           <p className="highlights-sub">
-            Curated sessions, expert interactions, founder pitches, business
-            networking and investment opportunities — all in one powerful
-            experience.
+            {content.subheading}
           </p>
         </Reveal>
 
@@ -33,7 +34,7 @@ export default function Highlights() {
             <p className="agenda-title">Event Agenda</p>
           </div>
           <Carousel
-            items={EVENT_AGENDA}
+            items={content.agenda}
             trackClassName="agenda-track"
             itemClassName="agenda-item"
             variant="light"
@@ -51,7 +52,7 @@ export default function Highlights() {
         <Reveal className="special" delay={100}>
           <p className="special-title">What Makes It Special?</p>
           <Carousel
-            items={EXPERIENCE_SPECIAL}
+            items={content.special_items}
             trackClassName="special-grid"
             itemClassName="special-item"
             variant="light"
@@ -69,7 +70,7 @@ export default function Highlights() {
         <Reveal className="value-strip-block" delay={140}>
           <p className="special-title">What's in the event</p>
           <Carousel
-            items={EVENT_VALUE_STRIP}
+            items={content.value_strip}
             trackClassName="value-strip"
             itemClassName="value-strip-item"
             variant="light"

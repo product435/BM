@@ -15,18 +15,25 @@ export const SiteProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchContent = async () => {
-    const { data, error } = await supabase
+    // Fetch site_content if it exists
+    const { data: siteData, error: siteError } = await supabase
       .from('site_content')
       .select('data')
       .eq('id', 1)
       .single();
 
-    if (!error && data?.data) {
-      setContent(prev => ({
-        ...prev,
-        ...data.data
-      }));
-    }
+    // Fetch guests
+    const { data: guestsData, error: guestsError } = await supabase
+      .from('guests')
+      .select('*')
+      .order('sort_order', { ascending: true });
+
+    setContent(prev => ({
+      ...prev,
+      ...(siteData?.data || {}),
+      guests: guestsData?.length > 0 ? guestsData : GUESTS
+    }));
+
     setLoading(false);
   };
 

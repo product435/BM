@@ -33,6 +33,20 @@ async function submitRegistration(payload) {
     throw new Error("Registration failed. Please try again.");
   }
   
+  // Send email via Resend Edge Function
+  try {
+    await supabase.functions.invoke("send-email", {
+      body: {
+        name,
+        email,
+        message: `New registration for category: ${category} | Track: ${track}`,
+      },
+    });
+  } catch (err) {
+    console.error("Email sending failed:", err);
+    // We don't throw here so the user still sees success if DB insert worked.
+  }
+  
   return { ok: true };
 }
 

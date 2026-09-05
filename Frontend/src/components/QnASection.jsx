@@ -1,15 +1,21 @@
 import { useState } from "react";
-import { QA_FAQ } from "../data/eventData.js";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
-import { useSiteContent } from "../context/SiteContext.jsx";
 
-export default function QnASection() {
+export default function QnASection({ qaData = null }) {
   const [openIndex, setOpenIndex] = useState(0);
-  const { content } = useSiteContent();
-  const qaSession = content?.faq;
-
-  if (!qaSession) return null;
+  
+  const content = qaData || {
+    eyebrow: "08 — Q&A Session",
+    title_plain: "Ask. ",
+    title_italic: "Challenge.",
+    title_end: " Learn.",
+    lede: "An open-floor conversation, not a monologue. Bring the questions you've been sitting on — the event is listening.",
+    quote: "No question too early. No idea too small.",
+    faqs: [
+      { question: "Loading...", answer: "Please wait while we fetch the questions." }
+    ]
+  };
 
   return (
     <section className="qa section" id="qa" aria-labelledby="qa-title">
@@ -21,14 +27,14 @@ export default function QnASection() {
                 “
               </span>
               <SectionHeading
-                eyebrow="08 — Q&A Session"
+                eyebrow={content.eyebrow}
                 title={
                   <span id="qa-title">
-                    Ask. <span className="t-italic t-brass">Challenge.</span>{" "}
-                    Learn.
+                    {content.title_plain}<span className="t-italic t-brass">{content.title_italic}</span>
+                    {content.title_end}
                   </span>
                 }
-                lede="An open-floor conversation, not a monologue. Bring the questions you've been sitting on — the event is listening."
+                lede={content.lede}
                 dark
               />
             </Reveal>
@@ -36,13 +42,13 @@ export default function QnASection() {
 
           <div className="qa-right">
             <Reveal className="qa-quote" delay={120}>
-              <blockquote>“{qaSession.quote}”</blockquote>
+              <blockquote>“{content.quote}”</blockquote>
             </Reveal>
 
             <Reveal className="qa-faq" delay={160}>
               <p className="qa-faq-title">FAQ</p>
               <div className="qa-faq-list">
-                {QA_FAQ.map((item, i) => {
+                {content.faqs.map((item, i) => {
                   const open = openIndex === i;
                   return (
                     <div className="qa-faq-item" key={item.question}>
