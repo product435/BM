@@ -60,6 +60,7 @@ export default function FundingOpportunity({ onRegister }) {
                 variant="dark"
                 bleed={false}
                 ariaLabel="The BMI support model"
+                showDots
                 renderItem={(item) => (
                   <>
                     <span className="school-row-index">{item.index}</span>
@@ -77,7 +78,7 @@ export default function FundingOpportunity({ onRegister }) {
         <Reveal className="funding-media" delay={160}>
           <div className="funding-media-frame">
             <img
-              src="/images/vikas sir.png"
+              src="/images/image1.jpg"
               alt="Vikas — speaker at the BMI event"
               loading="lazy"
             />

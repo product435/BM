@@ -10,7 +10,7 @@ export const EVENT = {
   orgFull: "BMI Presents",
   city: "Jaipur",
   cityLong: "Jaipur, Rajasthan",
-  date: "20th",
+  date: "20th September",
   // Venue & capacity are intentionally editable — still subject to confirmation.
   venue: {
     status: "To be announced",
@@ -26,7 +26,7 @@ export const EVENT = {
 
 export const IMAGES = {
   hero: "https://images.pexels.com/photos/9275222/pexels-photo-9275222.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800",
-  networking: "/images/Image1.jpeg",
+  networking: "/images/image3.png",
   pitch:
     "https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=900",
   jaipur:
@@ -85,14 +85,14 @@ export const WHY_ITEMS = [
     index: "02",
     title: "Business Networking",
     description:
-      "Founders, operators, students and investors in one place — the conversations here tend to outlive the event itself.",
+      "Founders, operators, students and investors in one place the conversations here tend to outlive the event itself.",
     tags: ["Founders", "Operators", "Peers"],
   },
   {
     index: "03",
     title: "Ideas & Innovation",
     description:
-      "From early student ideas to scaling businesses — see what is being built and where the energy in the event is pointing.",
+      "From early student ideas to scaling businesses see what is being built and where the energy in the event is pointing.",
     tags: ["Ideas", "E-Sales", "New Models"],
   },
   {
@@ -106,7 +106,7 @@ export const WHY_ITEMS = [
     index: "05",
     title: "Funding Conversations",
     description:
-      "Where promising ideas meet opportunity. Explore what funding conversations actually look like — and how to be ready for yours.",
+      "Where promising ideas meet opportunity. Explore what funding conversations actually look like and how to be ready for yours.",
     tags: ["Funding", "Investment", "Readiness"],
   },
 ];
@@ -164,7 +164,7 @@ export const EXPERIENCE_HIGHLIGHTS = [
 
 export const WHAT_TO_EXPECT = [
   "Curated participation across stages",
-  "Industry-led conversations",
+  "Industry led conversations",
   "Strategic networking opportunities",
   "Potential next-step evaluation for selected ventures",
 ];
@@ -179,7 +179,7 @@ export const CATEGORIES = [
     title: "Student",
     tagline: "For ambitious students & emerging ideas",
     description:
-      "Walk in with your idea — however early it is. This is where it meets its first audience and its first real questions.",
+      "Walk in with your idea however early it is. This is where it meets its first audience and its first real questions.",
     cta: "Register as student",
   },
   {
@@ -197,7 +197,7 @@ export const CATEGORIES = [
     title: "Entrepreneur",
     tagline: "For founders building something real",
     description:
-      "Show your business to investors, operators and peers. Come for the pitch — leave with the connections.",
+      "Show your business to investors, operators and peers. Come for the pitch leave with the connections.",
     cta: "Register as entrepreneur",
   },
   {
@@ -217,6 +217,20 @@ export const CATEGORY_SHORT = {
   entrepreneur: "Pitch your business",
   businessTycoon: "Champion the next generation",
 };
+
+// Single source of truth for registration fees per category — demo/
+// configurable values, change here only. Student stays free; the other
+// three are paid. Amounts are in INR.
+export const REGISTRATION_FEES = {
+  student: 0,
+  visitor: 500,
+  entrepreneur: 1000,
+  businessTycoon: 2000,
+};
+
+// Placeholder payment UPI target for the demo QR — swap for the real
+// payee/VPA once a payment gateway is wired up by the backend team.
+export const PAYMENT_UPI_ID = "bmipresents@upi";
 
 export const FUNDING_AUDIENCE = [
   {
@@ -252,7 +266,7 @@ export const BMI_SUPPORT_MODEL = {
     {
       index: "01",
       title: "Potential Investment",
-      description: "Stage-appropriate capital support by BMI.",
+      description: "Stage appropriate capital support by BMI.",
     },
     {
       index: "02",
@@ -281,12 +295,12 @@ export const HOW_IT_WORKS = [
   {
     index: "01",
     title: "Register",
-    description: "Tell us you're coming — pick the category that matches how you want to show up.",
+    description: "Tell us you're coming pick the category that matches how you want to show up.",
   },
   {
     index: "02",
     title: "Choose your category",
-    description: "Student, startup, school or visitor. Each path has its own place in the event.",
+    description: "Students, Visitor, Entrepreneur and Business Tycoon. Each path has its own place in the event.",
   },
   {
     index: "03",
@@ -296,7 +310,7 @@ export const HOW_IT_WORKS = [
   {
     index: "04",
     title: "Join the experience",
-    description: "We confirm your seat. You show up on the 20th and make the event count.",
+    description: "We confirm your seat. You show up on the 20th September and make the event count.",
   },
 ];
 
@@ -361,12 +375,12 @@ export const EVENT_AGENDA = [
   { time: "10:45 AM", title: "Aman Maheshwari Session", description: "The New Generation of Entrepreneurship" },
   { time: "11:05 AM", title: "Business Leaders Panel", description: "Industry insights, opportunities and the road ahead" },
   { time: "11:45 AM", title: "BMI Idea Lab", description: "Student innovators pitch their ideas" },
-  { time: "12:20 PM", title: "BMI Build — Startup Pitches", description: "Early-stage startups pitch to experts" },
+  { time: "12:20 PM", title: "BMI Build — Startup Pitches", description: "Early stage startups pitch to experts" },
   { time: "01:30 PM", title: "Founder & Business Networking Lunch", description: "Connections over curated lunch" },
   { time: "02:30 PM", title: "Vikas Patel Session", description: "AI for Business: From Hype to Execution" },
   { time: "03:00 PM", title: "BMI Scale — Business Presentations", description: "Operating businesses present growth opportunities" },
   { time: "04:00 PM", title: "Expert Clinics & Networking", description: "1:1 expert interactions and ecosystem connections" },
-  { time: "04:30 PM", title: "BMI Investment Event", description: "Top founders and businesses in closed-door evaluation" },
+  { time: "04:30 PM", title: "BMI Investment Event", description: "Top founders and businesses in closed door evaluation" },
   { time: "05:30 PM", title: "Recognition & Diligence Selections", description: "Shortlisted ventures announced for next stage" },
   { time: "06:00 PM", title: "BMI Future Roadmap & Closing", description: "What's next for founders and the ecosystem" },
 ];
@@ -375,7 +389,7 @@ export const EXPERIENCE_SPECIAL = [
   {
     index: "01",
     title: "Curated Participants",
-    description: "High-value founders, businesses, experts and partners.",
+    description: "High value founders, businesses, experts and partners.",
   },
   {
     index: "02",
@@ -401,7 +415,7 @@ export const EXPERIENCE_SPECIAL = [
 
 export const EVENT_VALUE_STRIP = [
   { title: "Discover", description: "Promising ideas and businesses." },
-  { title: "Evaluate", description: "Expert-led screening and due diligence." },
+  { title: "Evaluate", description: "Expert led screening and due diligence." },
   { title: "Support", description: "Capital, capability and connections." },
   { title: "Scale", description: "Build sustainable and impactful enterprises." },
 ];
@@ -467,7 +481,7 @@ export const SECTOR_FOCUS = [
   {
     index: "11",
     title: "Retail & D2C",
-    description: "New-age brands and consumer experiences.",
+    description: "New age brands and consumer experiences.",
   },
   {
     index: "12",
@@ -488,6 +502,7 @@ export const FORM_FIELDS = {
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "college", label: "College / Institution", type: "text", required: true },
     { name: "city", label: "City", type: "text", required: true },
+    { name: "role", label: "Role", type: "text", required: true },
     { name: "interest", label: "Idea / Interest", type: "text", required: false },
     {
       name: "description",
@@ -504,6 +519,7 @@ export const FORM_FIELDS = {
     { name: "email", label: "Email Address", type: "email", required: true, autoComplete: "email" },
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
+    { name: "role", label: "Role", type: "text", required: true },
     { name: "industry", label: "Industry / Category", type: "text", required: true },
     {
       name: "startupDescription",
@@ -521,6 +537,7 @@ export const FORM_FIELDS = {
     { name: "email", label: "Email Address", type: "email", required: true, autoComplete: "email" },
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
+    { name: "role", label: "Role", type: "text", required: true },
     {
       name: "businessDescription",
       label: "Business Description",
@@ -535,5 +552,6 @@ export const FORM_FIELDS = {
     { name: "email", label: "Email Address", type: "email", required: true, autoComplete: "email" },
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
+    { name: "role", label: "Role", type: "text", required: true },
   ],
 };

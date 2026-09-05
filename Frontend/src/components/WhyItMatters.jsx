@@ -4,7 +4,7 @@ import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
 export default function WhyItMatters({ onExploreCategories }) {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
 
   return (
     <section className="why section" id="why" aria-labelledby="why-title">
@@ -19,7 +19,7 @@ export default function WhyItMatters({ onExploreCategories }) {
                   matters.
                 </span>
               }
-              lede="Opportunity rarely announces itself. This event exists so the people building things — and the people backing them — can find each other in person."
+              lede="Opportunity rarely announces itself. This event exists so the people building things and the people backing them can find each other in person."
               dark
             />
             <button

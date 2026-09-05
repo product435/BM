@@ -23,7 +23,7 @@ export default function EventExperience() {
             className="sec-head--inline"
           />
           <p className="exp-note">
-            More than funding — a structured ecosystem built around
+            More than funding a structured ecosystem built around
             evaluation, expertise, support and meaningful business
             connections.
           </p>
@@ -35,6 +35,7 @@ export default function EventExperience() {
           itemClassName="exp-cell"
           variant="light"
           ariaLabel="What makes BMI different"
+          showDots
           renderItem={(step, i) => (
             <Reveal delay={i * 70} as="article">
               <p className="exp-num" aria-hidden="true">
@@ -54,6 +55,7 @@ export default function EventExperience() {
             itemClassName="exp-highlight"
             variant="light"
             ariaLabel="Key experience highlights"
+            showDots
             renderItem={(item) => (
               <>
                 <span className="exp-highlight-index">{item.index}</span>

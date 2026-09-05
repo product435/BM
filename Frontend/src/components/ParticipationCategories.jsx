@@ -20,7 +20,7 @@ export default function ParticipationCategories({ onSelectCategory }) {
                 Choose <span className="t-italic t-emerald">your path.</span>
               </span>
             }
-            lede="Four ways to enter the event. Pick yours — the registration form adapts to how you'll show up."
+            lede="Four Categories to enter the event. Pick your registration form adapts to how you'll show up."
             className="sec-head--inline"
           />
         </div>
@@ -30,11 +30,11 @@ export default function ParticipationCategories({ onSelectCategory }) {
           trackClassName="cat-grid"
           variant="light"
           ariaLabel="Choose your path"
+          showDots
           renderItem={(category, i) => (
             <Reveal delay={i * 80}>
               <CategoryCard
                 category={category}
-                inverted={category.id === "entrepreneur"}
                 onSelect={onSelectCategory}
               />
             </Reveal>

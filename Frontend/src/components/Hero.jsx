@@ -41,11 +41,11 @@ export default function Hero({ onRegister, onExplore }) {
 
         <Reveal delay={220}>
           <p className="hero-sub">
-            A curated platform for founders, innovators, operating
-            businesses, industry leaders and strategic partners to connect,
-            build and scale. — in{" "}
+            A curated platform for Innovators, Founders, Operating
+            Businesses, Industry Leaders and Strategic Partners to connect,
+            build and scale, In{" "}
             <strong>{EVENT.city}</strong>, on the{" "}
-            <strong>{EVENT.date}</strong> — to explore what comes next.
+            <strong>{EVENT.date}</strong> to explore what comes next.
           </p>
         </Reveal>
 

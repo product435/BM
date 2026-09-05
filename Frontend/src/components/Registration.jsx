@@ -22,7 +22,7 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                     <span className="t-italic t-emerald">part of the event?</span>
                   </span>
                 }
-                lede="Seats are limited and the event is curated. Tell us who's coming — and how you want to show up."
+                lede="Seats are limited and the event is curated. Tell us who's coming and how you want to show up."
               />
             </Reveal>
 
@@ -31,8 +31,8 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                 <li className="reg-step">
                   <span className="reg-step-index">01</span>
                   <span className="reg-step-text">
-                    <strong>Choose your category.</strong> Student, visitor,
-                    entrepreneur or business tycoon.
+                    <strong>Choose your category.</strong> Student, Visitor,
+                    Entrepreneur or Business Tycoon.
                   </span>
                 </li>
                 <li className="reg-step">
@@ -50,27 +50,6 @@ export default function Registration({ selectedCategory, onCategoryChanged }) {
                   </span>
                 </li>
               </ol>
-            </Reveal>
-
-            <Reveal delay={180}>
-              <aside className="reg-glance" aria-label="Event capacity at a glance">
-                <p className="reg-glance-title">The event at a glance</p>
-                <div className="reg-glance-rows">
-                  <div className="reg-glance-row">
-                    <span>Invitations planned</span>
-                    <span>{EVENT.capacity.invitations}</span>
-                  </div>
-                  <div className="reg-glance-row">
-                    <span>Businesses expected</span>
-                    <span>{EVENT.capacity.businesses}</span>
-                  </div>
-                  <div className="reg-glance-row">
-                    <span>Visitor capacity</span>
-                    <span>{EVENT.capacity.visitors}</span>
-                  </div>
-                </div>
-                <p className="reg-glance-note">{EVENT.capacity.note}</p>
-              </aside>
             </Reveal>
           </div>
 

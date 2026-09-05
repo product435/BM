@@ -46,7 +46,7 @@ export default function Footer({ onNavigate }) {
             </a>
             <p className="footer-tagline">
               Where ideas meet opportunity. A startup, business and investment
-              event — built for the ones who build.
+              event built for the ones who build.
             </p>
           </div>
 

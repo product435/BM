@@ -10,12 +10,19 @@ export default function HowItWorks({ onRegister }) {
           eyebrow="06 — How It Works"
           title={
             <span id="how-title">
-              From intention to <span className="t-italic t-brass">invitation.</span>
+              Join collaborate create <span className="t-italic t-brass">impact.</span>
             </span>
           }
-          lede="Four steps between you and the event. No forms behind glass — just a clear path in."
           dark
         />
+        <p className="sec-lede">
+          BMI Startup &amp; Business Launch 2026 is more than an event. It is
+          the beginning of a movement to build future ready businesses and a
+          stronger India.
+        </p>
+        <p className="sec-lede how-lede-accent">
+          <strong className="t-italic t-brass">Be part of something bigger.</strong>
+        </p>
 
         <div className="how-grid">
           {HOW_IT_WORKS.map((step, i) => (
@@ -31,7 +38,7 @@ export default function HowItWorks({ onRegister }) {
         </div>
 
         <Reveal className="how-foot" delay={120}>
-          <span>Capacity is limited — registration is the only way in.</span>
+          <span>Capacity is limited — registration is the only way.</span>
           <button type="button" className="btn btn--light" onClick={onRegister}>
             Start your registration
             <span className="btn-arrow" aria-hidden="true">

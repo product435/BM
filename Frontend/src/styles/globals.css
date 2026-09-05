@@ -45,9 +45,17 @@
   --line-light: rgba(12, 11, 9, 0.16);
   --line-dark: rgba(247, 242, 232, 0.15);
 
-  /* Type */
-  --font-serif: "Fraunces", "Georgia", serif;
-  --font-sans: "Archivo", "Helvetica Neue", sans-serif;
+  /* Type — single site-wide family: Fraunces, Georgia, serif.
+     --font-site is the one source of truth; --font-display/
+     --font-body/--font-label (and the legacy --font-serif/
+     --font-sans aliases) all resolve to it so every visible-text
+     selector across the codebase stays in lockstep. */
+  --font-site: "Fraunces", "Georgia", serif;
+  --font-serif: var(--font-site);
+  --font-sans: var(--font-site);
+  --font-display: var(--font-site);
+  --font-body: var(--font-site);
+  --font-label: var(--font-site);
 
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
 
@@ -88,7 +96,7 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
   color: var(--ivory-50);
@@ -203,7 +211,7 @@ footer[id] {
   align-items: center;
   justify-content: center;
   gap: 0.85rem;
-  font-family: var(--font-sans);
+  font-family: var(--font-label);
   font-weight: 600;
   font-size: 0.72rem;
   letter-spacing: 0.22em;
@@ -268,7 +276,7 @@ footer[id] {
   display: inline-flex;
   align-items: center;
   gap: 0.9rem;
-  font-family: var(--font-sans);
+  font-family: var(--font-label);
   font-weight: 600;
   font-size: var(--fs-label);
   letter-spacing: 0.34em;
@@ -306,7 +314,7 @@ footer[id] {
 }
 
 .sec-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 460;
   font-size: clamp(2.35rem, 5vw, 4.3rem);
   line-height: 1.02;
@@ -395,6 +403,14 @@ footer[id] {
 }
 
 .carousel-arrow {
+  display: none;
+}
+
+.carousel-progress {
+  display: none;
+}
+
+.carousel-dots {
   display: none;
 }
 
@@ -583,7 +599,7 @@ footer[id] {
 }
 
 .m-label {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 8.5vw, 3rem);
   color: var(--ivory-50);
   transition: color 0.3s ease;
@@ -662,8 +678,19 @@ footer[id] {
   padding-bottom: clamp(2.4rem, 5vh, 4rem);
 }
 
+/* Desktop-only nudge: the eyebrow/heading/paragraph/buttons column
+   needs a touch more left breathing room — a small right shift via
+   left padding, independent of .hero-meta/.hero-ticker below (their
+   own .container instances are untouched). No transform, no
+   negative margin, no large offset. */
+@media (min-width: 1025px) {
+  .hero-inner {
+    padding-left: 0.6rem;
+  }
+}
+
 .hero-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 460;
   font-size: clamp(3rem, 11vw, 8.6rem);
   line-height: 0.96;
@@ -733,16 +760,17 @@ footer[id] {
 }
 
 .hero-meta-value {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.05rem, 1.8vw, 1.4rem);
   color: var(--ivory-50);
   margin-top: 0.4rem;
 }
 
 .hero-meta-value--date {
-  font-size: clamp(2.1rem, 4.6vw, 3.6rem);
+  font-size: clamp(1.6rem, 3.6vw, 3rem);
   color: var(--brass-300);
-  line-height: 1;
+  line-height: 1.05;
+  white-space: nowrap;
 }
 
 .scroll-cue {
@@ -796,7 +824,7 @@ footer[id] {
 }
 
 .hero-ticker .marquee-item {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1rem, 1.7vw, 1.25rem);
   letter-spacing: 0.06em;
   color: var(--stone-400);

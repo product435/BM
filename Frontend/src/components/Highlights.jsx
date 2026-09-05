@@ -23,7 +23,7 @@ export default function Highlights() {
           </h2>
           <p className="highlights-sub">
             Curated sessions, expert interactions, founder pitches, business
-            networking and investment opportunities — all in one powerful
+            networking and investment opportunities all in one powerful
             experience.
           </p>
         </Reveal>
@@ -38,6 +38,7 @@ export default function Highlights() {
             itemClassName="agenda-item"
             variant="light"
             ariaLabel="Event agenda"
+            showDots
             renderItem={(item) => (
               <>
                 <p className="agenda-time">{item.time}</p>
@@ -56,6 +57,7 @@ export default function Highlights() {
             itemClassName="special-item"
             variant="light"
             ariaLabel="What makes it special"
+            showDots
             renderItem={(item) => (
               <>
                 <span className="special-index">{item.index}</span>
@@ -74,6 +76,7 @@ export default function Highlights() {
             itemClassName="value-strip-item"
             variant="light"
             ariaLabel="What's in the event"
+            showDots
             renderItem={(item, i) => (
               <>
                 <span className="value-strip-index">

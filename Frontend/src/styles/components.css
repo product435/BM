@@ -109,7 +109,7 @@
 }
 
 .intro-media-headline {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--fs-card-title);
   font-weight: 460;
   letter-spacing: -0.01em;
@@ -166,7 +166,7 @@
 }
 
 .intro-stat-value {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 3.6vw, 3.1rem);
   font-weight: 420;
   line-height: 1;
@@ -251,7 +251,7 @@
 }
 
 .why-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.4rem, 2.4vw, 1.9rem);
   color: var(--ivory-50);
 }
@@ -366,7 +366,7 @@
 }
 
 .exp-num {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2.8rem, 4.6vw, 4.1rem);
   font-weight: 460;
   line-height: 1;
@@ -381,7 +381,7 @@
 }
 
 .exp-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--fs-card-title);
   margin-top: 1.6rem;
   color: var(--ink-950);
@@ -435,7 +435,7 @@
 
 .exp-highlight-title {
   margin-top: 0.5rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: var(--ink-950);
 }
@@ -484,7 +484,7 @@
   padding: 1.3rem 1.6rem;
   border-left: 2px solid var(--brass-400);
   background: var(--ivory-50);
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1rem, 1.6vw, 1.2rem);
   font-style: italic;
   line-height: 1.6;
@@ -582,7 +582,7 @@
 }
 
 .cat-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.9rem, 3vw, 2.6rem);
   font-weight: 460;
   letter-spacing: -0.01em;
@@ -781,7 +781,7 @@
 .school-row-index {
   width: 1.9rem;
   flex: none;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: var(--brass-300);
   line-height: 1;
@@ -855,6 +855,10 @@
   background: var(--ink-900);
 }
 
+.how-lede-accent {
+  margin-top: 0.6rem;
+}
+
 .how-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -885,7 +889,7 @@
 }
 
 .how-num {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2.3rem, 3.6vw, 3.2rem);
   font-weight: 420;
   color: var(--brass-300);
@@ -894,7 +898,7 @@
 }
 
 .how-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--fs-card-title);
   color: var(--ivory-50);
   margin-top: 1.5rem;
@@ -1032,7 +1036,7 @@
 
 .guest-initials {
   position: relative;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(3.2rem, 5.6vw, 4.6rem);
   font-weight: 400;
   letter-spacing: 0.02em;
@@ -1054,7 +1058,7 @@
 }
 
 .guest-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.45rem, 2.2vw, 1.8rem);
   font-weight: 460;
 }
@@ -1108,7 +1112,7 @@
 }
 
 .qa-mark {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 6rem;
   line-height: 0.6;
   color: var(--brass-400);
@@ -1133,7 +1137,7 @@
 }
 
 .qa-quote {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.9rem, 3.6vw, 3rem);
@@ -1175,7 +1179,7 @@
 }
 
 .qa-faq-question {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.15rem;
   color: var(--ivory-50);
 }
@@ -1238,7 +1242,7 @@
 
 .highlights-heading {
   margin-top: 1.4rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(2rem, 4.4vw, 3.4rem);
   font-weight: 460;
   letter-spacing: -0.01em;
@@ -1328,7 +1332,7 @@
 }
 
 .agenda-time {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: var(--brass-500);
 }
@@ -1389,7 +1393,7 @@
 
 .special-item-title {
   margin-top: 0.5rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.02rem;
   color: var(--ink-950);
 }
@@ -1459,7 +1463,7 @@
 }
 
 .highlights .marquee-item {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.6vw, 2.8rem);
   font-weight: 460;
   letter-spacing: -0.01em;
@@ -1570,7 +1574,7 @@
 }
 
 .jaipur-row-value {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.15rem, 2vw, 1.6rem);
   color: var(--ivory-50);
   text-align: right;
@@ -1633,7 +1637,7 @@
 }
 
 .reg-step-index {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.4rem;
   color: var(--brass-500);
   flex: none;
@@ -1647,53 +1651,6 @@
 .reg-step-text strong {
   color: var(--ink-950);
   font-weight: 600;
-}
-
-.reg-glance {
-  margin-top: 2.6rem;
-  border: 1px solid var(--line-light);
-  padding: 1.6rem 1.8rem;
-}
-
-.reg-glance-title {
-  font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: var(--stone-500);
-}
-
-.reg-glance-rows {
-  margin-top: 1.1rem;
-  display: grid;
-  gap: 0.7rem;
-}
-
-.reg-glance-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  font-size: 0.85rem;
-}
-
-.reg-glance-row span:first-child {
-  color: var(--stone-500);
-}
-
-.reg-glance-row span:last-child {
-  font-family: var(--font-serif);
-  font-size: 1.05rem;
-  color: var(--ink-950);
-}
-
-.reg-glance-note {
-  margin-top: 1.1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line-light);
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-  color: var(--stone-500);
 }
 
 .reg-right {
@@ -1718,7 +1675,7 @@
 }
 
 .reg-panel-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 460;
 }
@@ -1778,6 +1735,30 @@
   gap: 1.9rem;
 }
 
+/* Mobile/tablet only: keep the form collapsed until a category is
+   tapped, so the section opens on just the role cards instead of
+   the full field list. Desktop (>1024px) always shows the form —
+   this rule never applies there. */
+@media (max-width: 1024px) {
+  .reg-form-collapse {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  }
+
+  .reg-form-collapse > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .reg-form-collapse.is-open {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease 0.1s;
+  }
+}
+
 /* Floating-label field */
 .field {
   position: relative;
@@ -1791,7 +1772,7 @@
   border-radius: 0;
   padding: 1.55rem 0 0.85rem;
   color: var(--ivory-50);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.4;
   transition: border-color 0.35s ease;
@@ -1869,6 +1850,88 @@ textarea.field-input {
   height: 0.4rem;
   background: currentColor;
   flex: none;
+}
+
+/* Registration Fees — read-only display field, styled like the
+   other floating-label fields but without an actual input. */
+.reg-fee-block {
+  margin-top: 0.6rem;
+}
+
+.field--display {
+  padding: 1.55rem 0 0.85rem;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.field-label--static {
+  position: static;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--stone-400);
+}
+
+.reg-fee-value {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--ivory-50);
+}
+
+/* Dynamic payment QR — one at a time, shown only for paid categories. */
+.reg-qr-panel {
+  margin-top: 1.4rem;
+  padding: 1.4rem;
+  border: 1px solid var(--line-dark);
+  background: rgba(247, 242, 232, 0.03);
+  text-align: center;
+}
+
+.reg-qr-title {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--stone-400);
+}
+
+.reg-qr-code {
+  margin: 1rem auto 0;
+  width: fit-content;
+  padding: 0.75rem;
+  background: var(--ivory-50);
+  border-radius: 4px;
+}
+
+.reg-qr-amount {
+  margin-top: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--brass-300);
+}
+
+.reg-qr-note {
+  margin-top: 0.6rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--stone-500);
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  .reg-qr-panel {
+    padding: 1.1rem;
+  }
+
+  .reg-qr-code svg {
+    width: 128px !important;
+    height: 128px !important;
+    max-width: 100%;
+  }
 }
 
 .field.has-error .field-input {
@@ -1950,7 +2013,7 @@ textarea.field-input {
 }
 
 .reg-success-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.9rem, 3vw, 2.6rem);
   font-weight: 460;
 }
@@ -2021,20 +2084,37 @@ textarea.field-input {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-family: var(--font-serif);
-  font-size: clamp(7rem, 26vw, 24rem);
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 9.5vw, 8.5rem);
   font-weight: 460;
   line-height: 1;
+  letter-spacing: -0.01em;
   white-space: nowrap;
+  text-align: center;
   color: transparent;
   -webkit-text-stroke: 1px rgba(247, 242, 232, 0.09);
   pointer-events: none;
   user-select: none;
 }
 
+@media (max-width: 640px) {
+  .cta-ghost {
+    font-size: clamp(1.6rem, 8.6vw, 3.2rem);
+    letter-spacing: -0.02em;
+  }
+}
+
+@media (min-width: 1025px) {
+  .cta-ghost {
+    font-size: clamp(6rem, 11.5vw, 11rem);
+    letter-spacing: -0.015em;
+  }
+}
+
 .cta-final-title {
   position: relative;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 460;
   font-size: clamp(2.7rem, 7vw, 6rem);
   line-height: 1.02;
@@ -2098,7 +2178,7 @@ textarea.field-input {
 }
 
 .sector-focus-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-weight: 460;
   font-size: clamp(1.7rem, 3.4vw, 2.6rem);
   letter-spacing: -0.01em;
@@ -2135,7 +2215,7 @@ textarea.field-input {
 
 .sector-card-title {
   margin-top: 0.6rem;
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: var(--ivory-50);
 }
@@ -2310,8 +2390,17 @@ textarea.field-input {
 }
 
 @media (max-width: 420px) {
-  .reg-cats {
-    grid-template-columns: 1fr;
+  .reg-cat {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .reg-cat-name {
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+  }
+
+  .reg-cat-short {
+    font-size: 0.68rem;
   }
 
   .reg-form-foot {
@@ -2459,5 +2548,409 @@ textarea.field-input {
   .carousel-arrow svg {
     width: 0.9rem;
     height: 0.9rem;
+  }
+}
+
+/* ── Mobile-only fix: "What makes BMI different?" carousels ───
+   Scoped strictly to .exp-grid (differentiator cards) and
+   .exp-highlights (Key Experience Highlights) so no other
+   carousel on the site is affected. Shows one full card per
+   slide (no neighboring-card preview) and drops the arrows
+   below the card content instead of overlapping it. */
+@media (max-width: 640px) {
+  .exp-grid.carousel-track,
+  .exp-highlights.carousel-track {
+    padding-bottom: 3.4rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .exp-grid.carousel-track::-webkit-scrollbar,
+  .exp-highlights.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-item.exp-cell,
+  .carousel-item.exp-highlight {
+    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .exp-grid ~ .carousel-arrow,
+  .exp-highlights ~ .carousel-arrow {
+    top: auto;
+    bottom: 0;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .exp-grid ~ .carousel-arrow svg,
+  .exp-highlights ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .exp-grid ~ .carousel-dots,
+  .exp-highlights ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.15rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .exp-grid ~ .carousel-dots .carousel-dot,
+  .exp-highlights ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(220, 192, 138, 0.28);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .exp-grid ~ .carousel-dots .carousel-dot.is-active,
+  .exp-highlights ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-400);
+  }
+}
+
+/* ── Mobile-only fix: "Choose your path" participation cards ──
+   Scoped strictly to .cat-grid (Student/Visitor/Entrepreneur/
+   Business Tycoon) so no other carousel on the site is affected.
+   Shows one full card per slide (no neighboring-card preview),
+   drops the arrows below the card content, and shows dot
+   pagination below the arrows — same pattern site-wide. */
+@media (max-width: 640px) {
+  .cat-grid.carousel-track {
+    padding-bottom: 4.4rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .cat-grid.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-item.cat-card {
+    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .cat-grid ~ .carousel-arrow {
+    top: auto;
+    bottom: 1.6rem;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .cat-grid ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .cat-grid ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cat-grid ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(12, 11, 9, 0.18);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .cat-grid ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-500);
+  }
+}
+
+/* ── Mobile-only fix: BMI Support Model carousel ────────────────
+   Scoped strictly to .school-list so no other carousel or desktop
+   layout is affected. Shows one full card per slide (no
+   neighboring-card preview) and drops the arrows below the card
+   content instead of overlapping it. */
+@media (max-width: 640px) {
+  .school-list.carousel-track {
+    padding-bottom: 4.4rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .school-list.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-item.school-row {
+    flex: 0 0 100%;
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .school-list ~ .carousel-arrow {
+    top: auto;
+    bottom: 1.6rem;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .school-list ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .school-list ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .school-list ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(247, 242, 232, 0.25);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .school-list ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-400);
+  }
+}
+
+/* ── Mobile-only fix: Event Agenda / What Makes It Special? /
+   What's In The Event carousels ────────────────────────────────
+   Scoped strictly to .agenda-track / .special-grid / .value-strip.
+   Centers the active card (no neighboring-card preview), moves
+   arrows below the card, and shows dot pagination below the
+   arrows — same pattern as Guests. */
+@media (max-width: 640px) {
+  .agenda-track.carousel-track,
+  .special-grid.carousel-track,
+  .value-strip.carousel-track {
+    padding-bottom: 4.4rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .agenda-track.carousel-track::-webkit-scrollbar,
+  .special-grid.carousel-track::-webkit-scrollbar,
+  .value-strip.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-item.agenda-item,
+  .carousel-item.special-item,
+  .carousel-item.value-strip-item {
+    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .agenda-track ~ .carousel-arrow,
+  .special-grid ~ .carousel-arrow,
+  .value-strip ~ .carousel-arrow {
+    top: auto;
+    bottom: 1.6rem;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .agenda-track ~ .carousel-arrow svg,
+  .special-grid ~ .carousel-arrow svg,
+  .value-strip ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .agenda-track ~ .carousel-dots,
+  .special-grid ~ .carousel-dots,
+  .value-strip ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .agenda-track ~ .carousel-dots .carousel-dot,
+  .special-grid ~ .carousel-dots .carousel-dot,
+  .value-strip ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(220, 192, 138, 0.28);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .agenda-track ~ .carousel-dots .carousel-dot.is-active,
+  .special-grid ~ .carousel-dots .carousel-dot.is-active,
+  .value-strip ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-400);
+  }
+}
+
+/* ── Mobile-only fix: Guests carousel ───────────────────────────
+   Scoped strictly to .guest-grid. Centers the active guest card
+   (no neighboring-card preview), moves arrows below the card, and
+   shows dot pagination below the arrows, synced to scroll position. */
+@media (max-width: 640px) {
+  .guest-grid.carousel-track {
+    padding-bottom: 4.4rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .guest-grid.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .guest-grid .carousel-item {
+    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .guest-grid ~ .carousel-arrow {
+    top: auto;
+    bottom: 1.6rem;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .guest-grid ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .guest-grid ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .guest-grid ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(220, 192, 138, 0.28);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .guest-grid ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-400);
+  }
+}
+
+/* ── Mobile-only fix: "Investing in India's tomorrow" sectors ──
+   Scoped strictly to .sector-track (the 12 sector cards) so the
+   heading/eyebrow above it and every other carousel are unaffected.
+   Shows one full card per slide (no neighboring-card preview) and
+   drops the arrows below the card content instead of overlapping
+   the index/title/description. */
+@media (max-width: 640px) {
+  .sector-track.carousel-track {
+    padding-bottom: 4.4rem;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .sector-track.carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-item.sector-card {
+    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    max-width: none;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .sector-track ~ .carousel-arrow {
+    top: auto;
+    bottom: 1.6rem;
+    transform: none;
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .sector-track ~ .carousel-arrow svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .sector-track ~ .carousel-dots {
+    display: flex;
+    position: absolute;
+    left: 50%;
+    bottom: 1.6rem;
+    transform: translate(-50%, 50%);
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .sector-track ~ .carousel-dots .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(247, 242, 232, 0.25);
+    padding: 0;
+    transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .sector-track ~ .carousel-dots .carousel-dot.is-active {
+    width: 18px;
+    height: 8px;
+    background: var(--brass-400);
   }
 }

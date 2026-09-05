@@ -32,7 +32,7 @@ export default function EventIntro() {
               <strong>promising ideas</strong>, executing startups, operating
               businesses, entrepreneurs, industry experts and{" "}
               <strong>strategic partners</strong> on one curated platform. The
-              objective goes beyond investment — selected ventures may also
+              objective goes beyond investment selected ventures may also
               receive access to management guidance, technology, networks,
               operational support and strategic expertise.
             </p>
@@ -83,7 +83,7 @@ export default function EventIntro() {
           ))}
         </Reveal>
         <p className="intro-note">
-          Venue and capacity figures are being finalized — details will be
+          Venue and capacity figures are being finalized details will be
           confirmed ahead of the event.
         </p>
       </div>

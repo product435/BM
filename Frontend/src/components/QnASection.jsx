@@ -5,7 +5,7 @@ import SectionHeading from "./SectionHeading.jsx";
 import { useSiteContent } from "../context/SiteContext.jsx";
 
 export default function QnASection() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
   const { content } = useSiteContent();
   const qaSession = content?.faq;
 
@@ -28,7 +28,7 @@ export default function QnASection() {
                     Learn.
                   </span>
                 }
-                lede="An open-floor conversation, not a monologue. Bring the questions you've been sitting on — the event is listening."
+                lede="An open floor conversation, not a monologue. Bring the questions you've been sitting on the event is listening."
                 dark
               />
             </Reveal>

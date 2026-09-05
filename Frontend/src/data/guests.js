@@ -27,7 +27,7 @@ export const GUESTS = [
     name: "Aman",
     initials: "AM",
     role: "Q&A & discussion session",
-    description: "Leading the open-floor conversation — questions from the event, answered straight.",
+    description: "Leading the open floor conversation questions from the event, answered straight.",
   },
   {
     id: "rajat",
@@ -53,4 +53,4 @@ export const GUESTS = [
 ];
 
 export const GUESTS_NOTE =
-  "The lineup is being finalized — more voices may join the event before the 20th.";
+  "The lineup is being finalized more voices may join the event before the 20th.";

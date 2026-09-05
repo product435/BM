@@ -36,8 +36,8 @@ export default function JaipurSection({ onRegister, onExploreCategories }) {
 
             <Reveal delay={100}>
               <p className="jaipur-copy">
-                A city of <strong>craft and commerce</strong> — home to a
-                growing student-and-startup ecosystem, campuses like{" "}
+                A city of <strong>craft and commerce</strong> home to a
+                growing student andstartup ecosystem, campuses like{" "}
                 <strong>MNIT</strong>, and a generation of founders who
                 build for India. Jaipur isn't just the backdrop.{" "}
                 <strong>It's part of the pitch.</strong>

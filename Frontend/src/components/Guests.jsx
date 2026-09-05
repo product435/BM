@@ -32,6 +32,7 @@ export default function Guests() {
             trackClassName="guest-grid"
             variant="light"
             ariaLabel="Guests"
+            showDots
             renderItem={(guest, i) => (
               <Reveal delay={(i % 3) * 90}>
                 <GuestCard guest={guest} index={i} />
