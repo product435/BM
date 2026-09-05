@@ -2,15 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, ClipboardCheck, CreditCard,
-  Ticket, BarChart3, Settings, Bell, Search,
-  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut
+  Ticket, BarChart3, Settings, Bell, Search, MapPin,
+  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import AdminRegistrations from './AdminRegistrations';
-import AdminCMS from './AdminCMS';
 import AdminScanner from './AdminScanner';
-import { PenTool } from 'lucide-react';
+import { PenTool, LayoutTemplate } from 'lucide-react';
+import AdminHero from './AdminHero';
+import AdminGuests from './AdminGuests';
+import AdminVenue from './AdminVenue';
+import AdminEventAmount from './AdminEventAmount';
+import AdminEventExperience from './AdminEventExperience';
+import AdminQASession from './AdminQASession';
 
 // ── Brand tokens from BMI design system ──────────────────────
 const C = {
@@ -47,7 +52,12 @@ const NAV = [
   { name: 'Review',           icon: ClipboardCheck  },
   { name: 'Payments',         icon: CreditCard      },
   { name: 'Tickets & Check-in', icon: Ticket        },
-  { name: 'CMS',              icon: PenTool         },
+  { name: 'Q&A Session',      icon: HelpCircle      },
+  { name: 'Hero Section',     icon: LayoutTemplate  },
+  { name: 'The Venue',        icon: MapPin          },
+  { name: 'Event Day Exp',    icon: Clock           },
+  { name: 'Event Amount',     icon: BarChart3       },
+  { name: 'Guests',           icon: Users           },
   { name: 'Reports',          icon: BarChart3       },
   { name: 'Settings',         icon: Settings        },
 ];
@@ -527,8 +537,18 @@ export default function AdminDashboard() {
             openRegistrationId={openRegistrationId}
             onOpenRegistrationHandled={() => setOpenRegistrationId(null)}
           />
-        ) : active === 'CMS' ? (
-          <AdminCMS />
+        ) : active === 'Q&A Session' ? (
+          <AdminQASession />
+        ) : active === 'Hero Section' ? (
+          <AdminHero />
+        ) : active === 'The Venue' ? (
+          <AdminVenue />
+        ) : active === 'Event Day Exp' ? (
+          <AdminEventExperience />
+        ) : active === 'Event Amount' ? (
+          <AdminEventAmount />
+        ) : active === 'Guests' ? (
+          <AdminGuests />
         ) : active === 'Tickets & Check-in' ? (
           <AdminScanner />
         ) : (
