@@ -10,8 +10,8 @@ import { supabase } from '../lib/supabase';
 import AdminRegistrations from './AdminRegistrations';
 import AdminCMS from './AdminCMS';
 import AdminScanner from './AdminScanner';
-import { PenTool } from 'lucide-react';
-
+import { PenTool, LayoutTemplate } from 'lucide-react';
+import AdminHero from './AdminHero';
 // ── Brand tokens from BMI design system ──────────────────────
 const C = {
   ink950: '#0c0b09',
@@ -48,6 +48,7 @@ const NAV = [
   { name: 'Payments',         icon: CreditCard      },
   { name: 'Tickets & Check-in', icon: Ticket        },
   { name: 'CMS',              icon: PenTool         },
+  { name: 'Hero Section',     icon: LayoutTemplate  },
   { name: 'Reports',          icon: BarChart3       },
   { name: 'Settings',         icon: Settings        },
 ];
@@ -529,6 +530,8 @@ export default function AdminDashboard() {
           />
         ) : active === 'CMS' ? (
           <AdminCMS />
+        ) : active === 'Hero Section' ? (
+          <AdminHero />
         ) : active === 'Tickets & Check-in' ? (
           <AdminScanner />
         ) : (
