@@ -13,7 +13,7 @@ export default function JaipurSection({
     description: "A city of craft and commerce — home to a growing student-and-startup ecosystem, campuses like MNIT, and a generation of founders who build for India. Jaipur isn't just the backdrop. It's part of the pitch.",
     image_url: "https://images.pexels.com/photos/9275222/pexels-photo-9275222.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800",
     image_caption: "The Pink City — tradition with an eye on tomorrow",
-    event_date: "20th",
+    event_date: "20th September",
     location: "Jaipur",
     venue_status: "To be announced",
     participation_text: "By registration",

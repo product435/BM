@@ -117,14 +117,17 @@
 }
 
 .intro-media-pills {
+  margin-top: 0.6rem;
+}
+
+.intro-media-pills--desktop {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem 0.7rem;
-  margin-top: 0.6rem;
 }
 
-.intro-media-pills li {
+.intro-media-pills--desktop li {
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: var(--ls-label);
@@ -132,10 +135,16 @@
   color: var(--stone-500);
 }
 
-.intro-media-pills li:not(:last-child)::after {
+.intro-media-pills--desktop li:not(:last-child)::after {
   content: "•";
   margin-left: 0.7rem;
   color: var(--brass-400);
+}
+
+/* Mobile-only three-row layout (see .intro-media-pills--mobile below) —
+   hidden here, shown inside the 760px media query. */
+.intro-media-pills--mobile {
+  display: none;
 }
 
 .intro-media-location {
@@ -146,6 +155,10 @@
   text-transform: uppercase;
   color: var(--stone-500);
   padding-top: 0.3rem;
+}
+
+.intro-media-location--mobile {
+  display: none;
 }
 
 .intro-stats {
@@ -815,26 +828,30 @@
 
 .funding-media-frame {
   position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
 }
 
+/* Outline sits flush against the image's own box (no offset/translate)
+   so it hugs the image cleanly with no empty gap between the two. */
 .funding-media-frame::before {
   content: "";
   position: absolute;
   inset: 0;
-  transform: translate(1.1rem, 1.1rem);
   border: 1px solid var(--brass-400);
   opacity: 0.55;
   pointer-events: none;
+  z-index: 1;
 }
 
 .funding-media-frame img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  aspect-ratio: 3 / 4;
   object-fit: cover;
   object-position: center;
   filter: saturate(0.65) contrast(1.05) brightness(0.92);
-  position: relative;
 }
 
 .funding-media-caption {
@@ -848,6 +865,18 @@
   letter-spacing: var(--ls-label);
   text-transform: uppercase;
   color: var(--stone-400);
+}
+
+/* Mobile only: a gentler crop than desktop's tall 3:4 portrait —
+   just enough shorter to feel less dominant, without cropping so
+   aggressively that the person looks compressed. object-fit: cover
+   still handles the crop naturally (no stretching); the outline
+   (::before) automatically follows since it shares the same frame
+   box. */
+@media (max-width: 640px) {
+  .funding-media-frame {
+    aspect-ratio: 4 / 4.6;
+  }
 }
 
 /* ── How It Works ──────────────────────────────────────────── */
@@ -1243,10 +1272,10 @@
 .highlights-heading {
   margin-top: 1.4rem;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4.4vw, 3.4rem);
+  font-size: 37.6px;
   font-weight: 460;
-  letter-spacing: -0.01em;
-  line-height: 1.08;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
   color: var(--ink-950);
   text-wrap: balance;
 }
@@ -1497,24 +1526,30 @@
 
 .jaipur-media-frame {
   position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
 }
 
+/* Outline sits flush against the image's own box (no offset/translate)
+   so it hugs the image cleanly with no empty gap between the two. */
 .jaipur-media-frame::before {
   content: "";
   position: absolute;
   inset: 0;
-  transform: translate(-1.1rem, 1.1rem);
   border: 1px solid var(--rose-300);
   opacity: 0.4;
   pointer-events: none;
+  z-index: 1;
 }
 
 .jaipur-media-frame img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   object-fit: cover;
+  object-position: center;
   filter: saturate(0.8) contrast(1.05);
-  position: relative;
 }
 
 .jaipur-media-frame::after {
@@ -2079,39 +2114,6 @@ textarea.field-input {
   padding-bottom: clamp(5rem, 11vw, 9.5rem);
 }
 
-.cta-ghost {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 9.5vw, 8.5rem);
-  font-weight: 460;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  white-space: nowrap;
-  text-align: center;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(247, 242, 232, 0.09);
-  pointer-events: none;
-  user-select: none;
-}
-
-@media (max-width: 640px) {
-  .cta-ghost {
-    font-size: clamp(1.6rem, 8.6vw, 3.2rem);
-    letter-spacing: -0.02em;
-  }
-}
-
-@media (min-width: 1025px) {
-  .cta-ghost {
-    font-size: clamp(6rem, 11.5vw, 11rem);
-    letter-spacing: -0.015em;
-  }
-}
-
 .cta-final-title {
   position: relative;
   font-family: var(--font-display);
@@ -2120,6 +2122,14 @@ textarea.field-input {
   line-height: 1.02;
   letter-spacing: -0.015em;
   text-wrap: balance;
+}
+
+/* Mobile only: match the requested 37.6px floor (was 43.2px via the
+   clamp's 2.7rem minimum above). Desktop/tablet keep the base clamp. */
+@media (max-width: 640px) {
+  .cta-final-title {
+    font-size: clamp(2.35rem, 7vw, 6rem);
+  }
 }
 
 .cta-final-title .t-italic {
@@ -2312,6 +2322,56 @@ textarea.field-input {
 }
 
 @media (max-width: 760px) {
+  /* "Funding is only the beginning" keywords — three complete,
+     unbreakable text rows (not per-word flex/grid items), so a row
+     can never split mid-sentence on narrow screens. */
+  .intro-media-pills--desktop {
+    display: none;
+  }
+
+  .intro-media-pills--mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .intro-media-pills-row {
+    font-size: var(--fs-label);
+    font-weight: 600;
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--stone-500);
+    white-space: nowrap;
+  }
+
+  .intro-media-pills-row .dot {
+    color: var(--brass-400);
+  }
+
+  /* If a row still can't fit at very small widths, shrink only this
+     keyword text (never wrap it) until it does. */
+  @media (max-width: 360px) {
+    .intro-media-pills-row {
+      font-size: 0.56rem;
+      letter-spacing: 0.22em;
+    }
+  }
+
+  /* "JAIPUR, RAJASTHAN" moves below the Venue/Capacity stats on
+     mobile — the caption copy stays above the media, the standalone
+     copy below .intro-stats becomes visible instead. */
+  .intro-media-location--desktop {
+    display: none;
+  }
+
+  .intro-media-location--mobile {
+    display: block;
+    margin-top: 1.6rem;
+    text-align: center;
+  }
+
   .exp-expect {
     flex-direction: column;
     align-items: flex-start;
@@ -2333,6 +2393,7 @@ textarea.field-input {
   .intro-stats {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.6rem 0;
+    padding-top: 1.6rem;
   }
 
   .intro-stat {
@@ -2633,19 +2694,43 @@ textarea.field-input {
   .cat-grid.carousel-track {
     padding-bottom: 4.4rem;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
+    gap: 0;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 
   .cat-grid.carousel-track::-webkit-scrollbar {
     display: none;
   }
 
-  .carousel-item.cat-card {
-    flex: 0 0 calc(100vw - var(--gutter) * 2);
+  /* REAL slide wrapper: Carousel.jsx renders each slide as a plain
+     <div class="carousel-item"> (ParticipationCategories never passes
+     an itemClassName), with the actual <article class="cat-card"> as
+     its child — so ".carousel-item.cat-card" (a compound selector
+     requiring BOTH classes on the same element) never matched
+     anything. That's why the generic fallback rule
+     ".carousel-item { flex: 0 0 84%; max-width: 20rem }" from the
+     shared 1024px block kept winning and the next card kept peeking.
+     Target the actual wrapper via a descendant selector instead. */
+  .cat-grid .carousel-item {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
     max-width: none;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-inline: var(--gutter);
+  }
+
+  .cat-grid .carousel-item > .cat-card {
+    width: 100%;
+    max-width: 24rem;
+    margin-inline: auto;
+    flex: none;
   }
 
   .cat-grid ~ .carousel-arrow {
@@ -2837,19 +2922,40 @@ textarea.field-input {
   .guest-grid.carousel-track {
     padding-bottom: 4.4rem;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
+    gap: 0;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 
   .guest-grid.carousel-track::-webkit-scrollbar {
     display: none;
   }
 
+  /* Each slide is a full-viewport-width, non-scrolling wrapper — the
+     actual card keeps its normal width and is centered inside it, so
+     it never touches the neighboring slide's card and no sliver of
+     the next card leaks into the current viewport (the previous
+     calc(100vw - gutter*2) width plus the shared track's 0.9rem gap
+     left just enough space for the next card to peek in). */
   .guest-grid .carousel-item {
-    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
     max-width: none;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding-inline: var(--gutter);
+  }
+
+  .guest-grid .carousel-item > .guest-card {
+    width: 100%;
+    max-width: 24rem;
+    margin-inline: auto;
+    flex: none;
   }
 
   .guest-grid ~ .carousel-arrow {
@@ -2901,19 +3007,37 @@ textarea.field-input {
   .sector-track.carousel-track {
     padding-bottom: 4.4rem;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
+    gap: 0;
+    margin-inline: 0;
+    padding-inline: 0;
   }
 
   .sector-track.carousel-track::-webkit-scrollbar {
     display: none;
   }
 
+  /* .carousel-item and .sector-card are the SAME element here
+     (renderItem returns a bare fragment, no inner card wrapper), so
+     the slide-sizing and the card's own visual box both live on this
+     one selector. The slide is a full-viewport-width, non-scrolling
+     unit (flex-basis 100%, no max-width cap — guaranteeing exactly
+     one slide's worth of scroll per navigation step); the card's
+     visible background/border only fills its border-box, so adding
+     side padding here makes the visible card narrower and centered
+     within the full-width slide, with no separate wrapper needed.
+     The previous calc(100vw - gutter*2) width plus the shared
+     track's 0.9rem gap had left just enough space for the next
+     card to peek in — this removes that leftover space entirely. */
   .carousel-item.sector-card {
-    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
     max-width: none;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    box-sizing: border-box;
+    padding-inline: calc(var(--gutter) + 0.5rem);
   }
 
   .sector-track ~ .carousel-arrow {

@@ -53,4 +53,4 @@ export const GUESTS = [
 ];
 
 export const GUESTS_NOTE =
-  "The lineup is being finalized more voices may join the event before the 20th.";
+  "The lineup is being finalized more voices may join the event before the 20th September.";

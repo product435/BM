@@ -142,13 +142,18 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged })
   // The success card is much shorter than the full form it replaces —
   // that height collapse can shift the page enough for the browser to
   // land on whatever section now sits under the viewport (e.g. the
-  // green CTA below Registration). Re-anchor to this panel once the
-  // success state has actually rendered, so submitting never navigates
-  // the visitor away from the Registration section.
+  // green CTA below Registration). Scroll to the TOP of the whole
+  // Registration section (not just this form panel) once the success
+  // state has actually rendered, so "11 — Registration" / "Ready to
+  // be part of the event?" / "Application received." are all visible
+  // together without the visitor scrolling up manually. #register
+  // already has scroll-margin-top set globally, so the fixed navbar
+  // never covers the heading.
   useEffect(() => {
     if (status !== "success") return;
     requestAnimationFrame(() => {
-      panelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const section = document.getElementById("register");
+      (section ?? panelRef.current)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, [status]);
 
@@ -172,11 +177,8 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged })
     setStatus("idle");
     setHasSelected(true);
     if (onCategoryChanged) onCategoryChanged(id);
-    // Mobile: bring the newly-revealed form into view. No-op on desktop,
-    // where the form is already visible beside the category cards.
-    requestAnimationFrame(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    });
+    // Intentionally no scrollIntoView/scrollTo here — selecting a
+    // category must never move the page. The form reveals in place.
   };
 
   const handleChange = (field) => (e) => {

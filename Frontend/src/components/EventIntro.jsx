@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   EVENT,
   IMAGES,
@@ -62,13 +63,41 @@ export default function EventIntro() {
           <div className="intro-media-caption">
             <div className="intro-media-caption-main">
               <p className="intro-media-headline">{INTRO_MEDIA_CAPTION.headline}</p>
-              <ul className="intro-media-pills" aria-label="What this platform offers">
+              <ul
+                className="intro-media-pills intro-media-pills--desktop"
+                aria-label="What this platform offers"
+              >
                 {INTRO_MEDIA_CAPTION.pills.map((pill) => (
                   <li key={pill}>{pill}</li>
                 ))}
               </ul>
+
+              {/* Mobile only: the same words as three complete, unbreakable
+                  rows (see .intro-media-pills--mobile) instead of the
+                  desktop flex-wrap list, which splits mid-row on narrow
+                  screens. */}
+              <div
+                className="intro-media-pills intro-media-pills--mobile"
+                aria-label="What this platform offers"
+              >
+                {[
+                  INTRO_MEDIA_CAPTION.pills.slice(0, 3),
+                  INTRO_MEDIA_CAPTION.pills.slice(3, 6),
+                  INTRO_MEDIA_CAPTION.pills.slice(6, 8),
+                ].map((row, rowIndex) => (
+                  <p className="intro-media-pills-row" key={rowIndex}>
+                    {row.map((word) => (
+                      <Fragment key={word}>
+                        <span className="dot">•</span> {word}{" "}
+                      </Fragment>
+                    ))}
+                  </p>
+                ))}
+              </div>
             </div>
-            <span className="intro-media-location">{EVENT.city}, Rajasthan</span>
+            <span className="intro-media-location intro-media-location--desktop">
+              {EVENT.city}, Rajasthan
+            </span>
           </div>
         </Reveal>
 
@@ -86,6 +115,9 @@ export default function EventIntro() {
           Venue and capacity figures are being finalized details will be
           confirmed ahead of the event.
         </p>
+        <span className="intro-media-location intro-media-location--mobile">
+          {EVENT.city}, Rajasthan
+        </span>
       </div>
     </section>
   );

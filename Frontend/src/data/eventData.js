@@ -166,11 +166,11 @@ export const WHAT_TO_EXPECT = [
   "Curated participation across stages",
   "Industry led conversations",
   "Strategic networking opportunities",
-  "Potential next-step evaluation for selected ventures",
+  "Potential next step evaluation for selected ventures",
 ];
 
 export const EXPERIENCE_CLOSING_LINE =
-  "From arrival to opportunity — BMI is designing an experience built for serious founders and growth-focused businesses.";
+  "From arrival to opportunity — BMI is designing an experience built for serious founders and growth focused businesses.";
 
 export const CATEGORIES = [
   {
@@ -231,6 +231,12 @@ export const REGISTRATION_FEES = {
 // Placeholder payment UPI target for the demo QR — swap for the real
 // payee/VPA once a payment gateway is wired up by the backend team.
 export const PAYMENT_UPI_ID = "bmipresents@upi";
+
+// Floating WhatsApp button target — swap WHATSAPP_NUMBER for the real
+// contact number (international format, digits only, no + or spaces,
+// e.g. "919876543210") once it's confirmed.
+export const WHATSAPP_NUMBER = "910000000000";
+export const WHATSAPP_MESSAGE = "Hi! I'd like to know more about BMI Presents.";
 
 export const FUNDING_AUDIENCE = [
   {

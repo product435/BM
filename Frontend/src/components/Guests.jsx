@@ -51,7 +51,7 @@ export default function Guests() {
 
         <div className="guests-foot">
           <span>Roles &amp; session details — being finalized</span>
-          <span>Jaipur · {`\u2192`} the 20th</span>
+          <span>Jaipur · {`\u2192`} the 20th September</span>
         </div>
       </div>
     </section>

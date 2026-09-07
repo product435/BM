@@ -2,6 +2,7 @@ import { EVENT, NAV_LINKS } from "../data/eventData.js";
 import {
   FacebookIcon,
   InstagramIcon,
+  WhatsappIcon,
   XIcon,
   YoutubeIcon,
 } from "./SocialIcons.jsx";
@@ -19,6 +20,7 @@ const socialLinks = [
   { name: "Instagram", url: "#", icon: InstagramIcon },
   { name: "X / Twitter", url: "#", icon: XIcon },
   { name: "YouTube", url: "#", icon: YoutubeIcon },
+  { name: "WhatsApp", url: "#", icon: WhatsappIcon },
 ];
 
 export default function Footer({ onNavigate }) {

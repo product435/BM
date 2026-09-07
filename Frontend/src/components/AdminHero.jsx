@@ -33,7 +33,7 @@ export default function AdminHero() {
     primaryCtaText: 'Register now',
     secondaryCtaText: 'Explore the event',
     ticker: 'Startup Pitches, Investment Conversations, Business Networking, Student Ideas, E-Sales, Innovation',
-    heroImage: 'https://images.pexels.com/photos/9275222/pexels-photo-9275222.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1000&w=1800'
+    heroImage: '/images/Apna_Jaipur.mp4'
   });
 
   const [message, setMessage] = useState({ type: '', text: '' });

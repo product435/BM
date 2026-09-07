@@ -69,13 +69,18 @@ export default function Carousel({
 
     // Loop past the last card back to the first (and vice versa),
     // rather than stopping — same scroll used by the arrows/swipe.
+    // The reset jump uses behavior:"instant" (not "smooth"): a smooth
+    // scroll from the last card back to left:0 visually travels
+    // backward across every card in between (1→2→3→4→5→4→3→2→1) —
+    // an instant jump snaps straight to the first card with no
+    // visible reverse travel, so autoplay only ever goes forward.
     const max = node.scrollWidth - node.clientWidth;
     if (direction > 0 && node.scrollLeft >= max - 4) {
-      node.scrollTo({ left: 0, behavior: "smooth" });
+      node.scrollTo({ left: 0, behavior: "instant" });
       return;
     }
     if (direction < 0 && node.scrollLeft <= 4) {
-      node.scrollTo({ left: max, behavior: "smooth" });
+      node.scrollTo({ left: max, behavior: "instant" });
       return;
     }
     node.scrollBy({ left: direction * step, behavior: "smooth" });

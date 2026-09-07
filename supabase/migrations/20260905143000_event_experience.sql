@@ -53,7 +53,7 @@ INSERT INTO public.event_experience (
     { "time": "02:30 PM", "title": "Vikas Patel Session", "description": "AI for Business: From Hype to Execution" },
     { "time": "03:00 PM", "title": "BMI Scale — Business Presentations", "description": "Operating businesses present growth opportunities" },
     { "time": "04:00 PM", "title": "Expert Clinics & Networking", "description": "1:1 expert interactions and ecosystem connections" },
-    { "time": "04:30 PM", "title": "BMI Investment Event", "description": "Top founders and businesses in closed-door evaluation" },
+    { "time": "04:30 PM", "title": "BMI Investment Event", "description": "Top founders and businesses in closed door evaluation" },
     { "time": "05:30 PM", "title": "Recognition & Diligence Selections", "description": "Shortlisted ventures announced for next stage" },
     { "time": "06:00 PM", "title": "BMI Future Roadmap & Closing", "description": "What''s next for founders and the ecosystem" }
   ]'::jsonb,
