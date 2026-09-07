@@ -12,6 +12,23 @@ export default function Highlights({ experienceData = null }) {
     special_items: [],
     value_strip: []
   };
+
+  const parseItems = (items) => {
+    if (!items) return [];
+    if (typeof items === 'string') {
+      try {
+        const parsed = JSON.parse(items);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return Array.isArray(items) ? items : [];
+  };
+
+  const agendaItems = parseItems(content.agenda);
+  const specialItems = parseItems(content.special_items);
+  const valueStripItems = parseItems(content.value_strip);
   return (
     <section
       className="highlights"
@@ -36,7 +53,7 @@ export default function Highlights({ experienceData = null }) {
             <p className="agenda-title">Event Agenda</p>
           </div>
           <Carousel
-            items={content.agenda}
+            items={agendaItems}
             trackClassName="agenda-track"
             itemClassName="agenda-item"
             variant="light"
@@ -55,7 +72,7 @@ export default function Highlights({ experienceData = null }) {
         <Reveal className="special" delay={100}>
           <p className="special-title">What Makes It Special?</p>
           <Carousel
-            items={content.special_items}
+            items={specialItems}
             trackClassName="special-grid"
             itemClassName="special-item"
             variant="light"
@@ -74,7 +91,7 @@ export default function Highlights({ experienceData = null }) {
         <Reveal className="value-strip-block" delay={140}>
           <p className="special-title">What's in the event</p>
           <Carousel
-            items={content.value_strip}
+            items={valueStripItems}
             trackClassName="value-strip"
             itemClassName="value-strip-item"
             variant="light"
