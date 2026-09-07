@@ -1,5 +1,9 @@
 import { AdminThemeContext } from '../context/AdminThemeContext';
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertCircle, Mail, Lock, LogIn } from 'lucide-react';
 const AdminLogin = () => {
   const { C } = useContext(AdminThemeContext);
   const [email, setEmail] = useState('');
