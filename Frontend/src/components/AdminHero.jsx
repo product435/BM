@@ -25,7 +25,7 @@ const SANS = '"Archivo","Helvetica Neue",sans-serif';
 export default function AdminHero() {
   const [formData, setFormData] = useState({
     city: 'Jaipur',
-    date: '20th',
+    date: '20th September',
     eyebrow: 'Capital. Capability. Connections.',
     titleLine1: 'Where ideas',
     titleLine2: 'meet opportunity',

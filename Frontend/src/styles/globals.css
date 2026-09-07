@@ -605,6 +605,12 @@ footer[id] {
   transition: color 0.3s ease;
 }
 
+@media (max-width: 640px) {
+  .m-label {
+    font-size: 28px;
+  }
+}
+
 .m-index {
   font-size: 0.62rem;
   font-weight: 600;

@@ -66,8 +66,8 @@ export default function Hero({
             A curated platform for Innovators, Founders, Operating
             Businesses, Industry Leaders and Strategic Partners to connect,
             build and scale, In{" "}
-            <strong>{EVENT.city}</strong>, on the{" "}
-            <strong>{EVENT.date}</strong> to explore what comes next.
+            <strong>{eventData.city}</strong>, on the{" "}
+            <strong>{eventData.date}</strong> to explore what comes next.
           </p>
         </Reveal>
 

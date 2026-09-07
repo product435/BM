@@ -5,14 +5,7 @@ import SectionHeading from "./SectionHeading.jsx";
 export default function Registration({
   selectedCategory,
   onCategoryChanged,
-  eventAmountData = null
 }) {
-  const amountData = eventAmountData || {
-    invitations_planned: "≈ 500–600",
-    businesses_expected: "≈ 30",
-    visitor_capacity: "≈ 100",
-    note: "Indicative figures — subject to confirmation."
-  };
   return (
     <section
       className="registration section"
@@ -59,27 +52,6 @@ export default function Registration({
                   </span>
                 </li>
               </ol>
-            </Reveal>
-
-            <Reveal delay={180}>
-              <aside className="reg-glance" aria-label="Event capacity at a glance">
-                <p className="reg-glance-title">The event at a glance</p>
-                <div className="reg-glance-rows">
-                  <div className="reg-glance-row">
-                    <span>Invitations planned</span>
-                    <span>{amountData.invitations_planned}</span>
-                  </div>
-                  <div className="reg-glance-row">
-                    <span>Businesses expected</span>
-                    <span>{amountData.businesses_expected}</span>
-                  </div>
-                  <div className="reg-glance-row">
-                    <span>Visitor capacity</span>
-                    <span>{amountData.visitor_capacity}</span>
-                  </div>
-                </div>
-                <p className="reg-glance-note">{amountData.note}</p>
-              </aside>
             </Reveal>
           </div>
 

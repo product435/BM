@@ -3,7 +3,7 @@ import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
 export default function QnASection({ qaData = null }) {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
 
   const content = qaData || {
     eyebrow: "08 — Q&A Session",
