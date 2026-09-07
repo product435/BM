@@ -43,7 +43,25 @@ export default function AdminEventExperience() {
     setLoading(true);
     const { data, error } = await supabase.from('event_experience').select('*').eq('id', 1).single();
     if (data) {
-      setFormData(data);
+      const parseItems = (items) => {
+        if (!items) return [];
+        if (typeof items === 'string') {
+          try {
+            const parsed = JSON.parse(items);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (e) {
+            return [];
+          }
+        }
+        return Array.isArray(items) ? items : [];
+      };
+
+      setFormData({
+        ...data,
+        agenda: parseItems(data.agenda),
+        special_items: parseItems(data.special_items),
+        value_strip: parseItems(data.value_strip),
+      });
     }
     setLoading(false);
   };
