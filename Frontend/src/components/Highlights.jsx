@@ -1,4 +1,4 @@
-import { HIGHLIGHTS } from "../data/eventData.js";
+import { HIGHLIGHTS, EVENT_AGENDA, EXPERIENCE_SPECIAL, EVENT_VALUE_STRIP } from "../data/eventData.js";
 import Carousel from "./Carousel.jsx";
 import Marquee from "./Marquee.jsx";
 import Reveal from "./Reveal.jsx";
@@ -8,9 +8,9 @@ export default function Highlights({ experienceData = null }) {
     eyebrow: '09 — Event Day Experience',
     heading: 'A full day of ideas, insights & impact.',
     subheading: 'Curated sessions, expert interactions, founder pitches, business networking and investment opportunities — all in one powerful experience.',
-    agenda: [],
-    special_items: [],
-    value_strip: []
+    agenda: EVENT_AGENDA,
+    special_items: EXPERIENCE_SPECIAL,
+    value_strip: EVENT_VALUE_STRIP
   };
 
   const parseItems = (items) => {
@@ -26,9 +26,13 @@ export default function Highlights({ experienceData = null }) {
     return Array.isArray(items) ? items : [];
   };
 
-  const agendaItems = parseItems(content.agenda);
-  const specialItems = parseItems(content.special_items);
-  const valueStripItems = parseItems(content.value_strip);
+  const parsedAgenda = parseItems(content.agenda);
+  const parsedSpecial = parseItems(content.special_items);
+  const parsedValue = parseItems(content.value_strip);
+
+  const agendaItems = parsedAgenda.length > 0 ? parsedAgenda : EVENT_AGENDA;
+  const specialItems = parsedSpecial.length > 0 ? parsedSpecial : EXPERIENCE_SPECIAL;
+  const valueStripItems = parsedValue.length > 0 ? parsedValue : EVENT_VALUE_STRIP;
   return (
     <section
       className="highlights"
