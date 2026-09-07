@@ -19,6 +19,7 @@ import AdminLogin from "./components/AdminLogin.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { SiteProvider } from "./context/SiteContext.jsx";
+import { AdminThemeProvider } from "./context/AdminThemeContext.jsx";
 import { supabase } from "./lib/supabase.js";
 
 const LandingPage = () => {
@@ -117,15 +118,17 @@ const LandingPage = () => {
 export default function App() {
   return (
     <SiteProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<ProtectedRoute />}>
-            <Route index element={<AdminDashboard />} />
-          </Route>
-        </Routes>
-      </Router>
+      <AdminThemeProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<ProtectedRoute />}>
+              <Route index element={<AdminDashboard />} />
+            </Route>
+          </Routes>
+        </Router>
+      </AdminThemeProvider>
     </SiteProvider>
   );
 }

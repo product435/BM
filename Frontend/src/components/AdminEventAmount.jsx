@@ -2,26 +2,34 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import Registration from './Registration';
 
-const C = {
-  ink950: '#0c0b09',
-  ink900: '#14120f',
-  ink800: '#1c1a15',
-  lineDark: 'rgba(247,242,232,0.10)',
-  ivory50: '#f7f2e8',
-  stone400: '#a49a84',
-  stone500: '#857b67',
-  brass400: '#c6a462',
-  brass500: '#a5844a',
-  em500: '#2c8360',
-  rose400: '#c87f63',
-};
+import { AdminThemeContext } from '../context/AdminThemeContext';
 
 const SERIF = '"Fraunces","Georgia",serif';
 const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 export default function AdminEventAmount() {
+  const { C } = React.useContext(AdminThemeContext);
+  
+  const inputStyle = {
+    width: '100%',
+    padding: '10px 12px',
+    background: C.ink900,
+    border: `1px solid ${C.lineDark}`,
+    borderRadius: '3px',
+    color: C.ivory50,
+    fontSize: '13px',
+    outline: 'none',
+    fontFamily: SANS,
+  };
+
+  const labelStyle = { 
+    display: 'block', 
+    fontSize: '12px', 
+    color: C.stone400, 
+    marginBottom: '6px' 
+  };
+
   const [formData, setFormData] = useState({
     invitations_planned: '≈ 500–600',
     businesses_expected: '≈ 30',
@@ -119,40 +127,10 @@ export default function AdminEventAmount() {
             </motion.div>
           </div>
 
-          {/* Live Preview */}
-          <div style={{ marginTop: '20px' }}>
-            <h3 style={{ fontFamily: SERIF, fontSize: '18px', color: C.ivory50, marginBottom: '16px' }}>Live Preview</h3>
-            <div style={{ border: `1px solid ${C.brass500}`, borderRadius: '4px', overflow: 'hidden', position: 'relative', background: C.ink950 }}>
-               <Registration 
-                 selectedCategory={null} 
-                 onCategoryChanged={() => {}}
-                 eventAmountData={formData}
-               />
-               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
-            </div>
-          </div>
-
         </div>
       </main>
     </div>
   );
 }
 
-const inputStyle = {
-  width: '100%',
-  padding: '10px 12px',
-  background: C.ink900,
-  border: `1px solid ${C.lineDark}`,
-  borderRadius: '3px',
-  color: C.ivory50,
-  fontSize: '13px',
-  outline: 'none',
-  fontFamily: SANS,
-};
 
-const labelStyle = { 
-  display: 'block', 
-  fontSize: '12px', 
-  color: C.stone400, 
-  marginBottom: '6px' 
-};

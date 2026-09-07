@@ -118,14 +118,17 @@ const CATEGORY_LABEL = {
   businessTycoon: "Business Tycoon",
 };
 
-export default function RegistrationForm({ initialCategory, onCategoryChanged }) {
+export default function RegistrationForm({ initialCategory, onCategoryChanged, dynamicFees, dynamicUpiId }) {
   const [category, setCategory] = useState(initialCategory || "student");
   const fields = FORM_FIELDS[category] || [];
+  
   // Registration Fees depend only on the selected CATEGORY (Student /
   // Visitor / Entrepreneur / Business Tycoon) — never on the typed
-  // Role field. Read straight from the single REGISTRATION_FEES config.
-  const fee = REGISTRATION_FEES[category] ?? 0;
-  const qrValue = `upi://pay?pa=${PAYMENT_UPI_ID}&pn=BMI%20Presents&am=${fee}&cu=INR&tn=BMI%20${category}%20registration`;
+  // Role field. Prefer dynamicFees if provided, else fallback to REGISTRATION_FEES.
+  const fee = dynamicFees ? dynamicFees[category] ?? 0 : REGISTRATION_FEES[category] ?? 0;
+  const upiId = dynamicUpiId || PAYMENT_UPI_ID;
+  const qrValue = `upi://pay?pa=${upiId}&pn=BMI%20Presents&am=${fee}&cu=INR&tn=BMI%20${category}%20registration`;
+  
   const [values, setValues] = useState(() => buildInitialValues(fields));
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});

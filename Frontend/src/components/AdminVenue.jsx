@@ -4,24 +4,32 @@ import { Check, Image as ImageIcon, RefreshCcw } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import JaipurSection from './JaipurSection';
 
-const C = {
-  ink950: '#0c0b09',
-  ink900: '#14120f',
-  ink800: '#1c1a15',
-  lineDark: 'rgba(247,242,232,0.10)',
-  ivory50: '#f7f2e8',
-  stone400: '#a49a84',
-  stone500: '#857b67',
-  brass400: '#c6a462',
-  brass500: '#a5844a',
-  em500: '#2c8360',
-  rose400: '#c87f63',
-};
-
+import { AdminThemeContext } from '../context/AdminThemeContext';
 const SERIF = '"Fraunces","Georgia",serif';
 const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 export default function AdminVenue() {
+  const { C } = React.useContext(AdminThemeContext);
+  
+  const inputStyle = {
+    width: '100%',
+    padding: '10px 12px',
+    background: C.ink900,
+    border: `1px solid ${C.lineDark}`,
+    borderRadius: '3px',
+    color: C.ivory50,
+    fontSize: '13px',
+    outline: 'none',
+    fontFamily: SANS,
+  };
+
+  const labelStyle = { 
+    display: 'block', 
+    fontSize: '12px', 
+    color: C.stone400, 
+    marginBottom: '6px' 
+  };
+
   const [formData, setFormData] = useState({
     eyebrow: '10 — The Venue',
     title_line_1: 'The next conversation',
@@ -185,7 +193,11 @@ export default function AdminVenue() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: C.ink900, border: `1px solid ${C.lineDark}`, padding: '12px', borderRadius: '3px' }}>
                       <div style={{ width: '60px', height: '60px', borderRadius: '3px', overflow: 'hidden', background: C.ink950, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         {previewImage ? (
-                           <img src={previewImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          previewImage.endsWith('.mp4') || previewImage.endsWith('.webm') ? (
+                            <video src={previewImage} style={{ width: '100%', height: '100%', objectFit: 'cover' }} muted playsInline />
+                          ) : (
+                            <img src={previewImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                          )
                         ) : (
                            <ImageIcon size={20} color={C.stone500} />
                         )}
@@ -234,22 +246,3 @@ export default function AdminVenue() {
     </div>
   );
 }
-
-const inputStyle = {
-  width: '100%',
-  padding: '10px 12px',
-  background: C.ink900,
-  border: `1px solid ${C.lineDark}`,
-  borderRadius: '3px',
-  color: C.ivory50,
-  fontSize: '13px',
-  outline: 'none',
-  fontFamily: SANS,
-};
-
-const labelStyle = { 
-  display: 'block', 
-  fontSize: '12px', 
-  color: C.stone400, 
-  marginBottom: '6px' 
-};

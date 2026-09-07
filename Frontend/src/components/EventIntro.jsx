@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase.js";
 import {
   EVENT,
   IMAGES,
@@ -8,40 +10,81 @@ import {
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
-export default function EventIntro() {
+// Helper to convert bold markdown to HTML (since description uses **text** for bold)
+const parseBold = (text) => {
+  if (!text) return null;
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+};
+
+export default function EventIntro({ previewData }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    if (previewData) {
+      setData(previewData);
+      return;
+    }
+
+    const fetchData = async () => {
+      const { data: introData, error } = await supabase
+        .from("event_intro")
+        .select("*")
+        .eq("id", 1)
+        .single();
+      
+      if (introData && !error) {
+        setData(introData);
+      }
+    };
+
+    fetchData();
+  }, [previewData]);
+
+  // Use dynamic data if available, fallback to constants
+  const eyebrow = data?.eyebrow || "01 — The Event";
+  
+  // Safe HTML parsing for the title since we allow <span class="t-italic">
+  const titleHtml = data?.title || `More than an event. <span class="t-italic t-emerald">A place</span> where ambition meets opportunity.`;
+  
+  const paragraph1 = data?.paragraph_1 || `${EVENT.org} Startup & Business Launch brings together **promising ideas**, executing startups, operating businesses, entrepreneurs, industry experts and **strategic partners** on one curated platform. The objective goes beyond investment selected ventures may also receive access to management guidance, technology, networks, operational support and strategic expertise.`;
+  const paragraph2 = data?.paragraph_2 || `One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next.`;
+  
+  const introWords = data?.intro_words || INTRO_WORDS;
+  const imageUrl = data?.image_url || IMAGES.networking;
+  const mediaHeadline = data?.media_headline || INTRO_MEDIA_CAPTION.headline;
+  const mediaPills = data?.media_pills || INTRO_MEDIA_CAPTION.pills;
+  const mediaLocation = data?.media_location || `${EVENT.city}, Rajasthan`;
+  const stats = data?.stats || INTRO_STATS;
+  const footerNote = data?.footer_note || "Venue and capacity figures are being finalized details will be confirmed ahead of the event.";
+
   return (
     <section className="intro section" id="about" aria-labelledby="about-title">
       <div className="container">
         <div className="intro-grid">
           <div className="intro-title-col">
             <SectionHeading
-              eyebrow="01 — The Event"
+              eyebrow={eyebrow}
               title={
-                <span id="about-title">
-                  More than an event.{" "}
-                  <span className="t-italic t-emerald">A place</span> where
-                  ambition meets opportunity.
-                </span>
+                <span id="about-title" dangerouslySetInnerHTML={{ __html: titleHtml }} />
               }
             />
           </div>
 
           <Reveal className="intro-copy-col" delay={120}>
             <p className="intro-copy intro-copy--tight">
-              {EVENT.org} Startup &amp; Business Launch brings together{" "}
-              <strong>promising ideas</strong>, executing startups, operating
-              businesses, entrepreneurs, industry experts and{" "}
-              <strong>strategic partners</strong> on one curated platform. The
-              objective goes beyond investment selected ventures may also
-              receive access to management guidance, technology, networks,
-              operational support and strategic expertise.
+              {parseBold(paragraph1)}
             </p>
             <p className="intro-copy">
-              One city. One powerful gathering. A space to connect, learn,
-              collaborate and create what comes next.
+              {paragraph2}
             </p>
             <ul className="intro-words" aria-label="What the event is about">
-              {INTRO_WORDS.map((word, i) => (
+              {introWords.map((word, i) => (
                 <li className="intro-word" key={word}>
                   {String(i + 1).padStart(2, "0")} — {word}
                 </li>
@@ -54,26 +97,26 @@ export default function EventIntro() {
           <div className="intro-media-frame">
             <img
               className="intro-media-fg"
-              src={IMAGES.networking}
-              alt="BM Sir — Belief, Consistency & Hard Work, the ultimate mantra of success"
+              src={imageUrl}
+              alt="Event Intro"
               loading="lazy"
             />
           </div>
           <div className="intro-media-caption">
             <div className="intro-media-caption-main">
-              <p className="intro-media-headline">{INTRO_MEDIA_CAPTION.headline}</p>
+              <p className="intro-media-headline">{mediaHeadline}</p>
               <ul className="intro-media-pills" aria-label="What this platform offers">
-                {INTRO_MEDIA_CAPTION.pills.map((pill) => (
+                {mediaPills.map((pill) => (
                   <li key={pill}>{pill}</li>
                 ))}
               </ul>
             </div>
-            <span className="intro-media-location">{EVENT.city}, Rajasthan</span>
+            <span className="intro-media-location">{mediaLocation}</span>
           </div>
         </Reveal>
 
         <Reveal className="intro-stats" delay={60}>
-          {INTRO_STATS.map((stat) => (
+          {stats.map((stat) => (
             <div className="intro-stat" key={stat.label}>
               <p className="intro-stat-value">
                 {stat.value === "TBA" ? <em>TBA</em> : stat.value}
@@ -83,8 +126,7 @@ export default function EventIntro() {
           ))}
         </Reveal>
         <p className="intro-note">
-          Venue and capacity figures are being finalized details will be
-          confirmed ahead of the event.
+          {footerNote}
         </p>
       </div>
     </section>

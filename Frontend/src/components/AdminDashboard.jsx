@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, ClipboardCheck, CreditCard,
   Ticket, BarChart3, Settings, Bell, Search, MapPin,
-  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle
+  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle, Sun, Moon
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -16,32 +16,13 @@ import AdminVenue from './AdminVenue';
 import AdminEventAmount from './AdminEventAmount';
 import AdminEventExperience from './AdminEventExperience';
 import AdminQASession from './AdminQASession';
+import AdminTheEvent from './AdminTheEvent';
+import AdminEventRegistration from './AdminEventRegistration';
+
+import { AdminThemeContext } from '../context/AdminThemeContext';
 
 // ── Brand tokens from BMI design system ──────────────────────
-const C = {
-  ink950: '#0c0b09',
-  ink900: '#14120f',
-  ink800: '#1c1a15',
-  ink700: '#262219',
-  ivory50: '#f7f2e8',
-  ivory100: '#efe8d8',
-  sand200: '#e3d8c0',
-  sand300: '#c9bb9e',
-  stone400: '#a49a84',
-  stone500: '#857b67',
-  stone600: '#6b6250',
-  brass300: '#dcc08a',
-  brass400: '#c6a462',
-  brass500: '#a5844a',
-  em900: '#0d2a20',
-  em700: '#1a4d38',
-  em600: '#1e6b4c',
-  em500: '#2c8360',
-  em300: '#8fc0a8',
-  rose400: '#c87f63',
-  lineDark: 'rgba(247,242,232,0.10)',
-  lineLight: 'rgba(12,11,9,0.14)',
-};
+// Removed static C, now using context
 
 const SERIF = '"Fraunces","Georgia",serif';
 const SANS = '"Archivo","Helvetica Neue",sans-serif';
@@ -51,9 +32,10 @@ const NAV = [
   { name: 'Registrations',    icon: Users           },
   { name: 'Review',           icon: ClipboardCheck  },
   { name: 'Payments',         icon: CreditCard      },
-  { name: 'Tickets & Check-in', icon: Ticket        },
+  { name: 'Event Registration', icon: ClipboardCheck},
   { name: 'Q&A Session',      icon: HelpCircle      },
   { name: 'Hero Section',     icon: LayoutTemplate  },
+  { name: 'The Event',        icon: LayoutTemplate  },
   { name: 'The Venue',        icon: MapPin          },
   { name: 'Event Day Exp',    icon: Clock           },
   { name: 'Event Amount',     icon: BarChart3       },
@@ -90,23 +72,29 @@ const timeAgo = (isoDate) => {
 
 // ── Sub-components ────────────────────────────────────────────
 
-const Divider = () => (
-  <div style={{ height: '1px', background: C.lineDark, margin: '8px 0' }} />
-);
+const Divider = () => {
+  const { C } = React.useContext(AdminThemeContext);
+  return (
+    <div style={{ height: '1px', background: C.lineDark, margin: '8px 0' }} />
+  );
+};
 
 const StatCard = ({ card }) => {
   const Icon = card.icon;
+  const { C } = React.useContext(AdminThemeContext);
   return (
     <motion.div
       variants={fade}
       whileHover={{ y: -2 }}
       style={{
-        background: C.ink800, border: `1px solid ${C.lineDark}`,
+        background: C.cardBg,
+        border: `1px solid ${C.cardBorder}`,
+        boxShadow: C.cardShadow,
         borderRadius: '3px', padding: '24px', position: 'relative', overflow: 'hidden',
         cursor: 'default', transition: 'box-shadow 0.2s',
       }}
-      onMouseEnter={e => e.currentTarget.style.boxShadow = `0 8px 32px rgba(0,0,0,0.4)`}
-      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+      onMouseEnter={e => e.currentTarget.style.boxShadow = C.theme === 'light' ? '0 4px 20px rgba(12,11,9,0.12)' : '0 8px 32px rgba(0,0,0,0.4)'}
+      onMouseLeave={e => e.currentTarget.style.boxShadow = C.cardShadow}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
@@ -125,6 +113,7 @@ const StatCard = ({ card }) => {
 
 // ── Main Component ────────────────────────────────────────────
 export default function AdminDashboard() {
+  const { C, theme, toggleTheme } = React.useContext(AdminThemeContext);
   const [active, setActive] = useState('Dashboard');
   const [stats, setStats] = useState(null);
   const navigate = useNavigate();
@@ -133,8 +122,10 @@ export default function AdminDashboard() {
   const [notifications, setNotifications] = useState([]);
   const [unreadIds, setUnreadIds] = useState(() => new Set());
   const [bellOpen, setBellOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [openRegistrationId, setOpenRegistrationId] = useState(null);
   const bellRef = useRef(null);
+  const profileRef = useRef(null);
   const knownIdsRef = useRef(new Set());
 
   useEffect(() => {
@@ -213,7 +204,7 @@ export default function AdminDashboard() {
     };
   }, []);
 
-  // Close the dropdown on outside click.
+  // Close bell dropdown on outside click
   useEffect(() => {
     if (!bellOpen) return;
     const onClick = (e) => {
@@ -224,6 +215,18 @@ export default function AdminDashboard() {
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
   }, [bellOpen]);
+
+  // Close profile dropdown on outside click
+  useEffect(() => {
+    if (!profileOpen) return;
+    const onClick = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [profileOpen]);
 
   const unreadCount = unreadIds.size;
 
@@ -329,14 +332,14 @@ export default function AdminDashboard() {
         transition={{ type: 'spring', stiffness: 280, damping: 30 }}
         style={{
           width: '240px', flexShrink: 0,
-          background: C.ink900,
-          borderRight: `1px solid ${C.lineDark}`,
+          background: C.sidebarBg,
+          borderRight: `1px solid ${C.cardBorder}`,
           display: 'flex', flexDirection: 'column',
           zIndex: 20,
         }}
       >
         {/* Logo */}
-        <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${C.lineDark}` }}>
+        <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${C.cardBorder}` }}>
           <img
             src="/Full_Logo.png"
             alt="BM Investment"
@@ -376,27 +379,6 @@ export default function AdminDashboard() {
           })}
         </nav>
 
-        <Divider />
-
-        {/* Logout Button */}
-        <div style={{ padding: '0 12px 12px' }}>
-          <button
-            onClick={handleLogout}
-            style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-              padding: '10px 12px', borderRadius: '3px', border: `1px solid rgba(200,127,99,0.2)`,
-              background: 'transparent', color: C.rose400,
-              fontSize: '12px', fontWeight: 600, letterSpacing: '0.08em',
-              textTransform: 'uppercase', cursor: 'pointer', fontFamily: SANS,
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(200,127,99,0.08)'; e.currentTarget.style.borderColor = C.rose400; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(200,127,99,0.2)'; }}
-          >
-            <LogOut size={14} />
-            <span>Sign Out</span>
-          </button>
-        </div>
 
         {/* User pill */}
         <div style={{ padding: '16px 12px 20px' }}>
@@ -417,10 +399,11 @@ export default function AdminDashboard() {
 
         {/* Header */}
         <header style={{
-          height: '68px', background: C.ink900,
-          borderBottom: `1px solid ${C.lineDark}`,
+          height: '68px', background: C.headerBg,
+          borderBottom: `1px solid ${C.cardBorder}`,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '0 32px', flexShrink: 0, zIndex: 10,
+          boxShadow: C.theme === 'light' ? '0 1px 4px rgba(12,11,9,0.06)' : 'none',
         }}>
           <h1 style={{ fontFamily: SERIF, fontSize: '22px', fontWeight: 600, color: C.ivory50, letterSpacing: '0.01em' }}>{active}</h1>
 
@@ -432,7 +415,7 @@ export default function AdminDashboard() {
                 placeholder="Search…"
                 style={{
                   paddingLeft: '34px', paddingRight: '16px', paddingTop: '8px', paddingBottom: '8px',
-                  background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px',
+                  background: C.ink950, border: `1px solid ${C.cardBorder}`, borderRadius: '3px',
                   color: C.ivory50, fontSize: '13px', outline: 'none', width: '220px',
                   fontFamily: SANS,
                 }}
@@ -440,6 +423,16 @@ export default function AdminDashboard() {
                 onBlur={e => e.target.style.borderColor = C.lineDark}
               />
             </div>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              style={{ position: 'relative', padding: '8px', background: 'transparent', border: 'none', cursor: 'pointer', color: C.stone400, borderRadius: '3px' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(247,242,232,0.05)'; e.currentTarget.style.color = C.ivory50; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.stone400; }}
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
 
             {/* Bell */}
             <div ref={bellRef} style={{ position: 'relative' }}>
@@ -524,9 +517,66 @@ export default function AdminDashboard() {
               </AnimatePresence>
             </div>
 
-            {/* Avatar */}
-            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: C.em700, border: `1px solid ${C.em600}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: C.em300 }}>AD</span>
+            {/* Avatar with profile dropdown */}
+            <div ref={profileRef} style={{ position: 'relative' }}>
+              <div
+                onClick={() => setProfileOpen(v => !v)}
+                style={{
+                  width: '34px', height: '34px', borderRadius: '50%',
+                  background: profileOpen ? C.brass500 : C.em700,
+                  border: `1px solid ${profileOpen ? C.brass400 : C.em600}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                }}
+              >
+                <span style={{ fontSize: '12px', fontWeight: 700, color: profileOpen ? C.ink950 : C.em300 }}>AD</span>
+              </div>
+
+              <AnimatePresence>
+                {profileOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    style={{
+                      position: 'absolute', top: 'calc(100% + 10px)', right: 0, width: '220px',
+                      background: C.headerBg, border: `1px solid ${C.cardBorder}`,
+                      borderRadius: '4px', boxShadow: C.theme === 'light' ? '0 8px 30px rgba(12,11,9,0.14)' : '0 20px 50px rgba(0,0,0,0.5)',
+                      zIndex: 60, overflow: 'hidden',
+                    }}
+                  >
+                    {/* User info */}
+                    <div style={{ padding: '16px', borderBottom: `1px solid ${C.cardBorder}` }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: C.em700, border: `1px solid ${C.em600}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                          <span style={{ fontSize: '13px', fontWeight: 700, color: C.em300 }}>AD</span>
+                        </div>
+                        <div style={{ overflow: 'hidden' }}>
+                          <p style={{ fontSize: '13px', fontWeight: 600, color: C.ivory50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Admin User</p>
+                          <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@bminvestment.com</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Sign out */}
+                    <button
+                      onClick={handleLogout}
+                      style={{
+                        width: '100%', padding: '12px 16px', border: 'none', background: 'transparent',
+                        display: 'flex', alignItems: 'center', gap: '10px',
+                        color: C.rose400, fontSize: '12px', fontWeight: 600,
+                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        cursor: 'pointer', fontFamily: SANS, textAlign: 'left',
+                        transition: 'background 0.15s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(200,127,99,0.08)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <LogOut size={14} />
+                      <span>Sign Out</span>
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </header>
@@ -537,10 +587,14 @@ export default function AdminDashboard() {
             openRegistrationId={openRegistrationId}
             onOpenRegistrationHandled={() => setOpenRegistrationId(null)}
           />
+        ) : active === 'Event Registration' ? (
+          <AdminEventRegistration />
         ) : active === 'Q&A Session' ? (
           <AdminQASession />
         ) : active === 'Hero Section' ? (
           <AdminHero />
+        ) : active === 'The Event' ? (
+          <AdminTheEvent />
         ) : active === 'The Venue' ? (
           <AdminVenue />
         ) : active === 'Event Day Exp' ? (
@@ -549,8 +603,6 @@ export default function AdminDashboard() {
           <AdminEventAmount />
         ) : active === 'Guests' ? (
           <AdminGuests />
-        ) : active === 'Tickets & Check-in' ? (
-          <AdminScanner />
         ) : (
           <main style={{ flex: 1, overflowY: 'auto', padding: '32px', background: C.ink950 }}>
             <motion.div variants={stagger} initial="hidden" animate="visible" style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -574,7 +626,7 @@ export default function AdminDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '20px' }}>
 
                     {/* Financial */}
-                    <motion.div variants={fade} style={{ background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px' }}>
+                    <motion.div variants={fade} style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, boxShadow: C.cardShadow, borderRadius: '3px', padding: '28px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                         <div>
                           <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>02 — Finance</p>
@@ -588,7 +640,7 @@ export default function AdminDashboard() {
                         {financialMetrics.map((m, i) => {
                           const Icon = m.icon;
                           return (
-                            <div key={i} style={{ background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '18px' }}>
+                            <div key={i} style={{ background: C.innerCardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '3px', padding: '18px' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
                                 <div style={{ padding: '7px', background: C.ink800, borderRadius: '3px', border: `1px solid ${C.lineDark}` }}>
                                   <Icon size={14} style={{ color: C.stone400 }} />
@@ -606,7 +658,7 @@ export default function AdminDashboard() {
                     </motion.div>
 
                     {/* Event Day */}
-                    <motion.div variants={fade} style={{ background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px', position: 'relative', overflow: 'hidden' }}>
+                    <motion.div variants={fade} style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, boxShadow: C.cardShadow, borderRadius: '3px', padding: '28px', position: 'relative', overflow: 'hidden' }}>
                       {/* Gold glow top-right */}
                       <div style={{ position: 'absolute', top: '-40px', right: '-40px', width: '160px', height: '160px', background: C.brass400, opacity: 0.07, borderRadius: '50%', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
@@ -639,7 +691,7 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Application Queue */}
-                  <motion.div variants={fade} style={{ background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px' }}>
+                  <motion.div variants={fade} style={{ background: C.cardBg, border: `1px solid ${C.cardBorder}`, boxShadow: C.cardShadow, borderRadius: '3px', padding: '28px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                       <div>
                         <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>04 — Pipeline</p>
@@ -655,7 +707,7 @@ export default function AdminDashboard() {
                           key={i}
                           whileHover={{ y: -2 }}
                           style={{
-                            background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px',
+                            background: C.innerCardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '3px',
                             padding: '20px 16px', textAlign: 'center', cursor: 'default',
                             transition: 'box-shadow 0.2s',
                             borderTop: `2px solid ${q.color}`,
