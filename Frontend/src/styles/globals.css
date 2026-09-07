@@ -779,6 +779,14 @@ footer[id] {
   white-space: nowrap;
 }
 
+/* Desktop only: match the date's size to the Location value
+   ("Jaipur, Rajasthan") — same clamp ceiling as .hero-meta-value. */
+@media (min-width: 1025px) {
+  .hero-meta-value--date {
+    font-size: 1.4rem;
+  }
+}
+
 .scroll-cue {
   display: flex;
   align-items: center;
@@ -949,6 +957,51 @@ footer[id] {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--stone-500);
+}
+
+/* ── Floating WhatsApp button ─────────────────────────────────
+   Fixed bottom-right, independent of the footer CONNECT list.
+   High z-index (below the skip-link's 200) so it stays visible
+   above all page content, including the mobile menu (80), without
+   ever covering the accessibility skip-link. */
+.floating-whatsapp {
+  position: fixed;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 150;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #ffffff;
+  box-shadow: 0 12px 28px -8px rgba(12, 11, 9, 0.45);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.floating-whatsapp:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 16px 34px -8px rgba(12, 11, 9, 0.5);
+}
+
+.floating-whatsapp-icon {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 640px) {
+  .floating-whatsapp {
+    right: 1rem;
+    bottom: 1rem;
+    width: 48px;
+    height: 48px;
+  }
+
+  .floating-whatsapp-icon {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 /* ── Reduced motion ────────────────────────────────────────── */

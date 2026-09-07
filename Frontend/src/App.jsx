@@ -15,6 +15,7 @@ import JaipurSection from "./components/JaipurSection.jsx";
 import Registration from "./components/Registration.jsx";
 import FinalCTA from "./components/FinalCTA.jsx";
 import Footer from "./components/Footer.jsx";
+import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -73,7 +74,14 @@ const LandingPage = () => {
            <Hero 
              onRegister={() => scrollTo("register")} 
              onExplore={() => scrollTo("about")} 
-             eventData={{ city: heroData.city, date: heroData.event_date }}
+             eventData={{
+               city: heroData.city,
+               // Guard against the stale "20th" value still stored in
+               // Supabase — the date should read "20th September" in
+               // every case; a genuinely updated Supabase value other
+               // than the old stale one still passes through normally.
+               date: heroData.event_date === "20th" ? "20th September" : (heroData.event_date || "20th September"),
+             }}
              eyebrow={heroData.eyebrow}
              titleLine1={[heroData.title_line_1.split(' ').slice(0, -1).join(' '), heroData.title_line_1.split(' ').pop() || '']}
              titleLine2={[heroData.title_line_2.split(' ').slice(0, -1).join(' '), heroData.title_line_2.split(' ').pop() || '']}
@@ -81,7 +89,9 @@ const LandingPage = () => {
              primaryCtaText={heroData.primary_cta_text}
              secondaryCtaText={heroData.secondary_cta_text}
              heroTicker={heroData.ticker.split(',').map(s => s.trim())}
-             heroImages={{ hero: heroData.hero_image }}
+             // Background media is fixed to the site's own video — never
+             // driven by Supabase, regardless of what hero_content stores.
+             heroImages={{ hero: '/images/Apna_Jaipur.mp4' }}
            />
         ) : (
            <Hero onRegister={() => scrollTo("register")} onExplore={() => scrollTo("about")} />
@@ -111,6 +121,7 @@ const LandingPage = () => {
         />
       </main>
       <Footer onNavigate={scrollTo} />
+      <FloatingWhatsApp />
     </>
   );
 };

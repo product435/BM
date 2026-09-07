@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { supabase } from "../lib/supabase.js";
 import {
   EVENT,
@@ -105,13 +105,41 @@ export default function EventIntro({ previewData }) {
           <div className="intro-media-caption">
             <div className="intro-media-caption-main">
               <p className="intro-media-headline">{mediaHeadline}</p>
-              <ul className="intro-media-pills" aria-label="What this platform offers">
+              <ul
+                className="intro-media-pills intro-media-pills--desktop"
+                aria-label="What this platform offers"
+              >
                 {mediaPills.map((pill) => (
                   <li key={pill}>{pill}</li>
                 ))}
               </ul>
+
+              {/* Mobile only: the same words as three complete, unbreakable
+                  rows (see .intro-media-pills--mobile) instead of the
+                  desktop flex-wrap list, which splits mid-row on narrow
+                  screens. */}
+              <div
+                className="intro-media-pills intro-media-pills--mobile"
+                aria-label="What this platform offers"
+              >
+                {[
+                  mediaPills.slice(0, 3),
+                  mediaPills.slice(3, 6),
+                  mediaPills.slice(6, 8),
+                ].map((row, rowIndex) => (
+                  <p className="intro-media-pills-row" key={rowIndex}>
+                    {row.map((word) => (
+                      <Fragment key={word}>
+                        <span className="dot">•</span> {word}{" "}
+                      </Fragment>
+                    ))}
+                  </p>
+                ))}
+              </div>
             </div>
-            <span className="intro-media-location">{mediaLocation}</span>
+            <span className="intro-media-location intro-media-location--desktop">
+              {mediaLocation}
+            </span>
           </div>
         </Reveal>
 
@@ -128,6 +156,9 @@ export default function EventIntro({ previewData }) {
         <p className="intro-note">
           {footerNote}
         </p>
+        <span className="intro-media-location intro-media-location--mobile">
+          {EVENT.city}, Rajasthan
+        </span>
       </div>
     </section>
   );

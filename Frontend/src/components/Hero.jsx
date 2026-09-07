@@ -19,18 +19,18 @@ export default function Hero({
   return (
     <section className="hero" id="home" aria-label="Event introduction">
       <div className="hero-media">
-        {heroImages.hero.endsWith('.mp4') ? (
+        {/\.(mp4|webm|mov)$/i.test(heroImages.hero) ? (
           <video
             className="hero-video"
-            src={heroImages.hero}
-            poster={DEFAULT_IMAGES.hero}
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
             aria-hidden="true"
-          />
+          >
+            <source src={heroImages.hero} type="video/mp4" />
+          </video>
         ) : (
           <img
             src={heroImages.hero}
@@ -63,7 +63,7 @@ export default function Hero({
 
         <Reveal delay={220}>
           <p className="hero-sub">
-            A curated platform for Innovators, Founders, Operating
+            A curated platform for Students, Founders, Operating
             Businesses, Industry Leaders and Strategic Partners to connect,
             build and scale, In{" "}
             <strong>{eventData.city}</strong>, on the{" "}

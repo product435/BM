@@ -30,7 +30,7 @@ WITH CHECK (true);
 INSERT INTO public.guests (id, name, initials, role, description, sort_order) VALUES 
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', 'BM Sir', 'BM', 'Speaker details to be announced', 'Conversation details will be shared as the lineup is confirmed.', 1),
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'Abhishek', 'AB', 'Speaker details to be announced', 'Conversation details will be shared as the lineup is confirmed.', 2),
-  ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Aman', 'AM', 'Q&A & discussion session', 'Leading the open-floor conversation — questions from the event, answered straight.', 3),
+  ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'Aman', 'AM', 'Q&A & discussion session', 'Leading the open floor conversation questions from the event, answered straight.', 3),
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'Rajat', 'RJ', 'Speaker details to be announced', 'Conversation details will be shared as the lineup is confirmed.', 4),
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'Pinkash', 'PK', 'Speaker details to be announced', 'Conversation details will be shared as the lineup is confirmed.', 5),
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'Dr. Sanjeev Saxena', 'SS', 'Speaker details to be announced', 'Conversation details will be shared as the lineup is confirmed.', 6)

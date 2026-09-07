@@ -10,7 +10,7 @@ export default function QnASection({ qaData = null }) {
     title_plain: "Ask. ",
     title_italic: "Challenge.",
     title_end: " Learn.",
-    lede: "An open-floor conversation, not a monologue. Bring the questions you've been sitting on — the event is listening.",
+    lede: "An open floor conversation, not a monologue. Bring the questions you've been sitting on the event is listening.",
     quote: "No question too early. No idea too small.",
     faqs: [
       { question: "Loading...", answer: "Please wait while we fetch the questions." }

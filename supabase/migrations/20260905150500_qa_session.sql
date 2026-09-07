@@ -42,7 +42,7 @@ INSERT INTO public.qa_session (
   'Ask. ',
   'Challenge.',
   ' Learn.',
-  'An open-floor conversation, not a monologue. Bring the questions you''ve been sitting on — the event is listening.',
+  'An open floor conversation, not a monologue. Bring the questions you''ve been sitting on the event is listening.',
   'No question too early. No idea too small.',
   '[
     { "question": "Who can apply to pitch?", "answer": "Founders, startups and operating businesses with a clear idea, product, service or growth opportunity can apply. Applications are reviewed based on relevance and readiness." },

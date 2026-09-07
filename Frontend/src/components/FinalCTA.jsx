@@ -38,10 +38,6 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
       </div>
 
       <div className="cta-final-inner">
-        <span className="cta-ghost" aria-hidden="true">
-          {EVENT.city} {EVENT.date}
-        </span>
-
         <Reveal delay={100}>
           <h2 className="sector-focus-title" id="cta-title">
             Your next idea could start here.
