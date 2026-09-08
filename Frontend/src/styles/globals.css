@@ -1075,8 +1075,35 @@ footer[id] {
      preserved via height: auto. */
   /* Reduced ~11% from the previous 14.2rem mobile value per follow-up
      feedback that it read slightly too large. */
+  /* Side-by-side mobile layout: logo (smaller, since it now shares a
+     row instead of taking the section's full stacked width) on the
+     left, tagline on the right, vertically centered. Removes the
+     stacked height the tagline's margin-top used to add below the
+     logo, and the section's next-content gap shrinks naturally since
+     .footer-brand's own box is now shorter — no separate gap/padding
+     value needed to "pull the following content upward". */
+  .footer-brand-mark {
+    flex: none;
+  }
+
+  .footer-brand {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    align-items: center;
+    gap: 20px;
+  }
+
   .footer-logo {
-    width: 12.64rem;
+    width: 130px;
+    position: relative;
+    left: -8px;
+  }
+
+  .footer-tagline {
+    margin-top: 0;
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.45;
   }
 
   .floating-whatsapp {
