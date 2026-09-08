@@ -33,6 +33,8 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
   const [selectedApp, setSelectedApp] = useState(null);
   const [adminNote, setAdminNote] = useState('');
   const [savingNote, setSavingNote] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     fetchRegistrations();
@@ -128,6 +130,17 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
       return matchSearch && matchTrack && matchStatus;
     });
   }, [data, search, filterTrack, filterStatus]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, filterTrack, filterStatus]);
+
+  const paginatedData = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredData.slice(start, start + itemsPerPage);
+  }, [filteredData, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const updateStatus = async (newStatus) => {
     if (!selectedApp) return;
@@ -244,7 +257,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                   <td colSpan="7" style={{ padding: '40px', textAlign: 'center', color: C.stone500, fontSize: '14px' }}>No applicants found.</td>
                 </tr>
               ) : (
-                filteredData.map(app => (
+                paginatedData.map(app => (
                   <tr
                     key={app.id}
                     onClick={() => openDrawer(app)}
@@ -268,6 +281,31 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Controls */}
+        {filteredData.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderTop: `1px solid ${C.cardBorder}`, background: C.cardBg }}>
+            <span style={{ fontSize: '12px', color: C.stone500 }}>
+              Showing {Math.min((currentPage - 1) * itemsPerPage + 1, filteredData.length)} to {Math.min(currentPage * itemsPerPage, filteredData.length)} of {filteredData.length} entries
+            </span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                style={{ padding: '6px 12px', background: C.innerCardBg, border: `1px solid ${C.cardBorder}`, color: C.ivory50, borderRadius: '4px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', opacity: currentPage === 1 ? 0.5 : 1, fontSize: '12px', fontFamily: SANS }}
+              >
+                Previous
+              </button>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                style={{ padding: '6px 12px', background: C.innerCardBg, border: `1px solid ${C.cardBorder}`, color: C.ivory50, borderRadius: '4px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', opacity: currentPage === totalPages ? 0.5 : 1, fontSize: '12px', fontFamily: SANS }}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Details Drawer Overlay */}

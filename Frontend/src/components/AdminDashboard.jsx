@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, ClipboardCheck, CreditCard,
   Ticket, BarChart3, Settings, Bell, Search, MapPin,
-  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle, Sun, Moon
+  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle, Sun, Moon, Handshake, PanelLeftClose, PanelLeftOpen, Menu, X
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
@@ -13,7 +13,6 @@ import { PenTool, LayoutTemplate } from 'lucide-react';
 import AdminHero from './AdminHero';
 import AdminGuests from './AdminGuests';
 import AdminVenue from './AdminVenue';
-import AdminEventAmount from './AdminEventAmount';
 import AdminEventExperience from './AdminEventExperience';
 import AdminQASession from './AdminQASession';
 import AdminTheEvent from './AdminTheEvent';
@@ -38,10 +37,7 @@ const NAV = [
   { name: 'The Event',        icon: LayoutTemplate  },
   { name: 'The Venue',        icon: MapPin          },
   { name: 'Event Day Exp',    icon: Clock           },
-  { name: 'Event Amount',     icon: BarChart3       },
   { name: 'Guests',           icon: Users           },
-  { name: 'Reports',          icon: BarChart3       },
-  { name: 'Settings',         icon: Settings        },
 ];
 
 const fade = { hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } };
@@ -117,6 +113,24 @@ export default function AdminDashboard() {
   const [active, setActive] = useState('Dashboard');
   const [stats, setStats] = useState(null);
   const navigate = useNavigate();
+
+  // ── Sidebar toggle state ──────────────────────────────────────
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
+    const saved = localStorage.getItem('bmi_sidebar_expanded');
+    return saved !== null ? saved === 'true' : false;
+  });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('bmi_sidebar_expanded', isSidebarExpanded);
+  }, [isSidebarExpanded]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // ── Registration notifications (bell) ────────────────────────
   const [notifications, setNotifications] = useState([]);
@@ -325,71 +339,94 @@ export default function AdminDashboard() {
   return (
     <div style={{ display: 'flex', height: '100vh', background: C.ink950, fontFamily: SANS, overflow: 'hidden' }}>
 
+      {/* ── Mobile Overlay ─────────────────────────────────────── */}
+      {isMobile && isMobileOpen && (
+        <div
+          onClick={() => setIsMobileOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 15 }}
+        />
+      )}
+
       {/* ── Sidebar ──────────────────────────────────────────── */}
       <motion.aside
-        initial={{ x: -260 }}
-        animate={{ x: 0 }}
+        initial={isMobile ? { x: -260 } : { width: isSidebarExpanded ? 240 : 76 }}
+        animate={isMobile ? { x: isMobileOpen ? 0 : -260 } : { width: isSidebarExpanded ? 240 : 76 }}
         transition={{ type: 'spring', stiffness: 280, damping: 30 }}
         style={{
-          width: '240px', flexShrink: 0,
+          width: isMobile ? '240px' : undefined, flexShrink: 0,
           background: C.sidebarBg,
           borderRight: `1px solid ${C.cardBorder}`,
           display: 'flex', flexDirection: 'column',
           zIndex: 20,
+          position: isMobile ? 'fixed' : 'relative',
+          height: '100vh',
+          left: 0, top: 0, bottom: 0,
         }}
       >
         {/* Logo */}
-        <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${C.cardBorder}` }}>
-          <img
-            src="/Full_Logo.png"
-            alt="BM Investment"
-            style={{ width: '140px', display: 'block', filter: `drop-shadow(0 0 8px rgba(198,164,98,0.25))` }}
-          />
-          <p style={{ fontSize: '10px', color: C.stone500, marginTop: '8px', letterSpacing: '0.05em' }}>Admin Control Panel</p>
+        <div style={{ padding: isSidebarExpanded || isMobile ? '20px 20px 16px' : '20px 0 16px', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {isSidebarExpanded || isMobile ? (
+            <>
+              <img
+                src="/Full_Logo.png"
+                alt="BM Investment"
+                style={{ width: '140px', display: 'block', filter: `drop-shadow(0 0 8px rgba(198,164,98,0.25))` }}
+              />
+              <p style={{ fontSize: '10px', color: C.stone500, marginTop: '8px', letterSpacing: '0.05em' }}>Admin Control Panel</p>
+            </>
+          ) : (
+            <div style={{ width: '32px', height: '32px', background: C.brass500, borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.ink950, fontWeight: 700, fontFamily: SERIF, fontSize: '16px' }}>
+              BM
+            </div>
+          )}
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, padding: '16px 12px', overflowY: 'auto' }}>
-          <p style={{ fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone600, marginBottom: '8px', paddingLeft: '12px', fontWeight: 700 }}>Navigation</p>
+        <nav style={{ flex: 1, padding: isSidebarExpanded || isMobile ? '16px 12px' : '16px 8px', overflowY: 'auto' }}>
+          {(isSidebarExpanded || isMobile) && <p style={{ fontSize: '9px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone600, marginBottom: '8px', paddingLeft: '12px', fontWeight: 700 }}>Navigation</p>}
           {NAV.map((item) => {
             const Icon = item.icon;
             const isActive = active === item.name;
+            const showLabel = isSidebarExpanded || isMobile;
             return (
               <button
                 key={item.name}
-                onClick={() => setActive(item.name)}
+                title={!showLabel ? item.name : undefined}
+                onClick={() => { setActive(item.name); if(isMobile) setIsMobileOpen(false); }}
                 style={{
                   width: '100%', display: 'flex', alignItems: 'center', gap: '12px',
-                  padding: '10px 12px', borderRadius: '3px', border: 'none',
+                  justifyContent: showLabel ? 'flex-start' : 'center',
+                  padding: showLabel ? '10px 12px' : '12px', borderRadius: '3px', border: 'none',
                   background: isActive ? `rgba(198,164,98,0.12)` : 'transparent',
                   color: isActive ? C.brass400 : C.stone400,
                   fontSize: '13px', fontWeight: isActive ? 600 : 400,
                   letterSpacing: '0.02em', cursor: 'pointer',
                   transition: 'all 0.15s', marginBottom: '2px',
                   textAlign: 'left', fontFamily: SANS,
-                  borderLeft: isActive ? `2px solid ${C.brass400}` : '2px solid transparent',
+                  borderLeft: isActive && showLabel ? `2px solid ${C.brass400}` : '2px solid transparent',
                 }}
                 onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background = 'rgba(247,242,232,0.04)'; e.currentTarget.style.color = C.ivory100; } }}
                 onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = C.stone400; } }}
               >
-                <Icon size={16} />
-                <span>{item.name}</span>
+                <Icon size={16} style={{ flexShrink: 0 }} />
+                {showLabel && <span style={{ whiteSpace: 'nowrap' }}>{item.name}</span>}
               </button>
             );
           })}
         </nav>
 
-
         {/* User pill */}
-        <div style={{ padding: '16px 12px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: C.ink800, borderRadius: '3px', border: `1px solid ${C.lineDark}` }}>
+        <div style={{ padding: isSidebarExpanded || isMobile ? '16px 12px 20px' : '16px 8px 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', padding: isSidebarExpanded || isMobile ? '12px' : '8px', background: C.ink800, borderRadius: '3px', border: `1px solid ${C.lineDark}`, overflow: 'hidden' }}>
             <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: C.em700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: `1px solid ${C.em600}`, flexShrink: 0 }}>
               <span style={{ fontSize: '13px', fontWeight: 700, color: C.em300 }}>AD</span>
             </div>
-            <div style={{ overflow: 'hidden' }}>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: C.ivory50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Admin User</p>
-              <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@bminvestment.com</p>
-            </div>
+            {(isSidebarExpanded || isMobile) && (
+              <div style={{ overflow: 'hidden' }}>
+                <p style={{ fontSize: '13px', fontWeight: 600, color: C.ivory50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Admin User</p>
+                <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@bminvestment.com</p>
+              </div>
+            )}
           </div>
         </div>
       </motion.aside>
@@ -405,26 +442,21 @@ export default function AdminDashboard() {
           padding: '0 32px', flexShrink: 0, zIndex: 10,
           boxShadow: C.theme === 'light' ? '0 1px 4px rgba(12,11,9,0.06)' : 'none',
         }}>
-          <h1 style={{ fontFamily: SERIF, fontSize: '22px', fontWeight: 600, color: C.ivory50, letterSpacing: '0.01em' }}>{active}</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {isMobile ? (
+              <button onClick={() => setIsMobileOpen(true)} style={{ background: 'transparent', border: 'none', color: C.stone400, cursor: 'pointer', display: 'flex', padding: '4px' }}>
+                <Menu size={22} />
+              </button>
+            ) : (
+              <button onClick={() => setIsSidebarExpanded(!isSidebarExpanded)} style={{ background: 'transparent', border: 'none', color: C.stone400, cursor: 'pointer', display: 'flex', padding: '4px', transition: 'color 0.15s' }} onMouseEnter={e => e.currentTarget.style.color = C.ivory50} onMouseLeave={e => e.currentTarget.style.color = C.stone400}>
+                {isSidebarExpanded ? <PanelLeftClose size={22} /> : <PanelLeftOpen size={22} />}
+              </button>
+            )}
+            <h1 style={{ fontFamily: SERIF, fontSize: '22px', fontWeight: 600, color: C.ivory50, letterSpacing: '0.01em' }}>{active}</h1>
+          </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            {/* Search */}
-            <div style={{ position: 'relative' }}>
-              <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: C.stone500 }} />
-              <input
-                placeholder="Search…"
-                style={{
-                  paddingLeft: '34px', paddingRight: '16px', paddingTop: '8px', paddingBottom: '8px',
-                  background: C.ink950, border: `1px solid ${C.cardBorder}`, borderRadius: '3px',
-                  color: C.ivory50, fontSize: '13px', outline: 'none', width: '220px',
-                  fontFamily: SANS,
-                }}
-                onFocus={e => e.target.style.borderColor = C.brass400}
-                onBlur={e => e.target.style.borderColor = C.lineDark}
-              />
-            </div>
-
-            {/* Theme Toggle */}
+            {/* Removed non-functional global search bar */}            {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               style={{ position: 'relative', padding: '8px', background: 'transparent', border: 'none', cursor: 'pointer', color: C.stone400, borderRadius: '3px' }}
@@ -599,8 +631,6 @@ export default function AdminDashboard() {
           <AdminVenue />
         ) : active === 'Event Day Exp' ? (
           <AdminEventExperience />
-        ) : active === 'Event Amount' ? (
-          <AdminEventAmount />
         ) : active === 'Guests' ? (
           <AdminGuests />
         ) : (

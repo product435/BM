@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import Hero from "./components/Hero.jsx";
 import EventIntro from "./components/EventIntro.jsx";
@@ -17,6 +17,7 @@ import FinalCTA from "./components/FinalCTA.jsx";
 import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
 import AdminLogin from "./components/AdminLogin.jsx";
+import UpdatePassword from "./components/UpdatePassword.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { SiteProvider } from "./context/SiteContext.jsx";
@@ -126,14 +127,37 @@ const LandingPage = () => {
   );
 };
 
+const AuthListener = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        navigate('/admin/update-password');
+      }
+    });
+
+    // Also check if the URL currently has the recovery hash (in case the event fired before listener attached)
+    if (window.location.hash.includes('type=recovery')) {
+      navigate('/admin/update-password');
+    }
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+  
+  return null;
+};
+
 export default function App() {
   return (
     <SiteProvider>
       <AdminThemeProvider>
         <Router>
+          <AuthListener />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/update-password" element={<UpdatePassword />} />
             <Route path="/admin" element={<ProtectedRoute />}>
               <Route index element={<AdminDashboard />} />
             </Route>

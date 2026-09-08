@@ -136,9 +136,7 @@ export default function AdminEventExperience() {
               <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>CMS</p>
               <h2 style={{ fontFamily: SERIF, fontSize: '20px', color: C.ivory50, fontWeight: 600 }}>Event Day Experience Management</h2>
             </div>
-            <button onClick={handleSave} disabled={saving || loading} style={{ padding: '10px 24px', background: C.brass400, color: C.ink950, border: 'none', borderRadius: '3px', fontWeight: 600, fontSize: '13px', cursor: (saving || loading) ? 'not-allowed' : 'pointer', fontFamily: SANS, opacity: (saving || loading) ? 0.7 : 1 }}>
-              {saving ? 'Saving...' : 'Save Changes'}
-            </button>
+
           </div>
 
           <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
@@ -222,11 +220,16 @@ export default function AdminEventExperience() {
                 </div>
               </div>
 
-              {message.text && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: message.type === 'success' ? C.em500 : C.rose400, fontSize: '13px' }}>
-                  <Check size={16} /> {message.text}
-                </div>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', paddingTop: '20px', borderTop: `1px solid ${C.lineDark}` }}>
+                {message.text ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: message.type === 'success' ? C.em500 : C.rose400, fontSize: '13px' }}>
+                    <Check size={16} /> {message.text}
+                  </div>
+                ) : <div />}
+                <button onClick={handleSave} disabled={saving || loading} style={{ padding: '10px 24px', background: C.brass400, color: C.ink950, border: 'none', borderRadius: '3px', fontWeight: 600, fontSize: '13px', cursor: (saving || loading) ? 'not-allowed' : 'pointer', fontFamily: SANS, opacity: (saving || loading) ? 0.7 : 1 }}>
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
 
             </motion.div>
           </div>

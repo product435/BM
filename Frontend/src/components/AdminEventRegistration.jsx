@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, Plus, Trash2, Edit2, GripVertical } from 'lucide-react';
 import { supabase } from '../lib/supabase';
-import Registration from './Registration';
 
 import { AdminThemeContext } from '../context/AdminThemeContext';
 const SERIF = '"Fraunces","Georgia",serif';
@@ -11,234 +10,233 @@ const SANS = '"Archivo","Helvetica Neue",sans-serif';
 export default function AdminEventRegistration() {
   const { C } = React.useContext(AdminThemeContext);
   
-  const inputStyle = {
-    width: '100%',
-    padding: '10px 12px',
-    background: C.ink900,
-    border: `1px solid ${C.lineDark}`,
-    borderRadius: '3px',
-    color: C.ivory50,
-    fontSize: '13px',
-    outline: 'none',
-    fontFamily: SANS,
-  };
-
-  const labelStyle = { 
-    display: 'block', 
-    fontSize: '12px', 
-    color: C.stone400, 
-    marginBottom: '6px' 
-  };
-
-  const sectionHeadingStyle = {
-    fontFamily: SERIF,
-    fontSize: '15px',
-    color: C.ivory50,
-    fontWeight: 600,
-    margin: 0
-  };
-
-  const [formData, setFormData] = useState({
-    eyebrow: '11 — Registration',
-    title: 'Ready to be <span class="t-italic t-emerald">part of the event?</span>',
-    lede: "Seats are limited and the event is curated. Tell us who's coming and how you want to show up.",
-    steps: [
-      { title: 'Choose your category.', description: 'Student, Visitor, Entrepreneur or Business Tycoon.' },
-      { title: 'Share your details.', description: 'The form adapts to your path.' },
-      { title: 'We confirm your seat.', description: 'You show up on the day and make the event count.' }
-    ],
-    fee_student: 0,
-    fee_visitor: 500,
-    fee_entrepreneur: 1000,
-    fee_business_tycoon: 2000,
-    upi_id: 'bmipresents@upi'
-  });
-
-  const [message, setMessage] = useState({ type: '', text: '' });
+  const [config, setConfig] = useState({ categories: [], form_fields: {} });
+  const [upiId, setUpiId] = useState('bmipresents@upi');
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [previewData, setPreviewData] = useState(null); // For live preview rendering
+  const [message, setMessage] = useState({ type: '', text: '' });
+  
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    fetchRegistrationContent();
+    fetchConfig();
   }, []);
 
-  const fetchRegistrationContent = async () => {
+  const fetchConfig = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('registration_content').select('*').eq('id', 1).single();
-    if (data) {
-      const parsedData = {
-        ...data,
-        steps: Array.isArray(data.steps) && data.steps.length === 3 ? data.steps : formData.steps
-      };
-      setFormData(parsedData);
-      setPreviewData(data); // Preview takes the raw DB object shape
+    const { data: configData } = await supabase.from('form_config').select('*').eq('id', 1).single();
+    if (configData) {
+      setConfig({ categories: configData.categories, form_fields: configData.form_fields });
+      if (configData.categories.length > 0) setSelectedCategory(configData.categories[0].id);
+    }
+    const { data: regData } = await supabase.from('registration_content').select('upi_id').eq('id', 1).single();
+    if (regData && regData.upi_id) {
+      setUpiId(regData.upi_id);
     }
     setLoading(false);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleCategoryChange = (index, field, value) => {
+    const newCats = [...config.categories];
+    newCats[index] = { ...newCats[index], [field]: value };
+    setConfig({ ...config, categories: newCats });
   };
 
-  const handleStepChange = (index, field, value) => {
-    setFormData(prev => {
-      const newSteps = [...prev.steps];
-      newSteps[index] = { ...newSteps[index], [field]: value };
-      return { ...prev, steps: newSteps };
+  const handleFieldChange = (catId, index, field, value) => {
+    const newFields = { ...config.form_fields };
+    newFields[catId][index] = { ...newFields[catId][index], [field]: value };
+    setConfig({ ...config, form_fields: newFields });
+  };
+
+  const addField = (catId) => {
+    const newFields = { ...config.form_fields };
+    if (!newFields[catId]) newFields[catId] = [];
+    newFields[catId].push({
+      name: `customField_${Date.now()}`,
+      label: 'New Field',
+      type: 'text',
+      required: false
     });
+    setConfig({ ...config, form_fields: newFields });
+  };
+
+  const removeField = (catId, index) => {
+    const newFields = { ...config.form_fields };
+    newFields[catId].splice(index, 1);
+    setConfig({ ...config, form_fields: newFields });
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setUploading(true);
+    const { error: configError } = await supabase.from('form_config').update({
+      categories: config.categories,
+      form_fields: config.form_fields,
+      updated_at: new Date().toISOString()
+    }).eq('id', 1);
 
-    const payload = {
-      id: 1,
-      eyebrow: formData.eyebrow,
-      title: formData.title,
-      lede: formData.lede,
-      steps: formData.steps,
-      fee_student: Number(formData.fee_student),
-      fee_visitor: Number(formData.fee_visitor),
-      fee_entrepreneur: Number(formData.fee_entrepreneur),
-      fee_business_tycoon: Number(formData.fee_business_tycoon),
-      upi_id: formData.upi_id
-    };
+    const { error: regError } = await supabase.from('registration_content').update({
+      upi_id: upiId
+    }).eq('id', 1);
 
-    const { error } = await supabase.from('registration_content').upsert(payload);
-
-    if (error) {
+    if (configError || regError) {
       setMessage({ type: 'error', text: 'Failed to save changes.' });
     } else {
-      setMessage({ type: 'success', text: 'Content saved successfully!' });
-      setPreviewData(payload); // Update live preview
+      setMessage({ type: 'success', text: 'Form configuration saved successfully!' });
     }
     
     setUploading(false);
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
   };
 
+  const inputStyle = {
+    width: '100%', padding: '8px 10px', background: C.ink950,
+    border: `1px solid ${C.lineDark}`, borderRadius: '3px',
+    color: C.ivory50, fontSize: '12px', outline: 'none', fontFamily: SANS,
+  };
+
+  if (loading) return <div style={{ padding: '40px', color: C.stone500 }}>Loading form builder...</div>;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', background: C.ink950 }}>
       <main style={{ flex: 1, padding: '32px' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          
           <div>
+            <style>{`
+              input[type=number]::-webkit-inner-spin-button, 
+              input[type=number]::-webkit-outer-spin-button { 
+                -webkit-appearance: none; 
+                margin: 0; 
+              }
+              input[type=number] {
+                -moz-appearance: textfield;
+              }
+            `}</style>
             <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>CMS</p>
-            <h2 style={{ fontFamily: SERIF, fontSize: '20px', color: C.ivory50, fontWeight: 600 }}>Event Registration Management</h2>
+            <h2 style={{ fontFamily: SERIF, fontSize: '20px', color: C.ivory50, fontWeight: 600 }}>Event Registration Form Builder</h2>
           </div>
 
-          <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ flex: 1, background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px' }}>
-              <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <form onSubmit={handleSave}>
+            <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+              
+              {/* Left Column: Categories List */}
+              <div style={{ width: '320px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <h3 style={{ fontFamily: SERIF, fontSize: '16px', color: C.ivory50 }}>Registration Categories</h3>
+                {config.categories.map((cat, idx) => (
+                  <div 
+                    key={cat.id} 
+                    onClick={() => setSelectedCategory(cat.id)}
+                    style={{ 
+                      background: selectedCategory === cat.id ? C.ink800 : C.ink900, 
+                      border: `1px solid ${selectedCategory === cat.id ? C.brass400 : C.lineDark}`, 
+                      borderRadius: '4px', padding: '16px', cursor: 'pointer' 
+                    }}
+                  >
+                    <input 
+                      value={cat.title} onChange={e => handleCategoryChange(idx, 'title', e.target.value)} 
+                      style={{ ...inputStyle, fontWeight: 'bold', marginBottom: '8px', background: 'transparent' }} 
+                    />
+                    <input 
+                      value={cat.tagline} onChange={e => handleCategoryChange(idx, 'tagline', e.target.value)} 
+                      style={{ ...inputStyle, marginBottom: '8px' }} placeholder="Tagline"
+                    />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <label style={{ fontSize: '11px', color: C.stone400 }}>Registration Fee (₹):</label>
+                      <input 
+                        type="number"
+                        placeholder="0"
+                        value={cat.fee === 0 ? '' : (cat.fee ?? '')} 
+                        onChange={e => handleCategoryChange(idx, 'fee', e.target.value === '' ? 0 : parseInt(e.target.value, 10))} 
+                        style={{ ...inputStyle, marginBottom: 0, flex: 1 }} 
+                      />
+                    </div>
+                    <textarea 
+                      value={cat.description} onChange={e => handleCategoryChange(idx, 'description', e.target.value)} 
+                      style={{ ...inputStyle, height: '60px', resize: 'vertical' }} placeholder="Description"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Right Column: Fields for Selected Category */}
+              <div style={{ flex: 1, background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '4px', padding: '24px' }}>
+                <h3 style={{ fontFamily: SERIF, fontSize: '16px', color: C.ivory50, marginBottom: '20px' }}>
+                  Form Fields for <span style={{ color: C.brass400 }}>{config.categories.find(c => c.id === selectedCategory)?.title}</span>
+                </h3>
                 
-                {/* Introduction Text Block */}
-                <div>
-                  <h3 style={sectionHeadingStyle}>Registration Content</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginTop: '12px' }}>
-                    <div>
-                      <label style={labelStyle}>Eyebrow (Badge)</label>
-                      <input name="eyebrow" value={formData.eyebrow} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Main Title (Supports HTML tags like {"<span class='t-italic'>"})</label>
-                      <input name="title" value={formData.title} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Sub-description (Lede)</label>
-                      <textarea name="lede" value={formData.lede} onChange={handleInputChange} style={{ ...inputStyle, height: '60px', resize: 'vertical' }} />
-                    </div>
-                  </div>
-                </div>
-
-                <hr style={{ borderTop: `1px solid ${C.lineDark}`, margin: '0' }} />
-
-                {/* Steps Block */}
-                <div>
-                  <h3 style={sectionHeadingStyle}>Registration Steps (3 Items)</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginTop: '12px' }}>
-                    {formData.steps.map((step, index) => (
-                      <div key={index} style={{ background: C.ink900, padding: '12px', borderRadius: '3px', border: `1px solid ${C.lineDark}` }}>
-                        <p style={{ fontSize: '10px', color: C.stone500, marginBottom: '8px' }}>Step {index + 1}</p>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <input 
-                            value={step.title} 
-                            onChange={(e) => handleStepChange(index, 'title', e.target.value)} 
-                            style={inputStyle} 
-                            placeholder="Title (e.g. Choose your category.)" 
-                          />
-                          <input 
-                            value={step.description} 
-                            onChange={(e) => handleStepChange(index, 'description', e.target.value)} 
-                            style={inputStyle} 
-                            placeholder="Description (e.g. Student, Visitor, Entrepreneur or Business Tycoon.)" 
-                          />
-                        </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {(config.form_fields[selectedCategory] || []).map((field, idx) => (
+                    <div key={idx} style={{ display: 'flex', gap: '12px', alignItems: 'center', background: C.ink900, padding: '12px', border: `1px solid ${C.lineDark}`, borderRadius: '4px' }}>
+                      <GripVertical size={16} color={C.stone500} style={{ cursor: 'move' }} />
+                      
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', fontSize: '10px', color: C.stone500, marginBottom: '4px' }}>Field Key (DB Name)</label>
+                        <input value={field.name} onChange={e => handleFieldChange(selectedCategory, idx, 'name', e.target.value)} style={inputStyle} disabled={field.name === 'email' || field.name === 'phone'} />
                       </div>
-                    ))}
-                  </div>
+                      
+                      <div style={{ flex: 1 }}>
+                        <label style={{ display: 'block', fontSize: '10px', color: C.stone500, marginBottom: '4px' }}>Field Label</label>
+                        <input value={field.label} onChange={e => handleFieldChange(selectedCategory, idx, 'label', e.target.value)} style={inputStyle} />
+                      </div>
+
+                      <div style={{ width: '100px' }}>
+                        <label style={{ display: 'block', fontSize: '10px', color: C.stone500, marginBottom: '4px' }}>Type</label>
+                        <select value={field.type} onChange={e => handleFieldChange(selectedCategory, idx, 'type', e.target.value)} style={inputStyle}>
+                          <option value="text">Text</option>
+                          <option value="email">Email</option>
+                          <option value="tel">Phone</option>
+                          <option value="textarea">Textarea</option>
+                          <option value="url">URL</option>
+                        </select>
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', paddingTop: '16px' }}>
+                        <input type="checkbox" checked={field.required} onChange={e => handleFieldChange(selectedCategory, idx, 'required', e.target.checked)} id={`req-${idx}`} />
+                        <label htmlFor={`req-${idx}`} style={{ fontSize: '11px', color: C.stone400 }}>Required</label>
+                      </div>
+
+                      <button type="button" onClick={() => removeField(selectedCategory, idx)} style={{ background: 'transparent', border: 'none', color: C.rose400, cursor: 'pointer', paddingTop: '16px' }} disabled={field.name === 'email' || field.name === 'phone'}>
+                        <Trash2 size={16} color={field.name === 'email' || field.name === 'phone' ? C.stone600 : C.rose400} />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  <button type="button" onClick={() => addField(selectedCategory)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', background: 'transparent', border: `1px dashed ${C.brass400}`, color: C.brass400, borderRadius: '4px', cursor: 'pointer' }}>
+                    <Plus size={16} /> Add Field
+                  </button>
                 </div>
-
-                <hr style={{ borderTop: `1px solid ${C.lineDark}`, margin: '0' }} />
-
-                {/* Fees Block */}
-                <div>
-                  <h3 style={sectionHeadingStyle}>Registration Fees (INR)</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
-                    <div>
-                      <label style={labelStyle}>Student Fee</label>
-                      <input type="number" name="fee_student" value={formData.fee_student} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Visitor Fee</label>
-                      <input type="number" name="fee_visitor" value={formData.fee_visitor} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Entrepreneur Fee</label>
-                      <input type="number" name="fee_entrepreneur" value={formData.fee_entrepreneur} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                    <div>
-                      <label style={labelStyle}>Business Tycoon Fee</label>
-                      <input type="number" name="fee_business_tycoon" value={formData.fee_business_tycoon} onChange={handleInputChange} style={inputStyle} />
-                    </div>
-                  </div>
-                  <div style={{ marginTop: '16px' }}>
-                    <label style={labelStyle}>Payment UPI ID</label>
-                    <input type="text" name="upi_id" value={formData.upi_id} onChange={handleInputChange} style={inputStyle} />
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '12px', paddingTop: '20px', borderTop: `1px solid ${C.lineDark}` }}>
+                
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '32px', paddingTop: '20px', borderTop: `1px solid ${C.lineDark}` }}>
                   {message.text ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: message.type === 'success' ? C.em500 : C.rose400, fontSize: '13px' }}>
                       <Check size={16} /> {message.text}
                     </div>
                   ) : <div />}
-                  <button type="submit" disabled={uploading || loading} style={{ padding: '10px 24px', background: C.brass400, color: C.ink950, border: 'none', borderRadius: '3px', fontWeight: 600, fontSize: '13px', cursor: (uploading || loading) ? 'not-allowed' : 'pointer', fontFamily: SANS, opacity: (uploading || loading) ? 0.7 : 1 }}>
-                    {uploading ? 'Saving...' : 'Save Changes'}
+                  <button type="submit" disabled={uploading} style={{ padding: '10px 24px', background: C.brass400, color: C.ink950, border: 'none', borderRadius: '3px', fontWeight: 600, fontSize: '13px', cursor: uploading ? 'not-allowed' : 'pointer' }}>
+                    {uploading ? 'Saving...' : 'Save Configuration'}
                   </button>
                 </div>
+                
+                <div style={{ marginTop: '32px', paddingTop: '24px', borderTop: `1px solid ${C.lineDark}` }}>
+                  <h3 style={{ fontFamily: SERIF, fontSize: '16px', color: C.ivory50, marginBottom: '12px' }}>Payment Settings</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <label style={{ fontSize: '11px', color: C.stone400 }}>UPI ID for QR Code Scanner</label>
+                    <input 
+                      value={upiId} 
+                      onChange={e => setUpiId(e.target.value)} 
+                      style={{ ...inputStyle, width: '100%', maxWidth: '300px' }} 
+                      placeholder="e.g. bmipresents@upi"
+                    />
+                    <p style={{ fontSize: '11px', color: C.stone500, margin: 0 }}>This UPI ID is used to generate the "Scan to Pay" QR code.</p>
+                  </div>
+                </div>
 
-              </form>
-            </motion.div>
-          </div>
-
-          {/* Live Preview */}
-          <div style={{ marginTop: '20px', paddingBottom: '40px' }}>
-            <h3 style={{ fontFamily: SERIF, fontSize: '18px', color: C.ivory50, marginBottom: '16px' }}>Live Preview</h3>
-            <div style={{ border: `1px solid ${C.brass500}`, borderRadius: '4px', overflow: 'hidden', position: 'relative', background: C.ink950 }}>
-               {/* Pass previewData to Registration.jsx to preview changes */}
-               <Registration previewData={previewData} selectedCategory={null} onCategoryChanged={() => {}} />
-               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
+              </div>
             </div>
-          </div>
+          </form>
 
         </div>
       </main>
     </div>
   );
 }
-
-

@@ -10,6 +10,7 @@ export default function Registration({
   previewData
 }) {
   const [data, setData] = useState(null);
+  const [formConfig, setFormConfig] = useState(null);
 
   useEffect(() => {
     if (previewData) {
@@ -27,6 +28,16 @@ export default function Registration({
       if (regData && !error) {
         setData(regData);
       }
+
+      const { data: configData, error: configError } = await supabase
+        .from("form_config")
+        .select("*")
+        .eq("id", 1)
+        .single();
+      
+      if (configData && !configError) {
+        setFormConfig(configData);
+      }
     };
 
     fetchData();
@@ -43,7 +54,10 @@ export default function Registration({
   ];
   const steps = data?.steps || defaultSteps;
 
-  const dynamicFees = {
+  const dynamicFees = formConfig?.categories?.reduce((acc, cat) => ({
+    ...acc,
+    [cat.id]: cat.fee ?? 0
+  }), {}) || {
     student: data?.fee_student ?? 0,
     visitor: data?.fee_visitor ?? 500,
     entrepreneur: data?.fee_entrepreneur ?? 1000,
@@ -90,6 +104,8 @@ export default function Registration({
               onCategoryChanged={onCategoryChanged}
               dynamicFees={dynamicFees}
               dynamicUpiId={upiId}
+              dynamicCategories={formConfig?.categories}
+              dynamicFields={formConfig?.form_fields}
             />
           </Reveal>
         </div>

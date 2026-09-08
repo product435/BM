@@ -111,16 +111,17 @@ function buildInitialValues(fields) {
   return values;
 }
 
-const CATEGORY_LABEL = {
-  student: "Student",
-  visitor: "Visitor",
-  entrepreneur: "Entrepreneur",
-  businessTycoon: "Business Tycoon",
-};
+// Removed static CATEGORY_LABEL since it is computed dynamically inside the component
 
-export default function RegistrationForm({ initialCategory, onCategoryChanged, dynamicFees, dynamicUpiId }) {
+export default function RegistrationForm({ initialCategory, onCategoryChanged, dynamicFees, dynamicUpiId, dynamicCategories, dynamicFields }) {
+  const activeCategories = dynamicCategories || CATEGORIES;
+  const activeFields = dynamicFields || FORM_FIELDS;
+
+  const CATEGORY_LABEL = activeCategories.reduce((acc, c) => ({ ...acc, [c.id]: c.title }), {});
+  const DYNAMIC_CATEGORY_SHORT = activeCategories.reduce((acc, c) => ({ ...acc, [c.id]: c.cta || c.title }), {});
+
   const [category, setCategory] = useState(initialCategory || "student");
-  const fields = FORM_FIELDS[category] || [];
+  const fields = activeFields[category] || [];
   
   // Registration Fees depend only on the selected CATEGORY (Student /
   // Visitor / Entrepreneur / Business Tycoon) — never on the typed
@@ -164,7 +165,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   useEffect(() => {
     if (initialCategory && initialCategory !== category) {
       setCategory(initialCategory);
-      setValues(buildInitialValues(FORM_FIELDS[initialCategory]));
+      setValues(buildInitialValues(activeFields[initialCategory] || []));
       setErrors({});
       setTouched({});
       setStatus("idle");
@@ -174,7 +175,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
 
   const chooseCategory = (id) => {
     setCategory(id);
-    setValues(buildInitialValues(FORM_FIELDS[id]));
+    setValues(buildInitialValues(activeFields[id] || []));
     setErrors({});
     setTouched({});
     setStatus("idle");
@@ -275,7 +276,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
           </p>
           <div className="reg-success-meta">
             <span className="reg-success-chip">
-              {CATEGORY_LABEL[category]} — {CATEGORY_SHORT[category]}
+              {CATEGORY_LABEL[category]} — {DYNAMIC_CATEGORY_SHORT[category]}
             </span>
             {values.city ? (
               <span className="reg-success-chip">{values.city}</span>
@@ -302,7 +303,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
       ) : (
         <>
           <div className="reg-cats" role="group" aria-label="Choose your category">
-            {CATEGORIES.map((c) => (
+            {activeCategories.map((c) => (
               <button
                 key={c.id}
                 type="button"
@@ -311,7 +312,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                 onClick={() => chooseCategory(c.id)}
               >
                 <span className="reg-cat-name">{c.title}</span>
-                <span className="reg-cat-short">{CATEGORY_SHORT[c.id]}</span>
+                <span className="reg-cat-short">{DYNAMIC_CATEGORY_SHORT[c.id]}</span>
               </button>
             ))}
           </div>
