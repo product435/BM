@@ -151,7 +151,7 @@ const AdminLogin = () => {
           <div className="text-center mb-10">
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
               <img
-                src="/Full_Logo.png"
+                src="/images/full_logo.png"
                 alt="BM Investment"
                 style={{ width: '160px', filter: `drop-shadow(0 0 16px rgba(212,175,55,0.2))` }}
               />

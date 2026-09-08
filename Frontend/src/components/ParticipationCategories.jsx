@@ -20,7 +20,7 @@ export default function ParticipationCategories({ onSelectCategory }) {
                 Choose <span className="t-italic t-emerald">your path.</span>
               </span>
             }
-            lede="Four Categories to enter the event. Pick your registration form adapts to how you'll show up."
+            lede="Explore the categories to enter the event. Pick your registration form adapts to how you'll show up."
             className="sec-head--inline"
           />
         </div>

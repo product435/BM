@@ -1,9 +1,19 @@
+import { useState } from "react";
 import { HIGHLIGHTS, EVENT_AGENDA, EXPERIENCE_SPECIAL, EVENT_VALUE_STRIP } from "../data/eventData.js";
 import Carousel from "./Carousel.jsx";
 import Marquee from "./Marquee.jsx";
 import Reveal from "./Reveal.jsx";
 
 export default function Highlights({ experienceData = null }) {
+  // Mobile/touch: a tapped card in each of these three carousels keeps
+  // the beige/cream tap state until a different card in the same
+  // carousel is tapped — CSS :active alone only lasts while the finger
+  // is pressed, so this tracks the last-tapped card per carousel.
+  // Independent of the carousel's own active/current slide index.
+  const [tappedAgenda, setTappedAgenda] = useState(null);
+  const [tappedSpecial, setTappedSpecial] = useState(null);
+  const [tappedValue, setTappedValue] = useState(null);
+
   const content = experienceData || {
     eyebrow: '09 — Event Day Experience',
     heading: 'A full day of ideas, insights & impact.',
@@ -63,12 +73,16 @@ export default function Highlights({ experienceData = null }) {
             variant="light"
             ariaLabel="Event agenda"
             showDots
-            renderItem={(item) => (
-              <>
+            renderItem={(item, i) => (
+              <div
+                className={`agenda-item-tap ${tappedAgenda === i ? "is-tapped" : ""}`.trim()}
+                onClick={() => setTappedAgenda(i)}
+                style={{ display: "contents" }}
+              >
                 <p className="agenda-time">{item.time}</p>
                 <p className="agenda-item-title">{item.title}</p>
                 <p className="agenda-item-desc">{item.description}</p>
-              </>
+              </div>
             )}
           />
         </Reveal>
@@ -82,12 +96,16 @@ export default function Highlights({ experienceData = null }) {
             variant="light"
             ariaLabel="What makes it special"
             showDots
-            renderItem={(item) => (
-              <>
+            renderItem={(item, i) => (
+              <div
+                className={`special-item-tap ${tappedSpecial === i ? "is-tapped" : ""}`.trim()}
+                onClick={() => setTappedSpecial(i)}
+                style={{ display: "contents" }}
+              >
                 <span className="special-index">{item.index}</span>
                 <p className="special-item-title">{item.title}</p>
                 <p className="special-item-desc">{item.description}</p>
-              </>
+              </div>
             )}
           />
         </Reveal>
@@ -102,13 +120,17 @@ export default function Highlights({ experienceData = null }) {
             ariaLabel="What's in the event"
             showDots
             renderItem={(item, i) => (
-              <>
+              <div
+                className={`value-strip-item-tap ${tappedValue === i ? "is-tapped" : ""}`.trim()}
+                onClick={() => setTappedValue(i)}
+                style={{ display: "contents" }}
+              >
                 <span className="value-strip-index">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <p className="value-strip-title">{item.title}</p>
                 <p className="value-strip-desc">{item.description}</p>
-              </>
+              </div>
             )}
           />
         </Reveal>

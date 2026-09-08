@@ -1,5 +1,4 @@
 import { WHATSAPP_MESSAGE, WHATSAPP_NUMBER } from "../data/eventData.js";
-import { WhatsappIcon } from "./SocialIcons.jsx";
 
 /**
  * FloatingWhatsApp — fixed bottom-right chat button, mounted once at
@@ -20,7 +19,7 @@ export default function FloatingWhatsApp() {
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
     >
-      <WhatsappIcon className="floating-whatsapp-icon" />
+      <img src="/images/whatsapp_icon.png" alt="" className="floating-whatsapp-icon" />
     </a>
   );
 }

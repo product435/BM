@@ -92,7 +92,7 @@ const LandingPage = () => {
              heroTicker={heroData.ticker.split(',').map(s => s.trim())}
              // Background media is fixed to the site's own video — never
              // driven by Supabase, regardless of what hero_content stores.
-             heroImages={{ hero: '/images/Apna_Jaipur.mp4' }}
+             heroImages={{ hero: '/videos/apna_jaipur.mp4' }}
            />
         ) : (
            <Hero onRegister={() => scrollTo("register")} onExplore={() => scrollTo("about")} />

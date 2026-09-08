@@ -25,7 +25,7 @@ export const EVENT = {
 };
 
 export const IMAGES = {
-  hero: "/images/Apna_Jaipur.mp4",
+  hero: "/videos/apna_jaipur.mp4",
   networking: "/images/image3.png",
   pitch:
     "https://images.pexels.com/photos/7413915/pexels-photo-7413915.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1100&w=900",

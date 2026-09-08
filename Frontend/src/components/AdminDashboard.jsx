@@ -368,7 +368,7 @@ export default function AdminDashboard() {
           {isSidebarExpanded || isMobile ? (
             <>
               <img
-                src="/Full_Logo.png"
+                src="/images/full_logo.png"
                 alt="BM Investment"
                 style={{ width: '140px', display: 'block', filter: `drop-shadow(0 0 8px rgba(198,164,98,0.25))` }}
               />

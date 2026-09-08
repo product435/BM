@@ -424,6 +424,21 @@ footer[id] {
   transition: background-color 0.45s ease, border-color 0.45s ease, backdrop-filter 0.45s ease;
 }
 
+/* While the mobile drawer is open, the header (even fully transparent)
+   still occupies a hit-testable box across the full viewport width —
+   including the top strip the drawer visually sits over. Disabling
+   its pointer-events guarantees clicks in that area always reach the
+   drawer's own close handler, regardless of z-index/stacking-context
+   edge cases. The burger button re-enables its own pointer-events so
+   it stays clickable as the close (X) control. */
+.header.menu-open {
+  pointer-events: none;
+}
+
+.header.menu-open .nav-burger {
+  pointer-events: auto;
+}
+
 .header.is-scrolled {
   background: rgba(12, 11, 9, 0.9);
   -webkit-backdrop-filter: blur(14px);
@@ -509,7 +524,10 @@ footer[id] {
 .nav-burger {
   display: none;
   position: relative;
-  z-index: 95;
+  /* Above .mobile-menu (96) so the burger-turned-X stays visible and
+     clickable even while the drawer is open and covers that corner
+     of the header. */
+  z-index: 97;
   width: 2.9rem;
   height: 2.9rem;
   border: 1px solid var(--line-dark);
@@ -524,9 +542,18 @@ footer[id] {
 .nav-burger span {
   display: block;
   width: 1.25rem;
-  height: 1.5px;
-  background: var(--ivory-50);
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  height: 2px;
+  background-color: #f7f2e8;
+  background-image: none;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+  color: transparent;
+  border: none;
+  box-shadow: none;
+  transform-origin: center;
+  backface-visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nav-burger.is-open {
@@ -541,33 +568,54 @@ footer[id] {
   transform: translateY(-4px) rotate(-45deg);
 }
 
-/* Mobile menu */
-.mobile-menu {
+/* Mobile menu — overlay dims the page, the drawer itself slides in
+   from the right and holds the actual nav content. Only the overlay
+   (not the drawer panel — see stopPropagation in Navbar.jsx) closes
+   the menu on click. */
+.mobile-menu-overlay {
   position: fixed;
   inset: 0;
   z-index: 80;
   background: rgba(12, 11, 9, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+.mobile-menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s ease, visibility 0s linear 0s;
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  /* Above .header (z-index: 90) — otherwise the fixed header bar
+     physically overlaps the top strip of the drawer (where "About"
+     and the space above it sit) and intercepts clicks there before
+     they ever reach the drawer's own close handler. */
+  z-index: 96;
+  width: 60vw;
+  max-width: 60vw;
+  min-height: 100vh;
+  background: var(--ink-950);
   -webkit-backdrop-filter: blur(18px) saturate(1.1);
   backdrop-filter: blur(18px) saturate(1.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 6.5rem var(--gutter) 3rem;
+  padding: 5rem 1.5rem 3rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-1.5%);
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0.5s;
+  transform: translateX(100%);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.mobile-menu.is-open {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0s;
+.mobile-menu-overlay.is-open .mobile-menu {
+  transform: translateX(0);
 }
 
 .mobile-menu-links {
@@ -587,19 +635,35 @@ footer[id] {
     color 0.3s ease;
 }
 
-.mobile-menu.is-open .mobile-menu-link {
+.mobile-menu-overlay.is-open .mobile-menu-link {
   opacity: 1;
   transform: none;
   transition-delay: calc(0.08s + var(--i) * 0.06s);
 }
 
-.mobile-menu-link:hover .m-label {
-  color: var(--brass-300);
-  font-style: italic;
+/* hover:hover guards against touch — a tap on mobile briefly fires
+   :hover too, and animating font-style there is exactly what caused
+   the "italic/different font" flicker on tap. Only real pointer
+   devices (mouse) get the hover treatment now, and only color
+   changes — font-family/font-style/font-weight never change on any
+   interaction state (hover/active/focus/visited/pressed). */
+@media (hover: hover) and (pointer: fine) {
+  .mobile-menu-link:hover .m-label {
+    color: var(--brass-300);
+  }
+}
+
+.mobile-menu-link:active .m-label,
+.mobile-menu-link:focus .m-label,
+.mobile-menu-link:visited .m-label {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: inherit;
 }
 
 .m-label {
   font-family: var(--font-display);
+  font-style: normal;
   font-size: clamp(2rem, 8.5vw, 3rem);
   color: var(--ivory-50);
   transition: color 0.3s ease;
@@ -607,7 +671,16 @@ footer[id] {
 
 @media (max-width: 640px) {
   .m-label {
-    font-size: 28px;
+    font-size: 26px;
+  }
+
+  /* .nav-logo's clamp(5.5rem, 9vw, 7.5rem) is pinned at its 5.5rem
+     floor at this width (9vw < 5.5rem below ~980px) — sized up ~17%
+     here, aspect ratio preserved via the existing height: auto.
+     Reduced ~9% from that (6.45rem -> 5.87rem) per follow-up
+     feedback that it read slightly too large. */
+  .nav-logo {
+    width: 5.87rem;
   }
 }
 
@@ -988,9 +1061,24 @@ footer[id] {
 .floating-whatsapp-icon {
   width: 28px;
   height: 28px;
+  object-fit: contain;
 }
 
 @media (max-width: 640px) {
+  /* Mobile only: .footer-logo's clamp(9rem, 16vw, 13rem) is pinned at
+     its 9rem floor on small screens (16vw < 9rem below ~900px), making
+     the logo (and the small text under it) look small. No parent
+     (.footer-brand-mark is width: fit-content, .footer-brand goes
+     full-width at 560px, .container has ample room) constrains this
+     further — width is the only limiting rule. Sized up to ~14.2rem
+     (~35% over the previous 10.5rem mobile value), aspect ratio
+     preserved via height: auto. */
+  /* Reduced ~11% from the previous 14.2rem mobile value per follow-up
+     feedback that it read slightly too large. */
+  .footer-logo {
+    width: 12.64rem;
+  }
+
   .floating-whatsapp {
     right: 1rem;
     bottom: 1rem;
@@ -1025,6 +1113,27 @@ footer[id] {
 }
 
 /* ── Responsive: navigation & hero ─────────────────────────── */
+/* Desktop/web only (tablet's own nav-burger switch already starts at
+   900px, so this stays above that so mobile/tablet are unaffected).
+   Measured with real rendered heights (Playwright, 1280/1440/1920px):
+   .hero is `justify-content: flex-end` with min-height: 100svh, so
+   content is bottom-anchored inside a full-viewport box — padding-top
+   only reserves headroom, it does not push content down/up, so it
+   isn't the lever for this gap (same mechanism already confirmed for
+   the equivalent mobile fix). At desktop widths content comfortably
+   fits inside 100svh, so the leftover space above it (measured:
+   81-88px, navbar bottom to eyebrow top) is min-height minus content
+   height. Shortening min-height by a fixed 36px pulls the
+   bottom-anchored content up by that same amount — a moderate, direct
+   30-40px reduction as requested, with no effect on the spacing below
+   the eyebrow (untouched, governed entirely by .hero-title/.hero-sub/
+   .hero-ctas' own margins). */
+@media (min-width: 901px) {
+  .hero {
+    min-height: calc(100svh - 36px);
+  }
+}
+
 @media (max-width: 900px) {
   .nav-links {
     display: none;
@@ -1056,13 +1165,84 @@ footer[id] {
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+  /* Measured with real Playwright renders (not just source-reading)
+     across 320/375/390/430/640px: with `justify-content: flex-end`
+     and a min-height derived from 100svh, the gap above the eyebrow
+     is (box height − content height). At narrow widths (320-390px)
+     the hero title/paragraph wrap to more lines, so content height
+     actually EXCEEDS that min-height — the box becomes
+     content-sized, flex-end has nothing left to "push up", and the
+     eyebrow ends up jammed against (even behind) the fixed header
+     (measured gap: -7px, an overlap). At wider widths (430-640px)
+     content fits inside the min-height box, so real leftover space
+     appears above it and grows with the box (measured: 26px, 47px,
+     using the previous 560px-only rule that also didn't reach up to
+     640px at all). Both problems trace back to the same root: a
+     bottom-anchored flex box can never give a content-independent,
+     width-independent gap by construction. Switched off flex-end
+     entirely for mobile — .hero-inner/.hero-meta/.hero-ticker now
+     stack from the top (flex-start), so padding-top is the literal,
+     direct distance from the fixed header to the eyebrow, unaffected
+     by how many lines the heading/paragraph wrap to or by viewport
+     height. min-height keeps the section from ever being shorter
+     than the viewport (unchanged visual floor); any leftover room
+     when content is short now falls below the ticker instead of
+     above the eyebrow, which is outside the area this task covers. */
+  /* Follow-up: min-height: 100svh was a leftover from the old
+     flex-end approach (needed there to anchor content to the
+     bottom). With flex-start + padding-top now positioning the top
+     directly, it no longer serves any purpose — it only forced the
+     section to fill the full viewport even when content is shorter,
+     pushing a large empty block in below the ticker (the "stretched
+     downward" symptom). Removed so height follows actual content;
+     padding-bottom gives a normal, controlled gap after the ticker
+     instead of a viewport-filling one. */
   .hero {
-    padding-top: 6rem;
+    justify-content: flex-start;
+    min-height: 0;
+    padding-top: 5.6rem;
+    padding-bottom: 2.4rem;
+  }
+
+  /* Side-by-side, not stacked: .hero-ctas is already flex + wrap, but
+     forcing each .btn to width:100% put each on its own line under
+     wrap. Keeping them auto-width with flex-wrap: nowrap (instead of
+     the inherited wrap) and tightening padding/gap/font-size just
+     enough for both "Register now" and "Explore the event" to fit one
+     row without the text wrapping or overflowing the viewport. */
+  .hero-ctas {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.6rem;
   }
 
   .hero-ctas .btn {
-    width: 100%;
+    flex: 0 1 auto;
+    padding: 1rem 0.7rem;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+  }
+
+  /* Reuse the exact desktop hover styles (.btn--light:hover /
+     .btn--ghost-light:hover, unscoped further up this file) at this
+     breakpoint — no color/value is new here. Previously gated behind
+     `@media (hover: hover)`, which tracks the device's actual input
+     capability, not viewport width: most mobile viewport emulation
+     (browser DevTools responsive mode, real touchscreens) reports
+     hover:none/pointer:coarse regardless of screen size, so that
+     guard silently excluded the exact "mobile width" context this
+     was meant to work in. Scoped to viewport width only now, same as
+     the rest of this block, so it's reachable at <=640px on any
+     pointer (:active still separately covers tap/click). */
+  .hero-ctas .btn--light:hover {
+    background: var(--brass-300);
+    color: var(--ink-950);
+  }
+
+  .hero-ctas .btn--ghost-light:hover {
+    border-color: var(--ivory-50);
+    background: rgba(247, 242, 232, 0.06);
   }
 
   .hero-meta-block {
