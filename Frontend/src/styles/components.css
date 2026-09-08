@@ -45,6 +45,15 @@
     margin-top: 14px;
   }
 
+  /* .sec-head's shared margin-bottom (clamp floor 2.6rem/41.6px) plus
+     .intro-grid's row-gap (14px) together make up the heading ->
+     first-paragraph gap (~55.6px total) — scoped here (not touching
+     the shared .sec-head rule) so no other section is affected.
+     Trimmed by 10px. */
+  .intro-title-col .sec-head {
+    margin-bottom: 31.6px;
+  }
+
   .intro-copy-col {
     /* The row-gap above already provides the heading -> first-
        paragraph spacing; this padding-top would stack on top of it.
@@ -263,6 +272,21 @@
   .why-left .sec-head {
     margin-bottom: 22px;
   }
+
+  /* "Explore the categories" was already ~305px wide (matches the
+     "Register for the event" reference button) but left-aligned,
+     since .why-left is a plain block container with no centering of
+     its own, and .btn's base display: inline-flex doesn't respond to
+     margin-inline: auto the way a block box does. Switching this one
+     button to display: flex (block-level, not inline) makes the
+     auto margins actually center it within .why-left, matching the
+     reference button's centered layout — .why-left itself is left
+     untouched (still sticky/positioned for its other children). */
+  .why-left .btn {
+    display: flex;
+    width: 305px;
+    margin-inline: auto;
+  }
 }
 
 .why-grid {
@@ -392,6 +416,26 @@
 .experience {
   background: var(--ivory-100);
   color: var(--ink-950);
+}
+
+/* Mobile only: nudge the "03 — The Experience" label up (the shared
+   .section padding-top floor sat slightly too far below the top
+   edge) and tighten the heading -> paragraph gap (.exp-head's flex
+   gap: 2rem is wider than needed once the label/heading and the
+   paragraph wrap onto separate rows on mobile). Scoped to .experience
+   and .exp-head so no other section using .section or the same flex
+   gap pattern is affected. */
+@media (max-width: 640px) {
+  .experience {
+    padding-top: 64px;
+  }
+
+  /* .exp-head is shared with ParticipationCategories.jsx's "04 —
+     Participation" block — scoped to .experience specifically so
+     that other section's spacing is untouched. */
+  .experience .exp-head {
+    gap: 20px;
+  }
 }
 
 .exp-head {
@@ -1031,6 +1075,7 @@
 
 .how-foot .btn {
   margin-left: auto;
+  width: 305px;
 }
 
 /* ── Guests ────────────────────────────────────────────────── */
@@ -1769,12 +1814,43 @@
   gap: 1rem;
 }
 
+.jaipur-ctas .btn--light {
+  width: 305px;
+}
+
 .jaipur-note {
   margin-top: 1.8rem;
   font-size: 0.78rem;
   letter-spacing: 0.05em;
   color: var(--stone-500);
   max-width: 30rem;
+}
+
+/* Mobile only: hide "See the categories", leaving "Register interest"
+   as a single full-width CTA (matching the reference full-width
+   mobile button pattern used elsewhere) — .jaipur-ctas already wraps,
+   so no layout rule needed there once the second button is gone.
+   .jaipur-note's own margin-top already gives the gap below the
+   button; reduced slightly here since the row it used to share with
+   a second button is gone, and .jaipur-ctas' margin-top is trimmed to
+   remove the extra space the missing button's row used to occupy. */
+@media (max-width: 640px) {
+  .jaipur-ctas {
+    margin-top: 2rem;
+    justify-content: center;
+  }
+
+  .jaipur-ctas .btn--ghost-light {
+    display: none;
+  }
+
+  .jaipur-ctas .btn--light {
+    width: 305px;
+  }
+
+  .jaipur-note {
+    margin-top: 1.4rem;
+  }
 }
 
 /* ── Registration ──────────────────────────────────────────── */
@@ -2266,6 +2342,24 @@ textarea.field-input {
   .cta-final {
     padding-top: 3.55rem;
   }
+
+  /* Mobile only: hide "Explore the categories", keeping only
+     "Register for the event" — .cta-final-actions stays a flex
+     container so the remaining button stays centered, and the event
+     info (.cta-final-meta) below it moves up naturally into the
+     freed space via .cta-final-inner's own flex gap (no separate
+     margin needed). Desktop/tablet keep both buttons untouched. */
+  .cta-final-actions .btn--ghost-light {
+    display: none;
+  }
+
+  /* Reclaim some of the bottom padding freed by the removed button's
+     height, without cutting into the (unchanged) gap below the
+     event info — mirrors the same pattern used for .cta-final's own
+     top padding above. */
+  .cta-final-inner {
+    padding-bottom: 3.4rem;
+  }
 }
 
 .cta-final-inner {
@@ -2315,6 +2409,10 @@ textarea.field-input {
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
+}
+
+.cta-final-actions .btn--light {
+  width: 305px;
 }
 
 .cta-final-meta {
@@ -2586,9 +2684,14 @@ textarea.field-input {
     min-height: 0;
   }
 
+  .how-foot {
+    justify-content: center;
+    text-align: center;
+  }
+
   .how-foot .btn {
     margin-left: 0;
-    width: 100%;
+    width: 305px;
   }
 
   .guests-note {

@@ -676,9 +676,11 @@ footer[id] {
 
   /* .nav-logo's clamp(5.5rem, 9vw, 7.5rem) is pinned at its 5.5rem
      floor at this width (9vw < 5.5rem below ~980px) — sized up ~17%
-     here, aspect ratio preserved via the existing height: auto. */
+     here, aspect ratio preserved via the existing height: auto.
+     Reduced ~9% from that (6.45rem -> 5.87rem) per follow-up
+     feedback that it read slightly too large. */
   .nav-logo {
-    width: 6.45rem;
+    width: 5.87rem;
   }
 }
 
@@ -1071,8 +1073,10 @@ footer[id] {
      further — width is the only limiting rule. Sized up to ~14.2rem
      (~35% over the previous 10.5rem mobile value), aspect ratio
      preserved via height: auto. */
+  /* Reduced ~11% from the previous 14.2rem mobile value per follow-up
+     feedback that it read slightly too large. */
   .footer-logo {
-    width: 14.2rem;
+    width: 12.64rem;
   }
 
   .floating-whatsapp {
