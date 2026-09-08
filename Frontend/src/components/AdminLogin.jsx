@@ -77,22 +77,22 @@ const AdminLogin = () => {
 
   return (
     <div style={{ backgroundColor: bgDark, minHeight: '100vh', fontFamily: '"Archivo","Helvetica Neue",sans-serif', position: 'relative', overflow: 'hidden' }}>
-      
+
       {/* Background Image / Texture Layer */}
-      <div 
-        style={{ 
-          position: 'absolute', inset: 0, 
+      <div
+        style={{
+          position: 'absolute', inset: 0,
           backgroundImage: 'url(/images/hero-bg.jpg)', // Assuming hero-bg.jpg or similar exists, fallback is dark bg
-          backgroundSize: 'cover', 
-          backgroundPosition: 'center', 
-          opacity: 0.15, 
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.15,
           pointerEvents: 'none',
           mixBlendMode: 'luminosity' // Ensures it stays grayscale/dark
-        }} 
+        }}
       />
       {/* Dark overlay to ensure form remains the focus */}
       <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, #0a0a0c 80%)', pointerEvents: 'none' }} />
-      
+
       {/* Subtle decorative gold lines */}
       <div style={{ position: 'absolute', top: 0, left: '20%', width: '1px', height: '100%', background: `linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.1), transparent)` }} />
       <div style={{ position: 'absolute', top: 0, right: '20%', width: '1px', height: '100%', background: `linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.1), transparent)` }} />
@@ -106,9 +106,9 @@ const AdminLogin = () => {
         </div>
         <div style={{ width: '24px', height: '1px', backgroundColor: gold, marginBottom: '24px' }} />
         <div style={{ color: textMuted, letterSpacing: '0.15em', fontSize: '10px', textTransform: 'uppercase', lineHeight: 1.8 }}>
-          POWERING<br/>TOMORROW'S<br/>OPPORTUNITIES
+          POWERING<br />TOMORROW'S<br />OPPORTUNITIES
         </div>
-        
+
         {/* Bottom Left */}
         <div style={{ position: 'absolute', bottom: '40px', left: 0, color: textMuted, fontSize: '10px', letterSpacing: '0.25em', display: 'flex', alignItems: 'center', gap: '16px', whiteSpace: 'nowrap' }}>
           JAIPUR • INDIA
@@ -119,10 +119,10 @@ const AdminLogin = () => {
       {/* Desktop Right Content */}
       <div className="hidden lg:flex" style={{ position: 'absolute', top: 0, bottom: 0, right: '60px', flexDirection: 'column', justifyContent: 'center', zIndex: 10, width: '200px', alignItems: 'flex-end', textAlign: 'right' }}>
         <div style={{ color: gold, fontSize: '26px', fontFamily: '"Fraunces","Georgia",serif', fontStyle: 'italic', marginBottom: '16px', lineHeight: 1.3 }}>
-          “<br/>Enabling ideas<br/>that create impact.
+          “<br />Enabling ideas<br />that create impact.
         </div>
         <div style={{ width: '24px', height: '1px', backgroundColor: gold }} />
-        
+
         {/* Bottom Right */}
         <div style={{ position: 'absolute', bottom: '40px', right: 0, color: textMuted, fontSize: '10px', letterSpacing: '0.25em', whiteSpace: 'nowrap' }}>
           CAPITAL. CAPABILITY. CONNECTIONS.
@@ -240,8 +240,8 @@ const AdminLogin = () => {
             {/* Keep me signed in */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '-4px' }}>
               <div style={{ position: 'relative', width: '16px', height: '16px' }}>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   id="keepSignedIn"
                   checked={keepSignedIn}
                   onChange={(e) => setKeepSignedIn(e.target.checked)}

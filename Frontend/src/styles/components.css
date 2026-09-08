@@ -10,7 +10,7 @@
 
 .intro-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 2.5rem 2rem;
 }
 
@@ -70,6 +70,34 @@
 
   .intro-copy-col .intro-words {
     margin-top: 1.8rem;
+  }
+
+  /* Mobile only: .intro-words is flex-wrap by default (base rule
+     further down this file), so each .intro-word sizes to its own
+     text ("01 — Connections" vs "03 — Funding"), producing visibly
+     uneven box widths on mobile where they wrap into a ragged
+     multi-column arrangement. Switched to a 2-column grid here so
+     all 6 items share identical width/height; no item-specific
+     width/max-width rule exists elsewhere to remove. Selector scoped
+     to .intro-copy-col .intro-words (2 classes, matching the
+     margin-top override just above) rather than bare .intro-words,
+     since the unscoped base rule sits later in this file and would
+     otherwise win on source order despite this being inside a media
+     query. Desktop/tablet keep the original flex-wrap layout. */
+  .intro-copy-col .intro-words {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .intro-copy-col .intro-word {
+    width: 100%;
+    min-height: 3.4rem;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
 }
 
@@ -282,9 +310,16 @@
      auto margins actually center it within .why-left, matching the
      reference button's centered layout — .why-left itself is left
      untouched (still sticky/positioned for its other children). */
+  /* max-width: 100% guards against real page overflow at narrow
+     widths (e.g. 320px, where the container is ~280px — narrower
+     than the fixed 305px) — confirmed via direct measurement this
+     button was the exact cause of a 5px page-level horizontal
+     overflow at 320px. width stays the primary/preferred size on
+     wider mobile screens where 305px does fit. */
   .why-left .btn {
     display: flex;
     width: 305px;
+    max-width: 100%;
     margin-inline: auto;
   }
 }
@@ -1076,6 +1111,7 @@
 .how-foot .btn {
   margin-left: auto;
   width: 305px;
+  max-width: 100%;
 }
 
 /* ── Guests ────────────────────────────────────────────────── */
@@ -1846,6 +1882,7 @@
 
   .jaipur-ctas .btn--light {
     width: 305px;
+    max-width: 100%;
   }
 
   .jaipur-note {
@@ -2413,6 +2450,7 @@ textarea.field-input {
 
 .cta-final-actions .btn--light {
   width: 305px;
+  max-width: 100%;
 }
 
 .cta-final-meta {
@@ -2500,12 +2538,48 @@ textarea.field-input {
 
 /* ── Responsive: sections ──────────────────────────────────── */
 @media (max-width: 1024px) {
+  /* Real root cause of horizontal page overflow on mobile (confirmed
+     via computed styles, not guessed): .intro-grid is a 12-column
+     grid with gap: 2.5rem 2rem (32px column-gap). 12 columns means
+     11 gaps between them = 11 * 32px = 352px of gap space alone —
+     more than the entire ~280px mobile container width. With no
+     room left for any column, every 1fr track legitimately computes
+     to 0px (confirmed: getComputedStyle(...).gridTemplateColumns
+     was "0px 0px 0px..."), and .intro-title-col/.intro-copy-col (both
+     grid-column: 1/-1 here) then overflow past their zero-width
+     tracks to their own content's natural size — pushing the whole
+     page ~52px wider than the viewport. Both title/copy columns are
+     already full-width/stacked at this breakpoint, so the 12-column
+     structure has no visual purpose here — reducing the column-gap
+     removes the impossible constraint with no visible layout change. */
+  .intro-grid {
+    column-gap: 0;
+  }
+
   .intro-title-col {
     grid-column: 1 / -1;
+    min-width: 0;
   }
 
   .intro-copy-col {
     grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  /* Same 12-column-grid overflow bug as .intro-grid above (see the
+     comment there): each of these grids uses repeat(12, 1fr) with a
+     2rem column-gap — 11 gaps x 32px = 352px, wider than the ~280px
+     mobile container, so every 1fr track collapses to 0px and the
+     full-width-spanned child (grid-column: 1/-1 below) overflows to
+     its own content size instead. All six are already single-column/
+     stacked at this breakpoint, so zeroing the column-gap here has
+     no visible layout effect. */
+  .why-grid,
+  .funding-grid,
+  .qa-grid,
+  .jaipur-grid,
+  .reg-grid {
+    column-gap: 0;
   }
 
   .why-left {
@@ -2692,6 +2766,7 @@ textarea.field-input {
   .how-foot .btn {
     margin-left: 0;
     width: 305px;
+    max-width: 100%;
   }
 
   .guests-note {

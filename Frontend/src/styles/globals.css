@@ -1276,6 +1276,16 @@ footer[id] {
     padding-block: 1.2rem;
   }
 
+  /* Same 12-column-grid overflow bug fixed for .intro-grid etc. in
+     components.css: repeat(12, 1fr) + 2rem column-gap needs 352px of
+     gap alone (11 gaps x 32px), wider than the mobile container, so
+     tracks collapse to 0px and full-width children overflow to their
+     content size. Zeroed here since .footer-brand/.footer-col are
+     already stacked/half-width at this breakpoint. */
+  .footer-grid {
+    column-gap: 0;
+  }
+
   .footer-brand {
     grid-column: 1 / -1;
   }
