@@ -50,7 +50,7 @@ export const HERO_TICKER = [
   "Innovation",
 ];
 
-export const INTRO_WORDS = ["IDEAS", "STARTUPS", "NETWORKING", "INVESTMENT", "INNOVATION"];
+export const INTRO_WORDS = ["IDEAS", "STARTUPS", "NETWORKING", "INVESTMENT", "INNOVATION", "MENTORSHIP"];
 
 export const INTRO_MEDIA_CAPTION = {
   headline: "Funding is only the beginning",

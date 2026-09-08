@@ -86,7 +86,7 @@ export default function EventIntro({ previewData }) {
             <ul className="intro-words" aria-label="What the event is about">
               {introWords.map((word, i) => (
                 <li className="intro-word" key={word}>
-                  {String(i + 1).padStart(2, "0")} — {word}
+                  {String(i + 1).padStart(2, "0")} <span className="intro-word-sep">— </span>{word}
                 </li>
               ))}
             </ul>

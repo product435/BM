@@ -90,15 +90,36 @@
     gap: 10px;
   }
 
+  /* "01 — Connections" was wrapping onto 3 separate lines (number /
+     dash / label each on their own line) at every mobile width —
+     confirmed via rendered innerText. .intro-word was already a row
+     flex container (no flex-direction: column anywhere), but its
+     text content itself had no white-space: nowrap, so the browser
+     wrapped at each space once the line exceeded the card's width.
+     white-space: nowrap forces the whole "01 — Connections" string
+     onto one line, matching the desktop rendering.
+
+     Follow-up: justify-content/text-align: center meant each card
+     centered its own full string independently — since "Connections"
+     and "Learning" are different lengths, the leading "01"/"02" (and
+     the rest of the line) landed at different horizontal positions
+     card to card, even within the same column. Switched to flex-start/
+     left so every card's content starts flush against the same
+     left inner edge, keeping 01/03/05 (and 02/04/06) aligned to one
+     vertical line regardless of how long each label is. Vertical
+     centering (align-items: center) is unaffected. */
   .intro-copy-col .intro-word {
     width: 100%;
     min-height: 3.4rem;
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    text-align: left;
+    white-space: nowrap;
+    padding-inline: 0.3rem;
   }
+
 }
 
 .intro-copy {
@@ -3071,6 +3092,11 @@ textarea.field-input {
     padding: 1.3rem 1.2rem;
     box-sizing: border-box;
     transition: background-color 0.4s ease;
+    /* Highlight title/description are admin-editable and vary in
+       length — a floor keeps every carousel slide the same height
+       regardless of content length, matching .exp-cell-card's own
+       min-height above. */
+    min-height: 9rem;
   }
 
   /* Reuse the exact desktop hover background (.exp-highlight:hover)
@@ -3308,6 +3334,11 @@ textarea.field-input {
     max-width: none;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    box-sizing: border-box;
+    /* Time/title/description text is admin-editable and varies in
+       length — a floor keeps every slide the same height as the
+       carousel scrolls, instead of visibly jumping card to card. */
+    min-height: 7rem;
   }
 
   /* Tap/click state (Event Agenda, What Makes It Special?, What's in
@@ -3420,6 +3451,17 @@ textarea.field-input {
     flex: none;
   }
 
+  /* Dynamic-content stability: role/description are admin-editable
+     and can be short, long, or empty. .guest-body already flexes to
+     fill the card (flex: 1), but with no floor a guest with a short
+     or missing role/description would leave the mobile carousel's
+     single visible card noticeably shorter than the next one it
+     scrolls to — a stable min-height keeps every card the same
+     height regardless of how much text a given guest has. */
+  .guest-grid .carousel-item .guest-body {
+    min-height: 9.5rem;
+  }
+
   .guest-grid~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
@@ -3500,6 +3542,10 @@ textarea.field-input {
     scroll-snap-stop: always;
     box-sizing: border-box;
     padding-inline: calc(var(--gutter) + 0.5rem);
+    /* Sector title/description are admin-editable and vary in length
+       — without a floor, a card with a short description renders
+       visibly shorter than its neighbors as the carousel scrolls. */
+    min-height: 8rem;
   }
 
   .sector-track~.carousel-arrow {

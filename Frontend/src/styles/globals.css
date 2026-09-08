@@ -670,6 +670,19 @@ footer[id] {
 }
 
 @media (max-width: 640px) {
+  /* Dynamic-content stability: admin/backend-edited text (guest
+     names, descriptions, quotes, card labels, etc.) can contain a
+     long unbroken word or string with no natural break point —
+     without this, such a word would force horizontal overflow on
+     narrow screens instead of wrapping. break-word only affects text
+     that's already too long to fit; it's a no-op for normal content,
+     so nothing here changes for existing short/medium text. Scoped
+     to headings/paragraphs/list text broadly (not per-component) so
+     new dynamic sections are covered without individual overrides. */
+  h1, h2, h3, h4, h5, h6, p, li, span {
+    overflow-wrap: break-word;
+  }
+
   .m-label {
     font-size: 26px;
   }
@@ -1193,6 +1206,21 @@ footer[id] {
 }
 
 @media (max-width: 640px) {
+  /* "Capital. Capability. Connections." wraps to 2 lines at mobile
+     widths (measured: wraps at 320-412px, only fits one line from
+     ~430px up) — .eyebrow is a shared class used by every section's
+     small label, so this is scoped to .hero-inner .eyebrow only,
+     not the shared base rule. white-space: nowrap forces one line;
+     font-size and letter-spacing use clamp() so they shrink just
+     enough to fit at the narrowest supported width (320px) while
+     staying close to the original 0.62rem/0.34em at wider mobile
+     widths, instead of a single fixed value tuned to one device. */
+  .hero-inner .eyebrow {
+    white-space: nowrap;
+    font-size: clamp(0.47rem, 2vw, 0.62rem);
+    letter-spacing: clamp(0.11em, 1vw, 0.34em);
+  }
+
   /* Measured with real Playwright renders (not just source-reading)
      across 320/375/390/430/640px: with `justify-content: flex-end`
      and a min-height derived from 100svh, the gap above the eyebrow
@@ -1234,21 +1262,34 @@ footer[id] {
 
   /* Side-by-side, not stacked: .hero-ctas is already flex + wrap, but
      forcing each .btn to width:100% put each on its own line under
-     wrap. Keeping them auto-width with flex-wrap: nowrap (instead of
-     the inherited wrap) and tightening padding/gap/font-size just
-     enough for both "Register now" and "Explore the event" to fit one
-     row without the text wrapping or overflowing the viewport. */
+     wrap. Kept flex-wrap: nowrap so both buttons always stay on one
+     row.
+
+     Production/cross-device fix: padding and font-size here used to
+     be fixed px/rem values (1rem 0.7rem / 0.6875rem) — a constant
+     content width regardless of viewport. Measured with real
+     rendered widths (Playwright) at every width this was meant to
+     support: the two buttons' combined natural width (368px) only
+     fit inside viewports >=375px; at 320-360px they genuinely
+     overflowed the screen, and because "Register now" and "Explore
+     the event" have different text lengths, flex: 0 1 auto let them
+     shrink unevenly instead of staying visually balanced. Switched
+     both to flex: 1 1 0 (equal share of the row, filling .hero-ctas
+     evenly instead of sizing to content) and made padding/font-size
+     clamp()-based so they scale down smoothly as the viewport
+     narrows instead of being tuned to one specific device width. */
   .hero-ctas {
     flex-wrap: nowrap;
     justify-content: center;
-    gap: 0.6rem;
+    gap: clamp(0.4rem, 2vw, 0.6rem);
   }
 
   .hero-ctas .btn {
-    flex: 0 1 auto;
-    padding: 1rem 0.7rem;
-    font-size: 0.6875rem;
+    flex: 1 1 0;
+    padding: clamp(0.75rem, 3vw, 1rem) clamp(0.4rem, 2vw, 0.7rem);
+    font-size: clamp(0.56rem, 2.6vw, 0.6875rem);
     white-space: nowrap;
+    min-width: 0;
   }
 
   /* Reuse the exact desktop hover styles (.btn--light:hover /
