@@ -1109,6 +1109,27 @@ footer[id] {
 }
 
 /* ── Responsive: navigation & hero ─────────────────────────── */
+/* Desktop/web only (tablet's own nav-burger switch already starts at
+   900px, so this stays above that so mobile/tablet are unaffected).
+   Measured with real rendered heights (Playwright, 1280/1440/1920px):
+   .hero is `justify-content: flex-end` with min-height: 100svh, so
+   content is bottom-anchored inside a full-viewport box — padding-top
+   only reserves headroom, it does not push content down/up, so it
+   isn't the lever for this gap (same mechanism already confirmed for
+   the equivalent mobile fix). At desktop widths content comfortably
+   fits inside 100svh, so the leftover space above it (measured:
+   81-88px, navbar bottom to eyebrow top) is min-height minus content
+   height. Shortening min-height by a fixed 36px pulls the
+   bottom-anchored content up by that same amount — a moderate, direct
+   30-40px reduction as requested, with no effect on the spacing below
+   the eyebrow (untouched, governed entirely by .hero-title/.hero-sub/
+   .hero-ctas' own margins). */
+@media (min-width: 901px) {
+  .hero {
+    min-height: calc(100svh - 36px);
+  }
+}
+
 @media (max-width: 900px) {
   .nav-links {
     display: none;
