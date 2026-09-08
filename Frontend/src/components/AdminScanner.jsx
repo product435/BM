@@ -4,24 +4,12 @@ import { supabase } from '../lib/supabase';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, XCircle, AlertCircle, RefreshCw } from 'lucide-react';
 
-const C = {
-  ink950: '#0c0b09',
-  ink900: '#14120f',
-  ink800: '#1c1a15',
-  ivory50: '#f7f2e8',
-  stone400: '#a49a84',
-  stone500: '#857b67',
-  em500: '#2c8360',
-  em700: '#1a4d38',
-  rose400: '#c87f63',
-  brass400: '#c6a462',
-  lineDark: 'rgba(247,242,232,0.10)',
-};
-
+import { AdminThemeContext } from '../context/AdminThemeContext';
 const SERIF = '"Fraunces","Georgia",serif';
 const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 export default function AdminScanner() {
+  const { C } = React.useContext(AdminThemeContext);
   const [scanResult, setScanResult] = useState(null);
   const [loading, setLoading] = useState(false);
 

@@ -235,8 +235,8 @@ export const PAYMENT_UPI_ID = "bmipresents@upi";
 // Floating WhatsApp button target — swap WHATSAPP_NUMBER for the real
 // contact number (international format, digits only, no + or spaces,
 // e.g. "919876543210") once it's confirmed.
-export const WHATSAPP_NUMBER = "910000000000";
-export const WHATSAPP_MESSAGE = "Hi! I'd like to know more about BMI Presents.";
+export const WHATSAPP_NUMBER = "919752430783";
+export const WHATSAPP_MESSAGE = "Hello! I'm interested in the BMI Startup & Business Event in Jaipur. I need help with registration. Please guide me.";
 
 export const FUNDING_AUDIENCE = [
   {

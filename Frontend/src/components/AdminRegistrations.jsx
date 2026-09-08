@@ -4,19 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, ChevronRight, X, FileText, Video, ExternalLink, MessageSquare, Check, XCircle, Plus, Loader2, Download } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-// Brand tokens
-const C = {
-  ink950: '#0c0b09', ink900: '#14120f', ink800: '#1c1a15', ink700: '#262219',
-  ivory50: '#f7f2e8', ivory100: '#efe8d8',
-  stone400: '#a49a84', stone500: '#857b67', stone600: '#6b6250',
-  brass300: '#dcc08a', brass400: '#c6a462', brass500: '#a5844a',
-  em900: '#0d2a20', em700: '#1a4d38', em600: '#1e6b4c', em500: '#2c8360', em300: '#8fc0a8',
-  rose400: '#c87f63', lineDark: 'rgba(247,242,232,0.10)',
-};
+import { AdminThemeContext } from '../context/AdminThemeContext';
 const SERIF = '"Fraunces","Georgia",serif';
 const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 const StatusBadge = ({ status }) => {
+  const { C } = React.useContext(AdminThemeContext);
   let color = C.stone400, bg = 'rgba(164,154,132,0.1)';
   if (status === 'Under Review') { color = C.brass300; bg = 'rgba(220,192,138,0.1)'; }
   else if (status === 'Shortlisted') { color = C.em500; bg = 'rgba(44,131,96,0.1)'; }
@@ -31,6 +24,7 @@ const StatusBadge = ({ status }) => {
 };
 
 export default function AdminRegistrations({ openRegistrationId, onOpenRegistrationHandled } = {}) {
+  const { C } = React.useContext(AdminThemeContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -203,19 +197,19 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
             <Search size={14} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: C.stone500 }} />
             <input
               type="text" placeholder="Search name or ID..." value={search} onChange={e => setSearch(e.target.value)}
-              style={{ width: '100%', padding: '10px 10px 10px 36px', background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none' }}
-              onFocus={e => e.target.style.borderColor = C.brass400} onBlur={e => e.target.style.borderColor = C.lineDark}
+              style={{ width: '100%', padding: '10px 10px 10px 36px', background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none' }}
+              onFocus={e => e.target.style.borderColor = C.brass400} onBlur={e => e.target.style.borderColor = C.cardBorder}
             />
           </div>
           {/* Track Filter */}
-          <select value={filterTrack} onChange={e => setFilterTrack(e.target.value)} style={{ padding: '10px', background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none', cursor: 'pointer' }}>
+          <select value={filterTrack} onChange={e => setFilterTrack(e.target.value)} style={{ padding: '10px', background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none', cursor: 'pointer' }}>
             <option value="All">All Tracks</option>
             <option value="Track 1">Track 1 (Students)</option>
             <option value="Track 2">Track 2 (Startups)</option>
             <option value="Track 3">Track 3 (Scale)</option>
           </select>
           {/* Status Filter */}
-          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ padding: '10px', background: C.ink900, border: `1px solid ${C.lineDark}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none', cursor: 'pointer' }}>
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} style={{ padding: '10px', background: C.cardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '3px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, outline: 'none', cursor: 'pointer' }}>
             <option value="All">All Statuses</option>
             <option value="Pending">Pending</option>
             <option value="Under Review">Under Review</option>
@@ -227,13 +221,13 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
       </div>
 
       {/* Data Table */}
-      <div style={{ flex: 1, background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flex: 1, background: C.cardBg, border: `1px solid ${C.cardBorder}`, boxShadow: C.cardShadow, borderRadius: '3px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
         <div style={{ overflowY: 'auto', flex: 1 }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-            <thead style={{ background: C.ink900, position: 'sticky', top: 0, zIndex: 5 }}>
+            <thead style={{ background: C.innerCardBg, position: 'sticky', top: 0, zIndex: 5 }}>
               <tr>
                 {['ID', 'Applicant Info', 'Track', 'Payment', 'Date', 'Status', ''].map(h => (
-                  <th key={h} style={{ padding: '16px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: C.stone500, fontWeight: 600, borderBottom: `1px solid ${C.lineDark}` }}>{h}</th>
+                  <th key={h} style={{ padding: '16px', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: C.stone500, fontWeight: 600, borderBottom: `1px solid ${C.cardBorder}` }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -254,8 +248,8 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                   <tr
                     key={app.id}
                     onClick={() => openDrawer(app)}
-                    style={{ borderBottom: `1px solid ${C.lineDark}`, cursor: 'pointer', transition: 'background 0.2s' }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(247,242,232,0.03)'}
+                    style={{ borderBottom: `1px solid ${C.cardBorder}`, cursor: 'pointer', transition: 'background 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = C.theme === 'light' ? 'rgba(12,11,9,0.03)' : 'rgba(247,242,232,0.03)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
                     <td style={{ padding: '16px', fontSize: '12px', color: C.stone400 }}>{app.registration_id}</td>
@@ -288,10 +282,10 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
             <motion.div
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '480px', background: C.ink900, borderLeft: `1px solid ${C.lineDark}`, zIndex: 50, display: 'flex', flexDirection: 'column', boxShadow: '-10px 0 30px rgba(0,0,0,0.5)' }}
+              style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '480px', background: C.headerBg, borderLeft: `1px solid ${C.cardBorder}`, zIndex: 50, display: 'flex', flexDirection: 'column', boxShadow: C.theme === 'light' ? '-10px 0 40px rgba(12,11,9,0.12)' : '-10px 0 30px rgba(0,0,0,0.5)' }}
             >
               {/* Drawer Header */}
-              <div style={{ padding: '24px 32px', borderBottom: `1px solid ${C.lineDark}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ padding: '24px 32px', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <p style={{ fontSize: '11px', letterSpacing: '0.1em', color: C.brass400, textTransform: 'uppercase', fontWeight: 600, marginBottom: '4px' }}>{selectedApp.registration_id}</p>
                   <h3 style={{ fontFamily: SERIF, fontSize: '24px', color: C.ivory50, fontWeight: 600 }}>{selectedApp.name}</h3>
@@ -303,7 +297,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
               <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
                 
                 {/* Status Bar */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: C.ink800, borderRadius: '4px', border: `1px solid ${C.lineDark}`, marginBottom: '24px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', background: C.innerCardBg, borderRadius: '4px', border: `1px solid ${C.cardBorder}`, marginBottom: '24px' }}>
                   <span style={{ fontSize: '13px', color: C.stone400 }}>Current Status</span>
                   <StatusBadge status={selectedApp.status} />
                 </div>
@@ -322,7 +316,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                 {/* Track Specific Details */}
                 <div style={{ marginBottom: '32px' }}>
                   <h4 style={{ fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: C.stone500, fontWeight: 600, marginBottom: '16px' }}>Application Details</h4>
-                  <div style={{ background: 'rgba(247,242,232,0.02)', padding: '16px', borderRadius: '4px', border: `1px solid ${C.lineDark}` }}>
+                  <div style={{ background: C.innerCardBg, padding: '16px', borderRadius: '4px', border: `1px solid ${C.cardBorder}` }}>
                     {selectedApp.details && Object.keys(selectedApp.details).length > 0 ? Object.entries(selectedApp.details).map(([key, val]) => (
                       <div key={key} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: `1px solid rgba(247,242,232,0.05)` }}>
                         <span style={{ fontSize: '13px', color: C.stone400, textTransform: 'capitalize' }}>{key.replace(/([A-Z])/g, ' $1').trim()}</span>
@@ -349,9 +343,9 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                         key={st} onClick={() => updateStatus(st)}
                         style={{
                           padding: '8px 16px', fontSize: '12px', borderRadius: '3px', cursor: 'pointer', fontFamily: SANS,
-                          background: selectedApp.status === st ? C.ink800 : 'transparent',
+                          background: selectedApp.status === st ? C.cardBg : 'transparent',
                           color: selectedApp.status === st ? C.ivory50 : C.stone400,
-                          border: `1px solid ${selectedApp.status === st ? C.brass400 : C.lineDark}`,
+                          border: `1px solid ${selectedApp.status === st ? C.brass400 : C.cardBorder}`,
                           transition: 'all 0.2s'
                         }}
                       >
@@ -375,8 +369,8 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                   <textarea
                     value={adminNote} onChange={e => setAdminNote(e.target.value)}
                     placeholder="Add feedback, scores or internal jury notes here..."
-                    style={{ width: '100%', height: '100px', background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '4px', padding: '12px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, resize: 'none', outline: 'none', marginBottom: '12px' }}
-                    onFocus={e => e.target.style.borderColor = C.brass400} onBlur={e => e.target.style.borderColor = C.lineDark}
+                    style={{ width: '100%', height: '100px', background: C.innerCardBg, border: `1px solid ${C.cardBorder}`, borderRadius: '4px', padding: '12px', color: C.ivory50, fontSize: '13px', fontFamily: SANS, resize: 'none', outline: 'none', marginBottom: '12px' }}
+                    onFocus={e => e.target.style.borderColor = C.brass400} onBlur={e => e.target.style.borderColor = C.cardBorder}
                   />
                   <button
                     onClick={saveNote} disabled={savingNote}
