@@ -42,7 +42,7 @@ export default function Footer({ onNavigate }) {
             <a className="footer-brand-mark" {...linkProps("home")} aria-label="BMI — back to top">
               <img
                 className="footer-logo"
-                src="/images/Full_Logo.png"
+                src="/images/full_logo.png"
                 alt={`${EVENT.org} — Investment. Ideas, Execution, Growth.`}
               />
             </a>

@@ -26,6 +26,44 @@
   padding-top: 0.4rem;
 }
 
+/* Mobile only: precise vertical rhythm for label -> heading ->
+   first paragraph -> second paragraph, once the title/copy columns
+   stack full-width at the 1024px breakpoint. Scoped selectors
+   (.intro-title-col .sec-title, .intro-copy-col p + p, and .intro's
+   own padding-top override below) so nothing outside this section
+   is affected — the shared .section rule stays untouched. */
+@media (max-width: 640px) {
+  .intro {
+    padding-top: 2.6rem;
+  }
+
+  .intro-grid {
+    row-gap: 14px;
+  }
+
+  .intro-title-col .sec-title {
+    margin-top: 14px;
+  }
+
+  .intro-copy-col {
+    /* The row-gap above already provides the heading -> first-
+       paragraph spacing; this padding-top would stack on top of it.
+       gap: 0 here since the exact paragraph-to-paragraph spacing is
+       set explicitly below instead (the words list keeps its
+       original gap via its own margin-top). */
+    padding-top: 0;
+    gap: 0;
+  }
+
+  .intro-copy-col .intro-copy+.intro-copy {
+    margin-top: 20px;
+  }
+
+  .intro-copy-col .intro-words {
+    margin-top: 1.8rem;
+  }
+}
+
 .intro-copy {
   color: var(--stone-600);
   font-size: clamp(1rem, 1.25vw, 1.12rem);
@@ -212,6 +250,21 @@
   background: var(--ink-900);
 }
 
+/* Mobile only: nudge the "02 — Why It Matters" label up slightly
+   (small reduction to the section's own top padding, not the shared
+   .section rule), and tighten the lede-to-button gap (.sec-head's
+   margin-bottom, scoped to .why-left so other sections using
+   SectionHeading are unaffected). */
+@media (max-width: 640px) {
+  .why {
+    padding-top: 3.6rem;
+  }
+
+  .why-left .sec-head {
+    margin-bottom: 22px;
+  }
+}
+
 .why-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -374,10 +427,6 @@
   transition: background-color 0.45s ease;
 }
 
-.exp-cell:hover {
-  background: var(--ivory-50);
-}
-
 .exp-num {
   font-family: var(--font-display);
   font-size: clamp(2.8rem, 4.6vw, 4.1rem);
@@ -388,9 +437,22 @@
   transition: color 0.45s ease, -webkit-text-stroke-color 0.45s ease;
 }
 
-.exp-cell:hover .exp-num {
-  color: var(--emerald-700);
-  -webkit-text-stroke-color: transparent;
+/* Desktop only: on mobile this same element (.exp-cell) is the
+   (background: none) carousel SLIDE, not the visible card —
+   .exp-cell-card is the real card there (see the max-width:640px
+   block below). Unscoped here, this rule's :hover on the invisible
+   slide could still fire on tap and drive .exp-num's color out of
+   sync with the mobile card's own hover/tap state — same conflict
+   already avoided for .exp-highlight:hover. */
+@media (min-width: 1025px) {
+  .exp-cell:hover {
+    background: var(--ivory-50);
+  }
+
+  .exp-cell:hover .exp-num {
+    color: var(--emerald-700);
+    -webkit-text-stroke-color: transparent;
+  }
 }
 
 .exp-title {
@@ -435,8 +497,15 @@
   transition: background-color 0.4s ease;
 }
 
-.exp-highlight:hover {
-  background: var(--ivory-100);
+/* Desktop only: on mobile this same element is the (now background:
+   none) carousel SLIDE, not the visible card — .exp-highlight-card is
+   the real card there (see the max-width:640px block below), and an
+   unscoped rule here would compete with that card's own hover state
+   at equal specificity, an unnecessary and fragile conflict. */
+@media (min-width: 1025px) {
+  .exp-highlight:hover {
+    background: var(--ivory-100);
+  }
 }
 
 .exp-highlight-index {
@@ -657,11 +726,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    115deg,
-    transparent 0 42px,
-    rgba(247, 242, 232, 0.028) 42px 43px
-  );
+  background-image: repeating-linear-gradient(115deg,
+      transparent 0 42px,
+      rgba(247, 242, 232, 0.028) 42px 43px);
   pointer-events: none;
 }
 
@@ -884,6 +951,15 @@
   background: var(--ink-900);
 }
 
+/* Mobile only: nudge the "06 — How It Works" label up slightly — a
+   small reduction to this section's own top padding (not the shared
+   .section rule), leaving the label-to-heading gap untouched. */
+@media (max-width: 640px) {
+  .how {
+    padding-top: 3.1rem;
+  }
+}
+
 .how-lede-accent {
   margin-top: 0.6rem;
 }
@@ -961,6 +1037,15 @@
 .guests {
   background: var(--ivory-50);
   color: var(--ink-950);
+}
+
+/* Mobile only: nudge the "07 — The Guests" label up slightly — a
+   small reduction to this section's own top padding (not the shared
+   .section rule), leaving the label-to-heading gap untouched. */
+@media (max-width: 640px) {
+  .guests {
+    padding-top: 3.15rem;
+  }
 }
 
 .guests-head {
@@ -1130,6 +1215,28 @@
   overflow: hidden;
 }
 
+/* Mobile only: reduce the section's own top padding (label sat too
+   far below the top edge/quote icon) and tighten the paragraph ->
+   quote gap once .qa-left/.qa-right stack. NOTE: the 1024px tablet
+   block used to also set .qa-right { margin-top: -1rem }, and since
+   a 640px-wide viewport matches BOTH the 1024px and 640px media
+   queries at once, that later-in-file tablet rule was silently
+   overriding this one every time (same specificity, later source
+   order wins) — every previous edit here was being cancelled by it.
+   Fixed by removing margin-top from the 1024px block so this is the
+   only rule setting it at mobile widths. .qa-grid's row-gap is 3rem
+   (48px); margin-top here pulls .qa-right up against that gap, so
+   the effective paragraph -> quote gap is 48px - |margin-top|. */
+@media (max-width: 640px) {
+  .qa {
+    padding-top: 3.4rem;
+  }
+
+  .qa-right {
+    margin-top: -3rem;
+  }
+}
+
 .qa-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -1143,10 +1250,28 @@
 .qa-mark {
   font-family: var(--font-display);
   font-size: 6rem;
-  line-height: 0.6;
+  line-height: 0.2;
   color: var(--brass-400);
   display: block;
   margin-bottom: 2.4rem;
+}
+
+/* Mobile only: the quote icon's own margin-bottom (2.4rem/38.4px) was
+   the actual cause of the large gap before the "08 — Q&A Session"
+   label — tightened here instead of adding a separate spacer rule. */
+@media (max-width: 640px) {
+  .qa-mark {
+    margin-bottom: 0px;
+  }
+
+  /* .qa-mark's own font metrics (6rem display glyph) leave empty
+     space below its visible ink even at margin-bottom:0 — pulled the
+     label the rest of the way up with a negative margin on .sec-head
+     itself (scoped to this section only, not the shared .sec-head
+     rule) since font-size/line-height on .qa-mark must stay unchanged. */
+  .qa-left .sec-head {
+    margin-top: -9px;
+  }
 }
 
 /* .qa-right is the single grid cell for the whole right column —
@@ -1264,6 +1389,14 @@
   overflow: hidden;
 }
 
+/* Mobile only: nudge the "09 — Event Day Experience" label up
+   slightly — a small reduction to this section's own top padding. */
+@media (max-width: 640px) {
+  .highlights {
+    padding-top: 3.2rem;
+  }
+}
+
 /* ── Event day intro ───────────────────────────────────────── */
 .highlights-intro {
   max-width: 44rem;
@@ -1356,8 +1489,14 @@
   transition: background-color 0.4s ease;
 }
 
-.agenda-item:hover {
-  background: var(--ivory-100);
+/* hover: hover so a tap on touch devices never triggers a "stuck"
+   hover state — real pointer devices (including mobile in a
+   hover-capable browser mode) still get it, reusing the same
+   existing var(--ivory-100) beige/cream tone used everywhere else. */
+@media (hover: hover) {
+  .agenda-item:hover {
+    background: var(--ivory-100);
+  }
 }
 
 .agenda-time {
@@ -1409,8 +1548,10 @@
   transition: background-color 0.4s ease;
 }
 
-.special-item:hover {
-  background: var(--ivory-100);
+@media (hover: hover) {
+  .special-item:hover {
+    background: var(--ivory-100);
+  }
 }
 
 .special-index {
@@ -1454,8 +1595,10 @@
   transition: background-color 0.4s ease;
 }
 
-.value-strip-item:hover {
-  background: var(--ivory-100);
+@media (hover: hover) {
+  .value-strip-item:hover {
+    background: var(--ivory-100);
+  }
 }
 
 .value-strip-index {
@@ -1640,6 +1783,15 @@
   color: var(--ink-950);
 }
 
+/* Mobile only: nudge the "11 — Registration" label up slightly — a
+   small reduction to this section's own top padding (not the shared
+   .section rule). */
+@media (max-width: 640px) {
+  .registration {
+    padding-top: 3.6rem;
+  }
+}
+
 .reg-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -1782,7 +1934,7 @@
     transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
   }
 
-  .reg-form-collapse > * {
+  .reg-form-collapse>* {
     min-height: 0;
     overflow: hidden;
   }
@@ -1852,8 +2004,8 @@ textarea.field-input {
   transition: transform 0.3s ease, color 0.3s ease, font-size 0.3s ease;
 }
 
-.field-input:focus ~ .field-label,
-.field-input:not(:placeholder-shown) ~ .field-label {
+.field-input:focus~.field-label,
+.field-input:not(:placeholder-shown)~.field-label {
   transform: translateY(-1rem) scale(0.68);
   transform-origin: left top;
   letter-spacing: 0.2em;
@@ -2041,6 +2193,7 @@ textarea.field-input {
     transform: scale(0.6);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
@@ -2103,6 +2256,16 @@ textarea.field-input {
   overflow: hidden;
   text-align: center;
   padding-top: clamp(5rem, 11vw, 9.5rem);
+}
+
+/* Mobile only: move the "LAST CALL — JAIPUR" label/heading block up
+   a moderate amount — a larger reduction than the small nudges used
+   elsewhere, since this section's own top padding floor (5rem/80px)
+   sat noticeably lower to begin with. */
+@media (max-width: 640px) {
+  .cta-final {
+    padding-top: 3.55rem;
+  }
 }
 
 .cta-final-inner {
@@ -2168,7 +2331,7 @@ textarea.field-input {
   color: var(--stone-400);
 }
 
-.cta-final-meta span + span::before {
+.cta-final-meta span+span::before {
   content: "✦";
   margin-right: 1.1rem;
   color: var(--brass-400);
@@ -2272,7 +2435,6 @@ textarea.field-input {
   .qa-right {
     grid-column: 1 / -1;
     gap: 2.6rem;
-    margin-top: -1rem;
   }
 
   .jaipur-media {
@@ -2322,6 +2484,7 @@ textarea.field-input {
 }
 
 @media (max-width: 760px) {
+
   /* "Funding is only the beginning" keywords — three complete,
      unbreakable text rows (not per-word flex/grid items), so a row
      can never split mid-sentence on narrow screens. */
@@ -2498,6 +2661,13 @@ textarea.field-input {
     margin-inline: calc(var(--gutter) * -1);
     padding-inline: var(--gutter);
     padding-bottom: 0.6rem;
+    /* The global `html { scroll-behavior: smooth }` can otherwise
+       make the JS scrollTo({behavior:"instant"}) loop-reset jump
+       (Carousel.jsx) still animate smoothly on some browsers,
+       visibly traveling backward through every card instead of
+       snapping straight to the first one. Forcing "auto" here
+       guarantees that reset is a true, invisible jump. */
+    scroll-behavior: auto;
   }
 
   .carousel-track--contained {
@@ -2619,12 +2789,23 @@ textarea.field-input {
    slide (no neighboring-card preview) and drops the arrows
    below the card content instead of overlapping it. */
 @media (max-width: 640px) {
+
   .exp-grid.carousel-track,
   .exp-highlights.carousel-track {
     padding-bottom: 3.4rem;
     scroll-snap-type: x mandatory;
     scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
+    /* The shared .carousel-track base rule sets gap: 0.9rem — left
+       unset here, that leftover gap plus the item's own width was
+       exactly enough space for the next card to peek in on both
+       edges. Zeroing it is what actually removes the peek; the
+       bleed (negative margin + matching padding) is kept so the
+       card still sits inset from the screen edge, and the item
+       below is sized to exactly 100% of that padded content box. */
+    gap: 0;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
   }
 
   .exp-grid.carousel-track::-webkit-scrollbar,
@@ -2632,16 +2813,101 @@ textarea.field-input {
     display: none;
   }
 
+  /* The SLIDE (.exp-cell / .exp-highlight, same element as
+     .carousel-item) always spans the full track width for correct
+     scroll-snap math — but its own desktop visual styling (border/
+     background/padding) is stripped here so it becomes an invisible
+     full-width slot; the actual visible CARD is the new inner
+     .exp-cell-card / .exp-highlight-card wrapper (added in
+     EventExperience.jsx), sized narrower and centered inside it. */
   .carousel-item.exp-cell,
   .carousel-item.exp-highlight {
-    flex: 0 0 calc(100vw - var(--gutter) * 2);
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
     max-width: none;
     scroll-snap-align: center;
     scroll-snap-stop: always;
+    box-sizing: border-box;
+    background: none;
+    border: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
   }
 
-  .exp-grid ~ .carousel-arrow,
-  .exp-highlights ~ .carousel-arrow {
+  .exp-cell-card {
+    width: calc(100% - 32px);
+    max-width: 22rem;
+    margin-inline: auto;
+    background: var(--ivory-100);
+    border: 1px solid var(--line-light);
+    padding: clamp(1.6rem, 5vw, 2.4rem);
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    transition: background-color 0.45s ease;
+  }
+
+  /* Reuse the exact desktop hover background/accent (.exp-cell:hover)
+     for real interaction only — never for the current/centered slide
+     by itself. Scoped to `hover: hover` alone (not also requiring
+     pointer: fine) so it fires on every device/browser mode that
+     genuinely supports hover, matching desktop behavior exactly;
+     :active covers tap/click on touch (fires only while pressed,
+     same as a real click would). */
+  @media (hover: hover) {
+    .exp-cell-card:hover {
+      background: var(--ivory-50);
+    }
+
+    .exp-cell-card:hover .exp-num {
+      color: var(--emerald-700);
+      -webkit-text-stroke-color: transparent;
+    }
+  }
+
+  /* :active covers the actual press (fires only while the finger is
+     down); .is-tapped (set in EventExperience.jsx, tracking which
+     card was last tapped) keeps that same look afterward until a
+     different card is tapped — plain :active alone releases the
+     instant the finger lifts, which isn't "stays selected". */
+  .exp-cell-card:active,
+  .exp-cell-card.is-tapped {
+    background: var(--ivory-50);
+  }
+
+  .exp-cell-card:active .exp-num,
+  .exp-cell-card.is-tapped .exp-num {
+    color: var(--emerald-700);
+    -webkit-text-stroke-color: transparent;
+  }
+
+  .exp-highlight-card {
+    width: calc(100% - 32px);
+    max-width: 22rem;
+    margin-inline: auto;
+    background: var(--ivory-50);
+    border: 1px solid var(--line-light);
+    padding: 1.3rem 1.2rem;
+    box-sizing: border-box;
+    transition: background-color 0.4s ease;
+  }
+
+  /* Reuse the exact desktop hover background (.exp-highlight:hover)
+     — no :hover rule existed on this mobile card at all before.
+     hover: hover (not also pointer: fine) so it applies on every
+     device/browser mode that genuinely supports hover, matching
+     desktop exactly; returns to the default background on hover-out. */
+  @media (hover: hover) {
+    .exp-highlight-card:hover {
+      background: var(--ivory-100);
+    }
+  }
+
+  .exp-grid~.carousel-arrow,
+  .exp-highlights~.carousel-arrow {
     top: auto;
     bottom: 0;
     transform: none;
@@ -2649,14 +2915,14 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .exp-grid ~ .carousel-arrow svg,
-  .exp-highlights ~ .carousel-arrow svg {
+  .exp-grid~.carousel-arrow svg,
+  .exp-highlights~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .exp-grid ~ .carousel-dots,
-  .exp-highlights ~ .carousel-dots {
+  .exp-grid~.carousel-dots,
+  .exp-highlights~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -2666,8 +2932,8 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .exp-grid ~ .carousel-dots .carousel-dot,
-  .exp-highlights ~ .carousel-dots .carousel-dot {
+  .exp-grid~.carousel-dots .carousel-dot,
+  .exp-highlights~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -2676,8 +2942,8 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .exp-grid ~ .carousel-dots .carousel-dot.is-active,
-  .exp-highlights ~ .carousel-dots .carousel-dot.is-active {
+  .exp-grid~.carousel-dots .carousel-dot.is-active,
+  .exp-highlights~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-400);
@@ -2726,14 +2992,14 @@ textarea.field-input {
     padding-inline: var(--gutter);
   }
 
-  .cat-grid .carousel-item > .cat-card {
+  .cat-grid .carousel-item>.cat-card {
     width: 100%;
     max-width: 24rem;
     margin-inline: auto;
     flex: none;
   }
 
-  .cat-grid ~ .carousel-arrow {
+  .cat-grid~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
     transform: none;
@@ -2741,12 +3007,12 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .cat-grid ~ .carousel-arrow svg {
+  .cat-grid~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .cat-grid ~ .carousel-dots {
+  .cat-grid~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -2756,7 +3022,7 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .cat-grid ~ .carousel-dots .carousel-dot {
+  .cat-grid~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -2765,7 +3031,7 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .cat-grid ~ .carousel-dots .carousel-dot.is-active {
+  .cat-grid~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-500);
@@ -2795,7 +3061,7 @@ textarea.field-input {
     scroll-snap-stop: always;
   }
 
-  .school-list ~ .carousel-arrow {
+  .school-list~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
     transform: none;
@@ -2803,12 +3069,12 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .school-list ~ .carousel-arrow svg {
+  .school-list~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .school-list ~ .carousel-dots {
+  .school-list~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -2818,7 +3084,7 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .school-list ~ .carousel-dots .carousel-dot {
+  .school-list~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -2827,7 +3093,7 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .school-list ~ .carousel-dots .carousel-dot.is-active {
+  .school-list~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-400);
@@ -2841,6 +3107,7 @@ textarea.field-input {
    arrows below the card, and shows dot pagination below the
    arrows — same pattern as Guests. */
 @media (max-width: 640px) {
+
   .agenda-track.carousel-track,
   .special-grid.carousel-track,
   .value-strip.carousel-track {
@@ -2865,9 +3132,26 @@ textarea.field-input {
     scroll-snap-stop: always;
   }
 
-  .agenda-track ~ .carousel-arrow,
-  .special-grid ~ .carousel-arrow,
-  .value-strip ~ .carousel-arrow {
+  /* Tap/click state (Event Agenda, What Makes It Special?, What's in
+     the Event): default stays the existing white/light background
+     (--ivory-50); tapping a card marks it via the .agenda-item-tap /
+     .special-item-tap / .value-strip-item-tap wrapper's .is-tapped
+     class (state tracked in Highlights.jsx, independent of the
+     carousel's own active/current-slide index) and only that card
+     switches to the same beige/cream (--ivory-100) already used for
+     desktop hover. display:contents on the wrapper keeps it out of
+     layout entirely, so card size/padding/border are unaffected —
+     :has() lets the background live on the real item box instead of
+     an extra nested div. */
+  .carousel-item.agenda-item:has(.agenda-item-tap.is-tapped),
+  .carousel-item.special-item:has(.special-item-tap.is-tapped),
+  .carousel-item.value-strip-item:has(.value-strip-item-tap.is-tapped) {
+    background: var(--ivory-100);
+  }
+
+  .agenda-track~.carousel-arrow,
+  .special-grid~.carousel-arrow,
+  .value-strip~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
     transform: none;
@@ -2875,16 +3159,16 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .agenda-track ~ .carousel-arrow svg,
-  .special-grid ~ .carousel-arrow svg,
-  .value-strip ~ .carousel-arrow svg {
+  .agenda-track~.carousel-arrow svg,
+  .special-grid~.carousel-arrow svg,
+  .value-strip~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .agenda-track ~ .carousel-dots,
-  .special-grid ~ .carousel-dots,
-  .value-strip ~ .carousel-dots {
+  .agenda-track~.carousel-dots,
+  .special-grid~.carousel-dots,
+  .value-strip~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -2894,9 +3178,9 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .agenda-track ~ .carousel-dots .carousel-dot,
-  .special-grid ~ .carousel-dots .carousel-dot,
-  .value-strip ~ .carousel-dots .carousel-dot {
+  .agenda-track~.carousel-dots .carousel-dot,
+  .special-grid~.carousel-dots .carousel-dot,
+  .value-strip~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -2905,9 +3189,9 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .agenda-track ~ .carousel-dots .carousel-dot.is-active,
-  .special-grid ~ .carousel-dots .carousel-dot.is-active,
-  .value-strip ~ .carousel-dots .carousel-dot.is-active {
+  .agenda-track~.carousel-dots .carousel-dot.is-active,
+  .special-grid~.carousel-dots .carousel-dot.is-active,
+  .value-strip~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-400);
@@ -2951,14 +3235,14 @@ textarea.field-input {
     padding-inline: var(--gutter);
   }
 
-  .guest-grid .carousel-item > .guest-card {
+  .guest-grid .carousel-item>.guest-card {
     width: 100%;
     max-width: 24rem;
     margin-inline: auto;
     flex: none;
   }
 
-  .guest-grid ~ .carousel-arrow {
+  .guest-grid~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
     transform: none;
@@ -2966,12 +3250,12 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .guest-grid ~ .carousel-arrow svg {
+  .guest-grid~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .guest-grid ~ .carousel-dots {
+  .guest-grid~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -2981,7 +3265,7 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .guest-grid ~ .carousel-dots .carousel-dot {
+  .guest-grid~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -2990,7 +3274,7 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .guest-grid ~ .carousel-dots .carousel-dot.is-active {
+  .guest-grid~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-400);
@@ -3040,7 +3324,7 @@ textarea.field-input {
     padding-inline: calc(var(--gutter) + 0.5rem);
   }
 
-  .sector-track ~ .carousel-arrow {
+  .sector-track~.carousel-arrow {
     top: auto;
     bottom: 1.6rem;
     transform: none;
@@ -3048,12 +3332,12 @@ textarea.field-input {
     height: 2.3rem;
   }
 
-  .sector-track ~ .carousel-arrow svg {
+  .sector-track~.carousel-arrow svg {
     width: 1rem;
     height: 1rem;
   }
 
-  .sector-track ~ .carousel-dots {
+  .sector-track~.carousel-dots {
     display: flex;
     position: absolute;
     left: 50%;
@@ -3063,7 +3347,7 @@ textarea.field-input {
     gap: 0.5rem;
   }
 
-  .sector-track ~ .carousel-dots .carousel-dot {
+  .sector-track~.carousel-dots .carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 999px;
@@ -3072,7 +3356,7 @@ textarea.field-input {
     transition: background-color 0.3s ease, width 0.3s ease, height 0.3s ease;
   }
 
-  .sector-track ~ .carousel-dots .carousel-dot.is-active {
+  .sector-track~.carousel-dots .carousel-dot.is-active {
     width: 18px;
     height: 8px;
     background: var(--brass-400);

@@ -338,7 +338,7 @@ export default function AdminDashboard() {
         {/* Logo */}
         <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${C.lineDark}` }}>
           <img
-            src="/Full_Logo.png"
+            src="/images/full_logo.png"
             alt="BM Investment"
             style={{ width: '140px', display: 'block', filter: `drop-shadow(0 0 8px rgba(198,164,98,0.25))` }}
           />

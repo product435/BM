@@ -89,7 +89,7 @@ const AdminLogin = () => {
             {/* Logo */}
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
               <img
-                src="/Full_Logo.png"
+                src="/images/full_logo.png"
                 alt="BM Investment"
                 style={{
                   width: '180px',

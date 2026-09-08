@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   EXPERIENCE_CLOSING_LINE,
   EXPERIENCE_HIGHLIGHTS,
@@ -9,6 +10,13 @@ import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 
 export default function EventExperience() {
+  // Mobile/touch: a tapped card in "What makes BMI different?" keeps
+  // the hover-equivalent styling until a different card is tapped —
+  // CSS :active alone only lasts while the finger is actually pressed
+  // down, so this tracks the last-tapped card explicitly. Purely a
+  // visual selection; it doesn't drive carousel position/autoplay.
+  const [tappedIndex, setTappedIndex] = useState(null);
+
   return (
     <section className="experience section" id="experience" aria-labelledby="experience-title">
       <div className="container">
@@ -37,7 +45,12 @@ export default function EventExperience() {
           ariaLabel="What makes BMI different"
           showDots
           renderItem={(step, i) => (
-            <Reveal delay={i * 70} as="article">
+            <Reveal
+              delay={i * 70}
+              as="article"
+              className={`exp-cell-card ${tappedIndex === i ? "is-tapped" : ""}`.trim()}
+              onClick={() => setTappedIndex(i)}
+            >
               <p className="exp-num" aria-hidden="true">
                 {step.index}
               </p>
@@ -57,11 +70,11 @@ export default function EventExperience() {
             ariaLabel="Key experience highlights"
             showDots
             renderItem={(item) => (
-              <>
+              <div className="exp-highlight-card">
                 <span className="exp-highlight-index">{item.index}</span>
                 <p className="exp-highlight-title">{item.title}</p>
                 <p className="exp-highlight-desc">{item.description}</p>
-              </>
+              </div>
             )}
           />
         </Reveal>

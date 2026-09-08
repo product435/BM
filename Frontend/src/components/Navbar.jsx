@@ -37,7 +37,9 @@ export default function Navbar({ onNavigate }) {
         Skip to content
       </a>
 
-      <header className={`header ${scrolled ? "is-scrolled" : ""}`}>
+      <header
+        className={`header ${scrolled ? "is-scrolled" : ""} ${menuOpen ? "menu-open" : ""}`.trim()}
+      >
         <div className="container nav">
           <a
             href="#home"
@@ -50,7 +52,7 @@ export default function Navbar({ onNavigate }) {
           >
             <img
               className="nav-logo"
-              src="/images/BMI_Logo.png"
+              src="/images/full_logo.png"
               alt={`${EVENT.org} logo`}
             />
           </a>
@@ -98,44 +100,55 @@ export default function Navbar({ onNavigate }) {
       </header>
 
       <div
-        id="mobile-menu"
-        className={`mobile-menu ${menuOpen ? "is-open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Site navigation"
+        className={`mobile-menu-overlay ${menuOpen ? "is-open" : ""}`}
+        onClick={() => setMenuOpen(false)}
+        aria-hidden={!menuOpen}
       >
-        <nav className="mobile-menu-links" aria-label="Mobile">
-          {NAV_LINKS.map((link, i) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              className="mobile-menu-link"
-              style={{ "--i": i }}
+        <div
+          id="mobile-menu"
+          className="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Site navigation"
+          onClick={() => setMenuOpen(false)}
+        >
+          <nav className="mobile-menu-links" aria-label="Mobile">
+            {NAV_LINKS.map((link, i) => (
+              <a
+                key={link.id}
+                href={`#${link.id}`}
+                className="mobile-menu-link"
+                style={{ "--i": i }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  go(link.id);
+                }}
+              >
+                <span className="m-index">{String(i + 1).padStart(2, "0")}</span>
+                <span className="m-label">{link.label}</span>
+              </a>
+            ))}
+          </nav>
+
+          <div className="mobile-menu-foot">
+            <span className="mobile-menu-meta">
+              {EVENT.city} · {EVENT.date}
+            </span>
+            <button
+              type="button"
+              className="btn btn--light"
               onClick={(e) => {
-                e.preventDefault();
-                go(link.id);
+                e.stopPropagation();
+                go("register");
               }}
             >
-              <span className="m-index">{String(i + 1).padStart(2, "0")}</span>
-              <span className="m-label">{link.label}</span>
-            </a>
-          ))}
-        </nav>
-
-        <div className="mobile-menu-foot">
-          <span className="mobile-menu-meta">
-            {EVENT.city} · {EVENT.date}
-          </span>
-          <button
-            type="button"
-            className="btn btn--light"
-            onClick={() => go("register")}
-          >
-            Register now
-            <span className="btn-arrow" aria-hidden="true">
-              →
-            </span>
-          </button>
+              Register now
+              <span className="btn-arrow" aria-hidden="true">
+                →
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </>
