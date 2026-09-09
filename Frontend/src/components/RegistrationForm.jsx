@@ -61,7 +61,7 @@ async function submitRegistration(payload) {
 const ERROR_MESSAGES = {
   required: "This field is required.",
   email: "Enter a valid email address.",
-  phone: "Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.",
+  phone: "Please enter a valid mobile number.",
   url: "Enter a valid URL starting with http:// or https://.",
   city: "Please enter a valid city name.",
 };
@@ -69,8 +69,8 @@ const ERROR_MESSAGES = {
 // City accepts letters, spaces, and the punctuation real city names use
 // (hyphen, apostrophe, dot) — no digits.
 const CITY_PATTERN = /^[A-Za-z\s'.-]+$/;
-// Indian mobile number: exactly 10 digits, starting 6-9.
-const PHONE_PATTERN = /^[6-9]\d{9}$/;
+// Indian mobile number: exactly 10 digits, starting 6-9, not all digits the same.
+const PHONE_PATTERN = /^[6-9](?!(\d)\1{8}$)\d{9}$/;
 
 function validateField(field, value) {
   const v = String(value ?? "").trim();
@@ -123,14 +123,14 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
 
   const [category, setCategory] = useState(initialCategory || "student");
   const fields = activeFields[category] || [];
-  
+
   // Registration Fees depend only on the selected CATEGORY (Student /
   // Visitor / Entrepreneur / Business Tycoon) — never on the typed
   // Role field. Prefer dynamicFees if provided, else fallback to REGISTRATION_FEES.
   const fee = dynamicFees ? dynamicFees[category] ?? 0 : REGISTRATION_FEES[category] ?? 0;
   const upiId = dynamicUpiId || PAYMENT_UPI_ID;
   const qrValue = `upi://pay?pa=${upiId}&pn=BMI%20Presents&am=${fee}&cu=INR&tn=BMI%20${category}%20registration`;
-  
+
   const [values, setValues] = useState(() => buildInitialValues(fields));
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -249,13 +249,13 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
     setStatus("submitting");
     try {
       const res = await submitRegistration({ category, ...values });
-      
+
       if (fee > 0) {
         setStatus("payment_processing");
-        
+
         try {
           const orderData = await createRazorpayOrder(res.registrationId, category);
-          
+
           if (!window.Razorpay) {
             throw new Error("Razorpay SDK not loaded. Please check your internet connection.");
           }
@@ -293,14 +293,14 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
               }
             },
             modal: {
-              ondismiss: function() {
+              ondismiss: function () {
                 setStatus("idle");
               }
             }
           };
 
           const rzpInstance = new window.Razorpay(options);
-          
+
           rzpInstance.on('payment.failed', function (response) {
             console.error("Payment Failed", response.error);
             setStatus("idle");
