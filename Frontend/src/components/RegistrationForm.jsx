@@ -8,6 +8,7 @@ import {
   REGISTRATION_FEES,
 } from "../data/eventData.js";
 import { supabase } from "../lib/supabase.js";
+import { createRazorpayOrder, verifyRazorpayPayment } from "../services/paymentService.js";
 
 async function submitRegistration(payload) {
   const { category, email, phone, city, ...rest } = payload;
@@ -54,7 +55,7 @@ async function submitRegistration(payload) {
     // We don't throw here so the user still sees success if DB insert worked.
   }
 
-  return { ok: true };
+  return { ok: true, registrationId: registration_id };
 }
 
 const ERROR_MESSAGES = {
@@ -247,8 +248,75 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
 
     setStatus("submitting");
     try {
-      await submitRegistration({ category, ...values });
-      setStatus("success");
+      const res = await submitRegistration({ category, ...values });
+      
+      if (fee > 0) {
+        setStatus("payment_processing");
+        
+        try {
+          const orderData = await createRazorpayOrder(res.registrationId, category);
+          
+          if (!window.Razorpay) {
+            throw new Error("Razorpay SDK not loaded. Please check your internet connection.");
+          }
+
+          const options = {
+            key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+            amount: orderData.amount,
+            currency: orderData.currency || "INR",
+            name: "BM Investment",
+            description: "Event Registration",
+            order_id: orderData.id,
+            prefill: {
+              name: values.fullName || values.founderName || values.contactPerson || "",
+              email: values.email || "",
+              contact: values.phone || ""
+            },
+            theme: {
+              color: "#C6A462"
+            },
+            handler: async function (response) {
+              console.log("Razorpay Success Callback received:", response);
+              setStatus("payment_verifying");
+              try {
+                await verifyRazorpayPayment(
+                  res.registrationId,
+                  response.razorpay_order_id,
+                  response.razorpay_payment_id,
+                  response.razorpay_signature
+                );
+                setStatus("success");
+              } catch (verifyErr) {
+                console.error("Payment Verification Failed:", verifyErr);
+                setStatus("idle");
+                setErrors({ form: "Payment verification failed. Please contact support or try again." });
+              }
+            },
+            modal: {
+              ondismiss: function() {
+                setStatus("idle");
+              }
+            }
+          };
+
+          const rzpInstance = new window.Razorpay(options);
+          
+          rzpInstance.on('payment.failed', function (response) {
+            console.error("Payment Failed", response.error);
+            setStatus("idle");
+            setErrors({ form: "Payment failed. Please try again." });
+          });
+
+          rzpInstance.open();
+
+        } catch (paymentErr) {
+          console.error("Razorpay Error:", paymentErr);
+          setStatus("idle");
+          setErrors({ form: paymentErr.message || "Could not initialize payment. Please try again." });
+        }
+      } else {
+        setStatus("success");
+      }
     } catch {
       setStatus("idle");
       setErrors({
@@ -439,16 +507,16 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                 <button
                   type="submit"
                   className="btn btn--light btn--submit"
-                  disabled={status === "submitting"}
+                  disabled={status === "submitting" || status === "payment_processing" || status === "payment_verifying"}
                 >
-                  {status === "submitting" ? (
+                  {status === "submitting" || status === "payment_processing" || status === "payment_verifying" ? (
                     <>
                       <span className="spinner" aria-hidden="true" />
-                      Sending…
+                      {status === "payment_processing" ? "Opening Payment…" : status === "payment_verifying" ? "Verifying Payment…" : "Sending…"}
                     </>
                   ) : (
                     <>
-                      Submit registration
+                      {fee > 0 ? "Proceed to Payment" : "Submit registration"}
                       <span className="btn-arrow" aria-hidden="true">
                         →
                       </span>

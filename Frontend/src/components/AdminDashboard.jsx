@@ -275,15 +275,17 @@ export default function AdminDashboard() {
     const selected = regs.filter(r => r.status === 'Selected').length;
     const rejected = regs.filter(r => r.status === 'Rejected').length;
 
-    // Financial calculations (Scale track is ₹2,499)
-    const paidScale = regs.filter(r => r.track.includes('Scale') && r.payment_status === 'Paid').length;
-    const pendingScale = regs.filter(r => r.track.includes('Scale') && r.payment_status === 'Pending').length;
-    const failedScale = regs.filter(r => r.track.includes('Scale') && r.payment_status === 'Failed').length;
+    // Financial calculations
+    const paidRegs = regs.filter(r => r.payment_status === 'PAID' || r.payment_status === 'Paid');
+    const pendingRegs = regs.filter(r => r.payment_status === 'Pending' || r.payment_status === 'PENDING');
+    const failedRegs = regs.filter(r => r.payment_status === 'Failed' || r.payment_status === 'FAILED');
+    const refundedRegs = regs.filter(r => r.payment_status === 'Refunded' || r.payment_status === 'REFUNDED');
 
-    const revPaid = paidScale * 2499;
-    const revPending = pendingScale * 2499;
-    const revFailed = failedScale * 2499;
-    const revTotal = revPaid + revPending; // assuming pending is expected revenue
+    const revPaid = paidRegs.reduce((sum, r) => sum + (Number(r.payment_amount) || 0), 0);
+    const revPending = pendingRegs.reduce((sum, r) => sum + (Number(r.payment_amount) || 0), 0);
+    const revFailed = failedRegs.reduce((sum, r) => sum + (Number(r.payment_amount) || 0), 0);
+    const revRefunded = refundedRegs.reduce((sum, r) => sum + (Number(r.payment_amount) || 0), 0);
+    const revTotal = revPaid; // Only count successfully verified PAID registrations as revenue
 
     const checkedInCount = regs.filter(r => r.checked_in).length;
     const notCheckedInCount = regs.length - checkedInCount;
@@ -294,7 +296,7 @@ export default function AdminDashboard() {
       scale: scaleCount,
       idea: ideaCount,
       queue: { pending, review, short, selected, rejected },
-      finance: { revPaid, revPending, revFailed, revTotal },
+      finance: { revPaid, revPending, revFailed, revRefunded, revTotal },
       checkins: { checkedIn: checkedInCount, notCheckedIn: notCheckedInCount }
     });
   };
@@ -315,10 +317,11 @@ export default function AdminDashboard() {
   const formatCurrency = (val) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 3 }).format(val);
 
   const financialMetrics = stats ? [
-    { title: 'Total Revenue',   value: formatCurrency(stats.finance.revTotal), icon: DollarSign,   trend: 'Projected', up: true  },
+    { title: 'Total Revenue',   value: formatCurrency(stats.finance.revTotal), icon: DollarSign,   trend: 'Verified', up: true  },
     { title: 'Paid Payments',   value: formatCurrency(stats.finance.revPaid),  icon: CheckCircle2, trend: 'Received',  up: true  },
     { title: 'Pending',         value: formatCurrency(stats.finance.revPending),icon: Clock,       trend: 'Awaiting',  up: false },
-    { title: 'Failed',          value: formatCurrency(stats.finance.revFailed), icon: AlertCircle, trend: 'Dropped',   up: false },
+    { title: 'Failed',          value: formatCurrency(stats.finance.revFailed), icon: AlertCircle, trend: 'Error',     up: false },
+    { title: 'Refunded',        value: formatCurrency(stats.finance.revRefunded), icon: ArrowDownRight, trend: 'Returned', up: false },
   ] : [];
 
   const applicationQueue = stats ? [
