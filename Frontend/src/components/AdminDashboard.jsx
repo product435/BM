@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Users, ClipboardCheck, CreditCard,
   Ticket, BarChart3, Settings, Bell, Search, MapPin,
-  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle, Sun, Moon, Handshake, PanelLeftClose, PanelLeftOpen, Menu, X
+  TrendingUp, DollarSign, AlertCircle, CheckCircle2, Clock, LogOut, Type, CheckSquare, HelpCircle, Sun, Moon, Handshake, PanelLeftClose, PanelLeftOpen, Menu, X, ArrowDownRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
