@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import QRCode from "react-qr-code";
 import {
   CATEGORIES,
   CATEGORY_SHORT,
   FORM_FIELDS,
-  PAYMENT_UPI_ID,
   REGISTRATION_FEES,
 } from "../data/eventData.js";
 import { supabase } from "../lib/supabase.js";
@@ -128,8 +126,6 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   // Visitor / Entrepreneur / Business Tycoon) — never on the typed
   // Role field. Prefer dynamicFees if provided, else fallback to REGISTRATION_FEES.
   const fee = dynamicFees ? dynamicFees[category] ?? 0 : REGISTRATION_FEES[category] ?? 0;
-  const upiId = dynamicUpiId || PAYMENT_UPI_ID;
-  const qrValue = `upi://pay?pa=${upiId}&pn=BMI%20Presents&am=${fee}&cu=INR&tn=BMI%20${category}%20registration`;
 
   const [values, setValues] = useState(() => buildInitialValues(fields));
   const [errors, setErrors] = useState({});
@@ -477,20 +473,6 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                             {fee === 0 ? "Free" : `₹${fee.toLocaleString("en-IN")}`}
                           </p>
                         </div>
-
-                        {fee > 0 ? (
-                          <div className="reg-qr-panel">
-                            <p className="reg-qr-title">Scan to pay</p>
-                            <div className="reg-qr-code">
-                              <QRCode value={qrValue} size={148} />
-                            </div>
-                            <p className="reg-qr-amount">Amount: ₹{fee.toLocaleString("en-IN")}</p>
-                            <p className="reg-qr-note">
-                              Payment verification will be confirmed by our team after
-                              submission — this is not an automatic confirmation.
-                            </p>
-                          </div>
-                        ) : null}
                       </div>
                     ) : null}
                   </div>
@@ -524,8 +506,9 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                   )}
                 </button>
                 <p className="form-note">
-                  By submitting you agree to be contacted about this event.
-                  No payment — registration only.
+                  {fee > 0
+                    ? "By submitting you agree to be contacted about this event. Click Proceed to Payment to complete your registration securely."
+                    : "By submitting you agree to be contacted about this event. No payment required for student registration."}
                 </p>
               </div>
             </form>

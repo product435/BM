@@ -2332,6 +2332,24 @@ textarea.field-input {
   max-width: 22rem;
 }
 
+/* Desktop/web only: the 22rem cap above forces this note to wrap after
+   just a few words, leaving a lot of unused width in .reg-form-foot and
+   an oversized gap below it. Widen it so both sentences run on one line
+   whenever the panel is wide enough, and let it wrap naturally again if
+   the panel narrows (no fixed line-break is introduced either way). */
+@media (min-width: 1025px) {
+  .form-note {
+    flex-basis: 100%;
+    max-width: none;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .reg-form-foot {
+    row-gap: 0.5rem;
+  }
+}
+
 .spinner {
   width: 1rem;
   height: 1rem;
