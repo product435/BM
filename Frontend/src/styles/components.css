@@ -2101,9 +2101,39 @@
   appearance: none;
 }
 
+/* Real root cause of the description field looking oversized next to
+   Visitor: the <textarea rows="4"> HTML attribute (set in
+   RegistrationForm.jsx's field config) drives the browser's native
+   default textarea height to fit 4 lines — min-height alone can't
+   override this since it only sets a floor, and the rows-driven
+   intrinsic height (128.95px, confirmed via computed style) already
+   exceeds any min-height we set. An earlier fix here changed
+   min-height and appeared to have no effect for exactly this reason.
+   height: (not min-height) directly overrides the rows-driven sizing,
+   set to Visitor's own measured single-line input height (61.78px)
+   so the initial empty field matches Visitor exactly. resize:
+   vertical (still active on mobile — see the desktop-only
+   resize:none block below) lets the user manually grow it past this
+   height, and typed content beyond the visible area scrolls natively
+   inside the textarea rather than being clipped, so longer
+   descriptions are never cut off. */
 textarea.field-input {
   resize: vertical;
-  min-height: 7.5rem;
+  height: 61.78px;
+  padding-top: 1.55rem;
+}
+
+/* Desktop/web only: hide the browser's diagonal resize handle in the
+   bottom-right corner of the description textarea (Student/
+   Entrepreneur/Business Tycoon) — resize: vertical above (unchanged)
+   still governs mobile, so touch users keep the ability to resize.
+   Only the visible handle/behavior on desktop is disabled; textarea
+   width/height, border, text wrapping, validation, and scrolling are
+   all untouched. */
+@media (min-width: 641px) {
+  textarea.field-input {
+    resize: none;
+  }
 }
 
 .field-input:focus:not(:focus-visible) {
@@ -2114,9 +2144,22 @@ textarea.field-input {
   border-bottom-color: var(--brass-400);
 }
 
+/* Root cause of the full rectangular box around focused registration
+   fields (e.g. "Startup Name"): this rule drew a 4-sided outline
+   (offset 3px beyond the box) around ANY focused .field-input, on
+   both desktop and mobile — confirmed via computed styles
+   (outlineStyle: solid, outlineWidth: 2px, outlineOffset: 3px,
+   matches :focus-visible) on a real click, not just keyboard nav.
+   Previously this was assumed "barely visible" on single-line inputs
+   and only disabled for mobile taps and for the tall description
+   textarea specifically — but it's clearly visible on desktop clicks
+   too, on every field type. .field-input:focus (below, unchanged)
+   already gives every field — input, textarea, select — a clear,
+   visible focus indicator via its own border-bottom color change, so
+   the boxed outline is removed entirely rather than re-scoped yet
+   again; no separate mobile/textarea overrides needed anymore. */
 .field-input:focus-visible {
-  outline: 2px solid var(--brass-400);
-  outline-offset: 3px;
+  outline: none;
 }
 
 .field-input:-webkit-autofill,

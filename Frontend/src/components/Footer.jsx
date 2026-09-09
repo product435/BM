@@ -1,4 +1,4 @@
-import { EVENT, NAV_LINKS } from "../data/eventData.js";
+import { EVENT, NAV_LINKS, WHATSAPP_MESSAGE, WHATSAPP_NUMBER } from "../data/eventData.js";
 import {
   FacebookIcon,
   InstagramIcon,
@@ -14,13 +14,20 @@ const PARTICIPATE_LINKS = [
   { label: "Business Tycoon", href: "#categories" },
 ];
 
-/* Update URLs here once the real social profiles are ready. */
+// WhatsApp reuses the exact same WHATSAPP_NUMBER/WHATSAPP_MESSAGE and
+// wa.me URL construction as FloatingWhatsApp.jsx, so this link always
+// opens the same chat destination as the floating button — no second
+// hardcoded number.
+const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+// X / Twitter: no valid profile URL exists anywhere in the project —
+// left as "#" intentionally, not a fake/invented link.
 const socialLinks = [
-  { name: "Facebook", url: "#", icon: FacebookIcon },
-  { name: "Instagram", url: "#", icon: InstagramIcon },
+  { name: "Facebook", url: "https://www.facebook.com/profile.php?id=61593793123130", icon: FacebookIcon },
+  { name: "Instagram", url: "https://www.instagram.com/bmin.vestment/", icon: InstagramIcon },
   { name: "X / Twitter", url: "#", icon: XIcon },
-  { name: "YouTube", url: "#", icon: YoutubeIcon },
-  { name: "WhatsApp", url: "#", icon: WhatsappIcon },
+  { name: "YouTube", url: "https://www.youtube.com/@BMIInvestment-h4z", icon: YoutubeIcon },
+  { name: "WhatsApp", url: whatsappHref, icon: WhatsappIcon },
 ];
 
 export default function Footer({ onNavigate }) {

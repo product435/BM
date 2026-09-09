@@ -134,11 +134,20 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting | success
-  // Mobile only (see .reg-form--collapsed in components.css): the form
-  // stays hidden below the category cards until the visitor actually taps
-  // a role, so the section doesn't dump every field on screen up front.
-  // Desktop ignores this flag entirely and always shows the form.
-  const [hasSelected, setHasSelected] = useState(Boolean(initialCategory));
+  // Mobile only (see .reg-form--collapsed in components.css): controls
+  // whether the form below the category cards is open. `category`
+  // already defaults to "student" above regardless of initialCategory,
+  // but this flag previously stayed false until a category was
+  // explicitly tapped (Boolean(initialCategory) is false on a normal
+  // page load/scroll-to-section, since initialCategory only arrives
+  // from an external pre-selection elsewhere on the page) — leaving
+  // the Student card unhighlighted and its form collapsed on first
+  // mobile view, even though Student was already the selected
+  // category in state. Starting true shows the (already-default)
+  // Student form immediately, matching desktop's always-open
+  // behavior; explicit taps on Visitor/Entrepreneur/Business Tycoon
+  // still work exactly as before via chooseCategory below.
+  const [hasSelected, setHasSelected] = useState(true);
   const firstErrorRef = useRef(null);
   const formRef = useRef(null);
   const panelRef = useRef(null);
@@ -146,18 +155,31 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   // The success card is much shorter than the full form it replaces —
   // that height collapse can shift the page enough for the browser to
   // land on whatever section now sits under the viewport (e.g. the
-  // green CTA below Registration). Scroll to the TOP of the whole
-  // Registration section (not just this form panel) once the success
-  // state has actually rendered, so "11 — Registration" / "Ready to
-  // be part of the event?" / "Application received." are all visible
-  // together without the visitor scrolling up manually. #register
-  // already has scroll-margin-top set globally, so the fixed navbar
-  // never covers the heading.
+  // green CTA below Registration). On desktop, .reg-left/.reg-right
+  // sit side by side, so scrolling to the whole #register section's
+  // top puts "11 — Registration" / "Ready to be part of the event?"
+  // and "Application received." in view together, as intended.
+  //
+  // On mobile (<=1024px, where .reg-left/.reg-right stack into one
+  // column — confirmed by rendering the actual mobile page and
+  // measuring positions), that same section-top scroll instead lands
+  // the viewport at the top of .reg-left's heading + 3-step list,
+  // which sits ABOVE the form panel — pushing "Application received."
+  // (in .reg-panel, .reg-right) below the fold on a normal phone
+  // screen, exactly the "user has to scroll manually" bug reported.
+  // Scrolling to panelRef (.reg-panel, the element that actually
+  // contains the success card) instead keeps desktop's existing
+  // behavior (still inside the same section, so the heading above it
+  // remains close by) while fixing mobile to show the success card
+  // itself from its own top edge. #register's scroll-margin-top
+  // still protects .reg-panel's own scroll position from the fixed
+  // navbar, since .reg-panel is a descendant of #register.
   useEffect(() => {
     if (status !== "success") return;
     requestAnimationFrame(() => {
-      const section = document.getElementById("register");
-      (section ?? panelRef.current)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const isMobile = window.matchMedia("(max-width: 1024px)").matches;
+      const target = isMobile ? panelRef.current : document.getElementById("register");
+      (target ?? panelRef.current)?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }, [status]);
 
@@ -235,11 +257,23 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
     }
   };
 
+  // "Register another" must always return to the first/default
+  // category (Student) regardless of which category was just
+  // submitted — the previous version left `category` untouched, so
+  // whatever was selected before submitting (e.g. Visitor, from a
+  // prior "Switch to visitor" click, or any category the visitor had
+  // chosen) stayed selected/highlighted after reset, and its fields
+  // kept rendering instead of Student's. Explicitly setting category
+  // back to "student" and rebuilding `values` from Student's own
+  // fields (not the just-submitted category's fields) fixes both the
+  // highlighted category and the fields actually shown.
   const reset = () => {
-    setValues(buildInitialValues(fields));
+    setCategory("student");
+    setValues(buildInitialValues(activeFields.student || []));
     setErrors({});
     setTouched({});
     setStatus("idle");
+    if (onCategoryChanged) onCategoryChanged("student");
   };
 
   const primaryName =
@@ -370,7 +404,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                     {isLastField ? (
                       <div className="reg-fee-block">
                         <div className="field field--display">
-                          <p className="field-label field-label--static">Registration Fees</p>
+                          <p className="field-label field-label--static">Registration Fees *</p>
                           <p className="reg-fee-value">
                             {fee === 0 ? "Free" : `₹${fee.toLocaleString("en-IN")}`}
                           </p>

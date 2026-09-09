@@ -3,6 +3,7 @@ import { supabase } from "../lib/supabase.js";
 import RegistrationForm from "./RegistrationForm.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
+import { REGISTRATION_FEES } from "../data/eventData.js";
 
 export default function Registration({
   selectedCategory,
@@ -54,9 +55,22 @@ export default function Registration({
   ];
   const steps = data?.steps || defaultSteps;
 
+  // Root cause of Entrepreneur/Business Tycoon showing "Free" with no
+  // QR: the form_config.categories row seeded by the original
+  // migration has no `fee` key on any category at all. `cat.fee ?? 0`
+  // silently resolved every category with a missing fee to 0 — which
+  // is invisible for Student (0 is the correct fee) and only visible
+  // once a category is genuinely paid. Any category an admin has
+  // since edited via the form builder (which does save a real `fee`
+  // value) works correctly; Entrepreneur/Business Tycoon apparently
+  // never were, so they fell through to 0. Normalizing here: prefer
+  // Supabase's fee only when it's an actual number (Number.isFinite
+  // rejects undefined/null/NaN, but still accepts a deliberate 0),
+  // otherwise fall back to this category's own known default fee
+  // (REGISTRATION_FEES) instead of a blanket 0 for every category.
   const dynamicFees = formConfig?.categories?.reduce((acc, cat) => ({
     ...acc,
-    [cat.id]: cat.fee ?? 0
+    [cat.id]: Number.isFinite(cat.fee) ? cat.fee : (REGISTRATION_FEES[cat.id] ?? 0)
   }), {}) || {
     student: data?.fee_student ?? 0,
     visitor: data?.fee_visitor ?? 500,
