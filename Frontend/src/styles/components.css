@@ -2101,35 +2101,64 @@
   appearance: none;
 }
 
-/* Real root cause of the description field looking oversized next to
-   Visitor: the <textarea rows="4"> HTML attribute (set in
-   RegistrationForm.jsx's field config) drives the browser's native
-   default textarea height to fit 4 lines — min-height alone can't
-   override this since it only sets a floor, and the rows-driven
-   intrinsic height (128.95px, confirmed via computed style) already
-   exceeds any min-height we set. An earlier fix here changed
-   min-height and appeared to have no effect for exactly this reason.
-   height: (not min-height) directly overrides the rows-driven sizing,
-   set to Visitor's own measured single-line input height (61.78px)
-   so the initial empty field matches Visitor exactly. resize:
-   vertical (still active on mobile — see the desktop-only
-   resize:none block below) lets the user manually grow it past this
-   height, and typed content beyond the visible area scrolls natively
-   inside the textarea rather than being clipped, so longer
-   descriptions are never cut off. */
+/* Description/Short Description textareas (Student, Entrepreneur,
+   Business Tycoon — Visitor has no such field, untouched by this
+   rule). Root cause of the label/text overlap, confirmed by
+   measuring the real rendered box on both desktop and mobile: the
+   <textarea rows="4"> HTML attribute drives a native intrinsic
+   height (~129px) that an earlier fix overrode down to 61.78px
+   (height:, not min-height — min-height alone can't win against the
+   rows-driven intrinsic size) to visually match Visitor's
+   single-line input. Once .field-input's own padding (1.55rem top +
+   0.85rem bottom) is subtracted from that 61.78px, the remaining
+   visible content box is only ~23px — barely one 22.4px line (16px
+   font-size * 1.4 line-height).
+
+   A prior fix raised this height on desktop only (assuming mobile's
+   resize:vertical was an adequate substitute), but live testing at
+   375px showed that assumption was wrong: resize:vertical is a
+   manual affordance the user must discover and drag themselves — by
+   default, before they do, a mobile textarea still starts at the
+   same too-short 61.78px, and something as ordinary as one sentence
+   wrapping to 2 lines already forces the same internal-scroll
+   overlap onto the label (confirmed via screenshot: typed text
+   rendered directly on top of "SHORT DESCRIPTION *"). This is the
+   actual still-open bug — the height fix below now applies
+   unconditionally (both desktop and mobile) instead of only above
+   641px, which is the real root-cause fix rather than a
+   mobile-specific patch.
+
+   box-sizing: border-box (already the global default from
+   globals.css, restated here so this rule is self-contained) keeps
+   the stated padding inside the stated height rather than adding to
+   it. white-space/overflow-wrap/word-break are restated explicitly
+   rather than left to each browser's own textarea default, so a
+   continuous no-space string is guaranteed to wrap inside the field
+   instead of only doing so by accident of the UA stylesheet;
+   overflow-x: hidden backs that with a hard stop against any
+   horizontal scroll if a wrap edge case ever occurs anyway.
+   overflow-y: auto lets content beyond the visible height scroll
+   vertically, inside the field's own border, rather than being
+   clipped or pushing the layout. */
 textarea.field-input {
+  box-sizing: border-box;
   resize: vertical;
-  height: 61.78px;
+  height: 6.6rem;
   padding-top: 1.55rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Desktop/web only: hide the browser's diagonal resize handle in the
-   bottom-right corner of the description textarea (Student/
-   Entrepreneur/Business Tycoon) — resize: vertical above (unchanged)
-   still governs mobile, so touch users keep the ability to resize.
-   Only the visible handle/behavior on desktop is disabled; textarea
-   width/height, border, text wrapping, validation, and scrolling are
-   all untouched. */
+   bottom-right corner (the "white resize artifact" at the field's
+   edge). Mobile keeps resize: vertical from the base rule above, so
+   touch users can still manually grow the field further if they want
+   — this is purely about disabling the drag-to-resize handle's visual
+   affordance on desktop/mouse input, not about height (height is now
+   the same 6.6rem on both, set once in the base rule above). */
 @media (min-width: 641px) {
   textarea.field-input {
     resize: none;
@@ -2189,6 +2218,236 @@ textarea.field-input {
   text-transform: uppercase;
   font-weight: 600;
   color: var(--brass-300);
+}
+
+/* Category dropdowns (Industry / Category, Business Category): a
+   <select> has no :placeholder-shown state for the input/textarea
+   floating-label trick above to key off, so its label is kept
+   permanently in the floated position instead — same end style as
+   every other filled field, just without the animation. */
+.field-label--floated {
+  transform: translateY(-1rem) scale(0.68);
+  transform-origin: left top;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--brass-300);
+}
+
+.field.has-error .field-label--floated {
+  color: var(--rose-300);
+}
+
+/* Underline-style select: reuses .field-input's own transparent
+   background/underline/appearance:none reset, just adds a single
+   clean chevron (inline SVG, not a stacked-gradient triangle — the
+   previous two-gradient approach could render as a broken/doubled
+   shape depending on the browser) and room for it on the right so
+   long option text doesn't run underneath. The chevron is vertically
+   centered on the field's own text baseline area, not the full field
+   height, so it lines up with the selected value rather than the
+   floated label above it. The placeholder option renders in the same
+   muted tone as other empty fields until a real category is chosen. */
+select.field-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0;
+  transform: none;
+  padding-right: 1.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 2 6 6.5 10.5 2' stroke='%23a49a84' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.1rem center;
+  background-size: 0.7rem;
+  cursor: pointer;
+}
+
+/* Mobile/tablet (<=1024px, the same breakpoint .reg-panel/.reg-form
+   already collapse to full width at): the category dropdown's own
+   trigger is reconfirmed here at zero fixed width, matching the
+   field's left/right padding exactly like every other field — the
+   trigger itself was never the source of the reported edge-to-edge
+   overflow (box-sizing: border-box already applies globally, and no
+   min-width/fixed width exists anywhere on .field/.field-input), but
+   this closes off any doubt and guards against future regressions.
+   The open dropdown's *popup* list, however, is native OS/browser UI
+   once expanded — CSS on the <select> element cannot resize or
+   reposition that overlay on most mobile browsers (Android Chrome and
+   iOS Safari both render it outside the normal box model). If the
+   popup itself still extends past the screen edge after this, that is
+   a native-picker rendering choice outside what CSS on <select> can
+   control, not a leftover fixed-width/transform/margin bug in this
+   stylesheet. */
+@media (max-width: 1024px) {
+  .field:has(> select.field-input) {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  select.field-input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+select.field-input:has(option[value=""]:checked) {
+  color: var(--stone-400);
+}
+
+/* The category dropdowns (Industry / Category, Business Category)
+   read as visually "busier" than a plain text field — the label sits
+   permanently floated (no blank/placeholder state to relax into) and
+   the field itself has no natural bottom padding beyond the shared
+   .field-input baseline. Give the field a bit more breathing room
+   below the trigger specifically, so the helper text/validation
+   message under it (and the next field below that) don't read as
+   glued to the dropdown the way plain inputs don't need to worry
+   about. This only affects vertical space belonging to the select's
+   own .field wrapper — it does not change field width, .reg-form's
+   shared row gap, or spacing around any other field type. */
+.field:has(> select.field-input) {
+  padding-bottom: 0.5rem;
+}
+
+/* Native <option>/<select>-popup theming is genuinely inconsistent
+   across browsers (Chromium and Firefox respect these; some WebKit
+   builds partially ignore them and fall back to the OS's own panel —
+   there is no fully reliable cross-browser way to theme the native
+   popup short of replacing <select> with a custom-built listbox,
+   which this project doesn't use elsewhere and wasn't asked for
+   here). Applied as the cleanest available fix: matches the popup to
+   the registration panel's own dark background/gold-on-ivory palette,
+   with real option padding and a subtle border, everywhere the
+   browser allows it, instead of leaving the default bright
+   white/blue, cramped system style. */
+select.field-input,
+select.field-input option {
+  background-color: var(--ink-950);
+  color: var(--ivory-50);
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
+
+select.field-input option {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+select.field-input option:checked,
+select.field-input option:hover,
+select.field-input option:focus {
+  background: var(--brass-400);
+  color: var(--ink-950);
+}
+
+/* Custom dropdown for the two category fields (Industry / Category,
+   Business Category) — replaces the native <select> above for just
+   these fields (the rules above are now inert for them, left in
+   place since nothing else in the project used select.field-input,
+   confirmed by search, so removing them isn't necessary and risks
+   nothing by staying). A native <select>'s open popup is OS-level UI
+   that CSS cannot position or reliably style across mobile browsers;
+   this in-DOM menu is a real element the site's own CSS controls
+   completely, positioned as an absolute panel anchored to the trigger
+   so opening it can never push "Registration Fees" or any later field
+   downward. */
+.category-select {
+  position: relative;
+}
+
+.category-select-trigger {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  background-color: transparent;
+  padding-right: 1.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 2 6 6.5 10.5 2' stroke='%23a49a84' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.1rem center;
+  background-size: 0.7rem;
+  cursor: pointer;
+}
+
+.category-select-trigger.is-placeholder {
+  color: var(--stone-400);
+}
+
+/* Absolute-positioned panel anchored to the trigger — top:100% + the
+   4-6px requested gap via margin-top, left:0/width:100% so it lines
+   up with and never exceeds the trigger's own edges, box-sizing:
+   border-box so its own border/padding can't push it past that width.
+   z-index lifts it above the Registration Fees block and every field
+   that follows in normal document flow. */
+.category-select-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  margin-top: 0.35rem;
+  padding: 0.3rem 0;
+  list-style: none;
+  background-color: var(--ink-950);
+  border: 1px solid var(--line-dark);
+  box-shadow: 0 16px 32px -12px rgba(12, 11, 9, 0.55);
+  max-height: 15.5rem;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.category-select-option {
+  padding: 0.6rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--ivory-50);
+  cursor: pointer;
+}
+
+.category-select-option.is-active,
+.category-select-option:hover {
+  background: var(--brass-400);
+  color: var(--ink-950);
+}
+
+.category-select-option.is-selected {
+  color: var(--brass-300);
+  font-weight: 600;
+}
+
+.category-select-option.is-selected.is-active,
+.category-select-option.is-selected:hover {
+  color: var(--ink-950);
+}
+
+/* The category field's own .field wrapper only needs breathing room
+   below the trigger while the menu can still be open above the next
+   field in flow (mobile-safe since the menu is position:absolute, not
+   part of layout) — kept from the earlier native-select fix so the
+   trigger doesn't read as glued to its own hint/error text. */
+.field:has(> .category-select) {
+  padding-bottom: 0.5rem;
+}
+
+/* Root cause of the mobile clipping this whole component exists to
+   avoid: once a category is chosen, this field renders inside
+   .reg-form-collapse.is-open, whose direct child (.reg-form) gets
+   overflow:hidden below 1024px as part of the accordion-open
+   animation (see the .reg-form-collapse rules above). That overflow
+   has nothing to do with the collapse animation once the panel is
+   already open — it only matters during the closed<->open transition
+   — so it's safe to release once .is-open, and doing so is required
+   for .category-select-menu's absolute panel to ever be visible past
+   .reg-form's own edges instead of being cut off there. */
+@media (max-width: 1024px) {
+  .reg-form-collapse.is-open>.reg-form {
+    overflow: visible;
+  }
 }
 
 .field-hint {
@@ -2295,6 +2554,130 @@ textarea.field-input {
     width: 128px !important;
     height: 128px !important;
     max-width: 100%;
+  }
+}
+
+/* "Are you bringing your team?" — Entrepreneur/Business Tycoon only.
+   Sits as a normal .reg-form grid child (same 1.9rem gap above/below
+   as every other field, so no extra top/bottom margin is added here)
+   directly above Registration Fees'/the submit button's row. */
+.reg-team {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.reg-team-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.reg-team-question {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ivory-50);
+}
+
+/* Compact Yes/No toggle — reuses the site's existing underline/gold
+   language (brass accent, ivory text, dark ground) rather than a new
+   switch component, so it reads as part of the same form system as
+   every input/select around it. */
+.reg-team-toggle {
+  display: inline-flex;
+  border: 1px solid var(--line-dark);
+  flex: none;
+}
+
+.reg-team-toggle-btn {
+  padding: 0.45rem 1.1rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--stone-400);
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.reg-team-toggle-btn+.reg-team-toggle-btn {
+  border-left: 1px solid var(--line-dark);
+}
+
+.reg-team-toggle-btn.is-active {
+  background: var(--brass-400);
+  color: var(--ink-950);
+}
+
+.reg-team-members {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.reg-team-member-title {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone-400);
+  margin-bottom: 0.5rem;
+}
+
+/* Name/Phone side-by-side row — two flexible, equal-width columns
+   that stay inside the parent form's own width (no fixed px widths
+   anywhere here), matching the "1fr 1fr, small gap, width:100%,
+   min-width:0, box-sizing:border-box" spec so neither column can
+   force the row wider than .reg-form itself. */
+.reg-team-member-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reg-team-field {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reg-team-add {
+  align-self: flex-start;
+  padding: 0.55rem 0;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--brass-300);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--brass-400);
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+
+.reg-team-add:hover {
+  color: var(--brass-400);
+}
+
+/* Very narrow phones only (~320-359px, e.g. iPhone SE): at these
+   widths each of the two columns has under ~130px to work with once
+   .reg-panel's own side padding is subtracted, which is too tight for
+   "Phone Number" + a 10-digit value to stay readable next to "Member
+   Name" — so only this tier stacks Name/Phone vertically. 375px,
+   390px and 412px (the project's other required test widths) all
+   have enough room and keep the 2-column layout, matching the task's
+   own "normal mobile" mockup. */
+@media (max-width: 359px) {
+  .reg-team-member-row {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 }
 

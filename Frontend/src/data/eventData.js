@@ -501,6 +501,18 @@ export const SECTOR_FOCUS = [
 // Backend-ready: each field maps to a plain payload key on submit.
 // ─────────────────────────────────────────────────────────────
 
+// Fallback options for the Entrepreneur/Business Tycoon category
+// dropdowns, used only when a field's own `options` (e.g. from
+// form_config in Supabase) isn't provided. Admins can later replace
+// or extend this list from the backend without any code change —
+// RegistrationForm renders whatever `field.options` array it's given.
+// Both dropdowns share this exact list, including "Other".
+export const CATEGORY_OPTIONS = ["AI & Tech", "Healthcare", "Manufacturing", "Agritech", "Other"];
+
+// Kept as an alias so any other import of the old name still resolves
+// to the same shared list.
+export const BUSINESS_CATEGORY_OPTIONS = CATEGORY_OPTIONS;
+
 export const FORM_FIELDS = {
   student: [
     { name: "fullName", label: "Full Name", type: "text", required: true, autoComplete: "name" },
@@ -516,7 +528,7 @@ export const FORM_FIELDS = {
       type: "textarea",
       required: true,
       rows: 4,
-      hint: "Your idea, or what you hope to gain — two or three lines is plenty.",
+      hint: "Your idea or what you hope to gain — two or three lines is plenty.",
     },
   ],
   entrepreneur: [
@@ -526,7 +538,7 @@ export const FORM_FIELDS = {
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
     { name: "role", label: "Role", type: "text", required: true },
-    { name: "industry", label: "Industry / Category", type: "text", required: true },
+    { name: "industry", label: "Industry / Category", type: "select", required: true, options: CATEGORY_OPTIONS },
     {
       name: "startupDescription",
       label: "Startup Description",
@@ -544,6 +556,7 @@ export const FORM_FIELDS = {
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
     { name: "role", label: "Role", type: "text", required: true },
+    { name: "businessCategory", label: "Business Category", type: "select", required: true, options: BUSINESS_CATEGORY_OPTIONS },
     {
       name: "businessDescription",
       label: "Business Description",
