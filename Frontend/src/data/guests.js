@@ -12,8 +12,8 @@ export const GUESTS = [
     id: "bm-sir",
     name: "BM Sir",
     initials: "BM",
-    role: "Speaker details to be announced",
-    description: "Conversation details will be shared as the lineup is confirmed.",
+    role: "Business mentor & strategic guide",
+    description: "Business building, leadership and growth thinking — conversation details to be confirmed.",
   },
   {
     id: "abhishek",

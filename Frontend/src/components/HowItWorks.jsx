@@ -16,9 +16,9 @@ export default function HowItWorks({ onRegister }) {
           dark
         />
         <p className="sec-lede">
-          BMI Startup &amp; Business Launch 2026 is more than an event. It is
-          the beginning of a movement to build future ready businesses and a
-          stronger India.
+          BMI Business Growth Forum Jaipur 2026 is more than an event. It is
+          a curated platform to build future-ready non-education businesses
+          through strategy, screening and capital connect.
         </p>
         <p className="sec-lede how-lede-accent">
           <strong className="t-italic t-brass">Be part of something bigger.</strong>

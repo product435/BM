@@ -79,7 +79,7 @@ export default function Navbar({ onNavigate }) {
               className="btn btn--light nav-cta"
               onClick={() => go("register")}
             >
-              Register now
+              Register for the event
               <span className="btn-arrow" aria-hidden="true">
                 →
               </span>
@@ -143,7 +143,7 @@ export default function Navbar({ onNavigate }) {
                 go("register");
               }}
             >
-              Register now
+              Register for the event
               <span className="btn-arrow" aria-hidden="true">
                 →
               </span>

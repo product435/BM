@@ -12,7 +12,7 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
 
         <Reveal>
           <h3 className="cta-final-title">
-            Investing in India's
+            Building India's
             <br />
             <span className="t-italic">tomorrow.</span>
           </h3>
@@ -24,7 +24,7 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
             trackClassName="sector-track"
             itemClassName="sector-card"
             variant="dark"
-            ariaLabel="Investing in India's tomorrow — sectors"
+            ariaLabel="Building India's tomorrow — sectors"
             showDots
             renderItem={(sector) => (
               <>
@@ -46,8 +46,8 @@ export default function FinalCTA({ onRegister, onExploreCategories }) {
 
         <Reveal delay={200}>
           <p className="cta-final-sub">
-            BMI focuses on scalable businesses and innovative startups across
-            high growth sectors driving our economy forward.
+            BMI focuses on scalable non-education businesses and innovative
+            startups across high-growth sectors driving our economy forward.
           </p>
         </Reveal>
 

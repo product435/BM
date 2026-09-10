@@ -6,9 +6,42 @@ import {
   BUSINESS_CATEGORY_OPTIONS,
   FORM_FIELDS,
   REGISTRATION_FEES,
+  COMPLIANCE_FIELDS,
 } from "../data/eventData.js";
+import {
+  REGISTRATION_DECLARATION,
+  RESTRICTED_SECTOR_KEYWORDS,
+} from "../data/legalContent.js";
 import { supabase } from "../lib/supabase.js";
 import { createRazorpayOrder, verifyRazorpayPayment } from "../services/paymentService.js";
+
+/** Compute SHA compliance flag from screening answers + free-text scan. */
+function computeComplianceFlag(values) {
+  const educationYes = String(values.educationConnection || "").toLowerCase() === "yes";
+  const allenYes = String(values.allenConnection || "").toLowerCase() === "yes";
+
+  const textBlob = [
+    values.description,
+    values.startupDescription,
+    values.businessDescription,
+    values.interest,
+    values.businessSector,
+    values.industry,
+    values.businessCategory,
+    values.industryOther,
+    values.businessCategoryOther,
+    values.businessSectorOther,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  const keywordHit = RESTRICTED_SECTOR_KEYWORDS.some((kw) => textBlob.includes(kw.toLowerCase()));
+
+  if (educationYes || keywordHit) return "red";
+  if (allenYes) return "amber";
+  return "green";
+}
 
 async function submitRegistration(payload) {
   const { category, email, phone, city, ...rest } = payload;
@@ -18,27 +51,68 @@ async function submitRegistration(payload) {
   const { fullName, founderName, contactPerson, ...details } = rest;
 
   let track = "Visitor";
-  if (category === "student") track = "Track 1 (Students)";
-  if (category === "startup") track = "Track 2 (Startups)";
-  if (category === "school") track = "Track 3 (Scale)";
+  if (category === "student") track = "Track 1 (Early Innovator)";
+  if (category === "entrepreneur") track = "Track 2 (Entrepreneur)";
+  if (category === "businessTycoon") track = "Track 3 (Business Tycoon)";
+  if (category === "visitor") track = "Track 4 (Visitor)";
 
-  const registration_id = 'REG-' + Math.floor(10000 + Math.random() * 90000);
+  const registration_id = "REG-" + Math.floor(10000 + Math.random() * 90000);
+  const compliance_flag = computeComplianceFlag(rest);
+  const education_connection = String(rest.educationConnection || "").toLowerCase() === "yes";
+  const allen_connection = String(rest.allenConnection || "").toLowerCase() === "yes";
+  const sector = rest.businessSector || rest.industry || rest.businessCategory || "";
 
-  const { error } = await supabase.from("registrations").insert([{
-    registration_id,
-    name,
-    email,
-    phone,
-    city,
-    track,
-    status: 'Pending',
-    payment_status: 'Pending',
-    details
-  }]);
+  // RED/AMBER stay under review; GREEN can proceed normally (payment still applies for paid tracks).
+  const status = compliance_flag === "green" ? "Pending" : "Pending Review";
+
+  const { error } = await supabase.from("registrations").insert([
+    {
+      registration_id,
+      name,
+      email,
+      phone,
+      city,
+      track,
+      status,
+      payment_status: "Pending",
+      sector,
+      education_connection,
+      allen_connection,
+      compliance_flag,
+      details,
+    },
+  ]);
 
   if (error) {
     console.error("Supabase insert error:", error);
-    throw new Error("Registration failed. Please try again.");
+    // Fallback without new columns if migration not yet applied
+    if (error.message && /column|schema|compliance_flag|sector/i.test(error.message)) {
+      const { error: fallbackError } = await supabase.from("registrations").insert([
+        {
+          registration_id,
+          name,
+          email,
+          phone,
+          city,
+          track,
+          status,
+          payment_status: "Pending",
+          details: {
+            ...details,
+            sector,
+            education_connection,
+            allen_connection,
+            compliance_flag,
+          },
+        },
+      ]);
+      if (fallbackError) {
+        console.error("Supabase fallback insert error:", fallbackError);
+        throw new Error("Registration failed. Please try again.");
+      }
+    } else {
+      throw new Error("Registration failed. Please try again.");
+    }
   }
 
   // Send email via Resend Edge Function
@@ -47,16 +121,31 @@ async function submitRegistration(payload) {
       body: {
         name,
         email,
-        message: `New registration for category: ${category} | Track: ${track}`,
+        message: `New registration for category: ${category} | Track: ${track} | Compliance: ${compliance_flag}`,
       },
     });
   } catch (err) {
     console.error("Email sending failed:", err);
-    // We don't throw here so the user still sees success if DB insert worked.
   }
 
-  return { ok: true, registrationId: registration_id };
+  return { ok: true, registrationId: registration_id, complianceFlag: compliance_flag };
 }
+
+/** Ensure every category form includes SHA compliance fields. */
+function withComplianceFields(fieldsByCategory) {
+  if (!fieldsByCategory) return fieldsByCategory;
+  const next = {};
+  for (const [key, fields] of Object.entries(fieldsByCategory)) {
+    const list = Array.isArray(fields) ? [...fields] : [];
+    const names = new Set(list.map((f) => f.name));
+    for (const cf of COMPLIANCE_FIELDS) {
+      if (!names.has(cf.name)) list.push(cf);
+    }
+    next[key] = list;
+  }
+  return next;
+}
+
 
 const ERROR_MESSAGES = {
   required: "This field is required.",
@@ -454,7 +543,10 @@ function CategorySelect({ field, value, error, onSelect, onBlur, onFocus, onTrig
 
 export default function RegistrationForm({ initialCategory, onCategoryChanged, dynamicFees, dynamicUpiId, dynamicCategories, dynamicFields }) {
   const activeCategories = dynamicCategories || CATEGORIES;
-  const activeFields = withDescriptionHints(withCategoryDropdowns(dynamicFields || FORM_FIELDS));
+  // Prefer CMS fields when present, but always inject SHA compliance fields.
+  const activeFields = withComplianceFields(
+    withDescriptionHints(withCategoryDropdowns(dynamicFields || FORM_FIELDS))
+  );
 
   const CATEGORY_LABEL = activeCategories.reduce((acc, c) => ({ ...acc, [c.id]: c.title }), {});
   const DYNAMIC_CATEGORY_SHORT = activeCategories.reduce((acc, c) => ({ ...acc, [c.id]: c.cta || c.title }), {});
@@ -492,6 +584,8 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [status, setStatus] = useState("idle"); // idle | submitting | success
+  const [declarationAccepted, setDeclarationAccepted] = useState(false);
+  const [lastComplianceFlag, setLastComplianceFlag] = useState("green");
 
   // "Are you bringing your team?" — Entrepreneur and Business Tycoon
   // only; showTeamSection (below, derived from `category`) gates
@@ -624,6 +718,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
       setTouched({});
       setStatus("idle");
       setHasSelected(true);
+      setDeclarationAccepted(false);
       resetTeamState();
     }
   }, [initialCategory, category]);
@@ -635,6 +730,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
     setTouched({});
     setStatus("idle");
     setHasSelected(true);
+    setDeclarationAccepted(false);
     resetTeamState();
     if (onCategoryChanged) onCategoryChanged(id);
     // Intentionally no scrollIntoView/scrollTo here — selecting a
@@ -767,6 +863,14 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
       return;
     }
 
+    if (!declarationAccepted) {
+      setErrors((prev) => ({
+        ...prev,
+        declaration: "Please confirm the declaration to continue.",
+      }));
+      return;
+    }
+
     setStatus("submitting");
     try {
       const teamPayload =
@@ -774,8 +878,13 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
           ? { teamMembers: teamMembers.map((m) => ({ name: m.name.trim(), phone: m.phone.trim() })) }
           : {};
       const res = await submitRegistration({ category, ...values, ...teamPayload });
+      setLastComplianceFlag(res.complianceFlag || "green");
 
-      if (fee > 0) {
+      // Paid tracks: only open Razorpay for GREEN flags. RED/AMBER need
+      // manual review first — payment can be collected after approval.
+      const allowPayment = fee > 0 && res.complianceFlag === "green";
+
+      if (allowPayment) {
         setStatus("payment_processing");
 
         try {
@@ -790,7 +899,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
             amount: orderData.amount,
             currency: orderData.currency || "INR",
             name: "BM Investment",
-            description: "Event Registration",
+            description: "Event Registration — participation fee only",
             order_id: orderData.id,
             prefill: {
               name: values.fullName || values.founderName || values.contactPerson || "",
@@ -866,6 +975,8 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
     setErrors({});
     setTouched({});
     setStatus("idle");
+    setDeclarationAccepted(false);
+    setLastComplianceFlag("green");
     resetTeamState();
     if (onCategoryChanged) onCategoryChanged("student");
   };
@@ -896,11 +1007,23 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
               <path d="M4 12.5 9.5 18 20 6.5" />
             </svg>
           </span>
-          <h3 className="reg-success-title">Application received.</h3>
+          <h3 className="reg-success-title">
+            {lastComplianceFlag === "green" ? "Application received." : "Application under review."}
+          </h3>
           <p className="reg-success-copy">
-            Thank you{firstName ? `, ${firstName}` : ""} — you're one step
-            closer to the event. Our team will be in touch with confirmation
-            details and next steps.
+            {lastComplianceFlag === "green" ? (
+              <>
+                Thank you{firstName ? `, ${firstName}` : ""} — you're one step
+                closer to the event. Our team will be in touch with confirmation
+                details and next steps.
+              </>
+            ) : (
+              <>
+                Thank you{firstName ? `, ${firstName}` : ""}. Your application is
+                under review for sector and compliance screening. We will contact
+                you with next steps — please do not assume auto-confirmation.
+              </>
+            )}
           </p>
           <div className="reg-success-meta">
             <span className="reg-success-chip">
@@ -911,9 +1034,8 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
             ) : null}
           </div>
           <p className="reg-success-note">
-            <strong>Preview build.</strong> This form isn't connected to a live
-            backend yet — nothing has been stored. The submit handler is ready
-            to point at your API.
+            Fees, where applicable, are for event participation only and are not
+            an investment or capital contribution.
           </p>
           <div className="reg-success-actions">
             <button type="button" className="btn btn--light" onClick={reset}>
@@ -1139,6 +1261,42 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                 </p>
               ) : null}
 
+              <label
+                className="reg-declaration"
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  alignItems: "flex-start",
+                  marginBottom: "1rem",
+                  fontSize: "0.8125rem",
+                  lineHeight: 1.5,
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  checked={declarationAccepted}
+                  onChange={(e) => {
+                    setDeclarationAccepted(e.target.checked);
+                    if (e.target.checked) {
+                      setErrors((prev) => {
+                        const next = { ...prev };
+                        delete next.declaration;
+                        return next;
+                      });
+                    }
+                  }}
+                  style={{ marginTop: "0.2rem", flexShrink: 0 }}
+                  required
+                />
+                <span>{REGISTRATION_DECLARATION}</span>
+              </label>
+              {errors.declaration ? (
+                <p className="field-error" role="alert">
+                  {errors.declaration}
+                </p>
+              ) : null}
+
               <div className="reg-form-foot">
                 <button
                   type="submit"
@@ -1161,8 +1319,8 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
                 </button>
                 <p className="form-note">
                   {fee > 0
-                    ? "By submitting you agree to be contacted about this event. Click Proceed to Payment to complete your registration securely."
-                    : "By submitting you agree to be contacted about this event. No payment required for student registration."}
+                    ? "By submitting you agree to be contacted about this event. Participation fees are not an investment. Click Proceed to Payment to complete registration securely (subject to compliance screening)."
+                    : "By submitting you agree to be contacted about this event. No payment required for Early Innovator registration. Applications may be screened before confirmation."}
                 </p>
               </div>
             </form>

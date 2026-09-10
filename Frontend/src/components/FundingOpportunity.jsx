@@ -1,4 +1,5 @@
-import { BMI_SUPPORT_MODEL, FUNDING_AUDIENCE, IMAGES } from "../data/eventData.js";
+import { BMI_SUPPORT_MODEL, FUNDING_AUDIENCE } from "../data/eventData.js";
+import { CAPITAL_CONNECT_DISCLAIMER } from "../data/legalContent.js";
 import Carousel from "./Carousel.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
@@ -14,7 +15,7 @@ export default function FundingOpportunity({ onRegister }) {
         <div className="funding-content">
           <Reveal>
             <SectionHeading
-              eyebrow="05 — Funding & BMI Support"
+              eyebrow="05 — Capital Connect & BMI Support"
               title={
                 <span id="funding-title" className="funding-title">
                   Every idea deserves{" "}
@@ -27,9 +28,13 @@ export default function FundingOpportunity({ onRegister }) {
 
           <Reveal delay={120}>
             <p className="funding-copy">
-              BMI believes in supporting ideas and businesses with the right
-              blend of <strong>capital, capability, and connections</strong>{" "}
-              to help them grow and scale.
+              BMI supports selected non-education ideas and businesses with the
+              right blend of <strong>capital connect, capability, and connections</strong>{" "}
+              to help them grow and scale — through screening, evaluation and
+              deal-specific introductions.
+            </p>
+            <p className="funding-copy" style={{ marginTop: "0.75rem", fontSize: "0.875rem", opacity: 0.85 }}>
+              {CAPITAL_CONNECT_DISCLAIMER}
             </p>
           </Reveal>
 

@@ -4,6 +4,7 @@ import RegistrationForm from "./RegistrationForm.jsx";
 import Reveal from "./Reveal.jsx";
 import SectionHeading from "./SectionHeading.jsx";
 import { REGISTRATION_FEES } from "../data/eventData.js";
+import { EVENT_FOCUS_DECLARATION } from "../data/legalContent.js";
 
 export default function Registration({
   selectedCategory,
@@ -49,9 +50,9 @@ export default function Registration({
   const lede = data?.lede || "Seats are limited and the event is curated. Tell us who's coming and how you want to show up.";
   
   const defaultSteps = [
-    { title: "Choose your category.", description: "Student, Visitor, Entrepreneur or Business Tycoon." },
-    { title: "Share your details.", description: "The form adapts to your path." },
-    { title: "We confirm your seat.", description: "You show up on the day and make the event count." }
+    { title: "Choose your category.", description: "Early Innovator, Visitor, Entrepreneur or Business Tycoon." },
+    { title: "Share your details.", description: "Including sector screening and compliance declarations." },
+    { title: "We review & confirm.", description: "Applications may be screened before confirmation." }
   ];
   const steps = data?.steps || defaultSteps;
 
@@ -109,6 +110,32 @@ export default function Registration({
                   </li>
                 ))}
               </ol>
+            </Reveal>
+
+            <Reveal delay={140}>
+              <p
+                className="reg-compliance-note"
+                style={{
+                  marginTop: "1.5rem",
+                  fontSize: "0.8125rem",
+                  lineHeight: 1.55,
+                  opacity: 0.8,
+                  maxWidth: "28rem",
+                }}
+              >
+                {EVENT_FOCUS_DECLARATION}
+              </p>
+              <p
+                style={{
+                  marginTop: "0.75rem",
+                  fontSize: "0.75rem",
+                  lineHeight: 1.5,
+                  opacity: 0.7,
+                  maxWidth: "28rem",
+                }}
+              >
+                Registration fees (where applicable) are for event participation only — not an investment or capital contribution.
+              </p>
             </Reveal>
           </div>
 

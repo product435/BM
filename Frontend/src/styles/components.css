@@ -3314,7 +3314,7 @@ select.field-input option:focus {
 
 @media (max-width: 760px) {
 
-  /* "Funding is only the beginning" keywords — three complete,
+  /* Capital Connect keywords — three complete,
      unbreakable text rows (not per-word flex/grid items), so a row
      can never split mid-sentence on narrow screens. */
   .intro-media-pills--desktop {
@@ -4137,7 +4137,7 @@ select.field-input option:focus {
   }
 }
 
-/* ── Mobile-only fix: "Investing in India's tomorrow" sectors ──
+/* ── Mobile-only fix: "Building India's tomorrow" sectors ──
    Scoped strictly to .sector-track (the 12 sector cards) so the
    heading/eyebrow above it and every other carousel are unaffected.
    Shows one full card per slide (no neighboring-card preview) and

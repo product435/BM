@@ -52,8 +52,8 @@ export default function EventIntro({ previewData }) {
   // Safe HTML parsing for the title since we allow <span class="t-italic">
   const titleHtml = data?.title || `More than an event. <span class="t-italic t-emerald">A place</span> where ambition meets opportunity.`;
   
-  const paragraph1 = data?.paragraph_1 || `${EVENT.org} Startup & Business Launch brings together **promising ideas**, executing startups, operating businesses, entrepreneurs, industry experts and **strategic partners** on one curated platform. The objective goes beyond investment selected ventures may also receive access to management guidance, technology, networks, operational support and strategic expertise.`;
-  const paragraph2 = data?.paragraph_2 || `One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next.`;
+  const paragraph1 = data?.paragraph_1 || `${EVENT.org} Business Growth Forum brings together **promising ideas**, executing startups, operating businesses, entrepreneurs, industry experts and **strategic partners** on one curated platform — focused on non-education sectors. Selected ventures may receive access to management guidance, technology, networks, operational support and deal-specific capital connect.`;
+  const paragraph2 = data?.paragraph_2 || `One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next — with independent evaluation at every step.`;
   
   const introWords = data?.intro_words || INTRO_WORDS;
   const imageUrl = data?.image_url || IMAGES.networking;

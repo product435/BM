@@ -12,10 +12,15 @@ export default function Hero({
   eyebrow = "Capital. Capability. Connections.",
   titleLine1 = ["Where", "ideas"],
   titleLine2 = ["meet", "opportunity"],
-  subText = `A curated platform for founders, innovators, operating businesses, industry leaders and strategic partners to connect, build and scale. — in ${eventData.city}, on the ${eventData.date} — to explore what comes next.`,
-  primaryCtaText = "Register now",
-  secondaryCtaText = "Explore the event",
+  subText,
+  primaryCtaText = "Register for the event",
+  secondaryCtaText = "Explore the forum",
+  safetyLine = "BMI is an independent non-education business growth platform.",
 }) {
+  const resolvedSub =
+    subText ||
+    `A curated platform for Early Innovators, Founders, Operating Businesses, Industry Leaders and Strategic Partners to connect, build and scale — in ${eventData.city}, on the ${eventData.date}. Focused on non-education businesses.`;
+
   return (
     <section className="hero" id="home" aria-label="Event introduction">
       <div className="hero-media">
@@ -62,13 +67,7 @@ export default function Hero({
         </Reveal>
 
         <Reveal delay={220}>
-          <p className="hero-sub">
-            A curated platform for Students, Founders, Operating
-            Businesses, Industry Leaders and Strategic Partners to connect,
-            build and scale, In{" "}
-            <strong>{eventData.city}</strong>, on the{" "}
-            <strong>{eventData.date}</strong> to explore what comes next.
-          </p>
+          <p className="hero-sub">{resolvedSub}</p>
         </Reveal>
 
         <Reveal delay={340}>
@@ -83,6 +82,12 @@ export default function Hero({
               {secondaryCtaText}
             </button>
           </div>
+        </Reveal>
+
+        <Reveal delay={420}>
+          <p className="hero-safety" style={{ marginTop: "1.25rem", fontSize: "0.8125rem", opacity: 0.78, maxWidth: "36rem", lineHeight: 1.45 }}>
+            {safetyLine}
+          </p>
         </Reveal>
       </div>
 

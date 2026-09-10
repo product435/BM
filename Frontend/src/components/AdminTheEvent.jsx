@@ -41,11 +41,11 @@ export default function AdminTheEvent() {
   const [formData, setFormData] = useState({
     eyebrow: '01 — The Event',
     title: 'More than an event. <span class="t-italic t-emerald">A place</span> where ambition meets opportunity.',
-    paragraph_1: 'BMI Event Startup & Business Launch brings together **promising ideas**...',
-    paragraph_2: 'One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next.',
-    intro_words: 'Connections, Learning, Funding, Scaling, Innovation, Mentorship',
+    paragraph_1: 'BMI Business Growth Forum brings together **promising ideas**, executing startups, operating businesses, entrepreneurs, industry experts and **strategic partners** on one curated platform — focused on non-education sectors. Selected ventures may receive access to management guidance, technology, networks, operational support and deal-specific capital connect.',
+    paragraph_2: 'One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next — with independent evaluation at every step.',
+    intro_words: 'Connections, Learning, Capital Connect, Scaling, Innovation, Mentorship',
     image_url: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-    media_headline: 'Funding is only the beginning',
+    media_headline: 'Capital. Capability. Connections.',
     media_pills: 'CAPITAL, MANAGEMENT, TECHNOLOGY, OPERATIONS, NETWORK, GROWTH, CONVERSATIONS, REAL CONNECTIONS',
     media_location: 'Jaipur, Rajasthan',
     stats: [
@@ -204,7 +204,7 @@ export default function AdminTheEvent() {
                     </div>
                     <div>
                       <label style={labelStyle}>Intro Words List (Comma separated)</label>
-                      <input name="intro_words" value={formData.intro_words} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Connections, Learning, Funding" />
+                      <input name="intro_words" value={formData.intro_words} onChange={handleInputChange} style={inputStyle} placeholder="e.g. Connections, Learning, Capital Connect" />
                     </div>
                   </div>
                 </div>

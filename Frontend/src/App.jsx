@@ -20,6 +20,10 @@ import AdminLogin from "./components/AdminLogin.jsx";
 import UpdatePassword from "./components/UpdatePassword.jsx";
 import AdminDashboard from "./components/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Compliance from "./pages/Compliance.jsx";
+import Privacy from "./pages/Privacy.jsx";
+import Terms from "./pages/Terms.jsx";
+import Contact from "./pages/Contact.jsx";
 import { SiteProvider } from "./context/SiteContext.jsx";
 import { AdminThemeProvider } from "./context/AdminThemeContext.jsx";
 import { supabase } from "./lib/supabase.js";
@@ -156,6 +160,10 @@ export default function App() {
           <AuthListener />
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/compliance" element={<Compliance />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/update-password" element={<UpdatePassword />} />
             <Route path="/admin" element={<ProtectedRoute />}>

@@ -29,10 +29,10 @@ export default function AdminHero() {
     eyebrow: 'Capital. Capability. Connections.',
     titleLine1: 'Where ideas',
     titleLine2: 'meet opportunity',
-    subText: 'A curated platform for founders, innovators, operating businesses, industry leaders and strategic partners to connect, build and scale. — in Jaipur, on the 20th — to explore what comes next.',
-    primaryCtaText: 'Register now',
-    secondaryCtaText: 'Explore the event',
-    ticker: 'Startup Pitches, Investment Conversations, Business Networking, Student Ideas, E-Sales, Innovation',
+    subText: 'A curated platform for Early Innovators, Founders, Operating Businesses, Industry Leaders and Strategic Partners to connect, build and scale — in Jaipur, on the 20th September. Focused on non-education businesses.',
+    primaryCtaText: 'Register for the event',
+    secondaryCtaText: 'Explore the forum',
+    ticker: 'Founder Pitches, Capital Connect, Business Networking, Early Ideas, Strategy Sessions, Innovation',
     heroImage: '/videos/apna_jaipur.mp4'
   });
 

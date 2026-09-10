@@ -1,13 +1,14 @@
 // ─────────────────────────────────────────────────────────────
-// EVENT CONFIGURATION — single source of truth for event copy.
-// Edit everything here; the UI reads from this file only.
-// Anything still being confirmed is marked as such and shown
-// honestly in the interface.
+// EVENT CONFIGURATION — SHA-safe single source of truth for event copy.
+// BMI Business Growth Forum — independent non-education platform.
+// Edit everything here; the UI reads from this file.
 // ─────────────────────────────────────────────────────────────
 
 export const EVENT = {
   org: "BMI",
   orgFull: "BMI Presents",
+  officialName: "BMI Business Growth Forum Jaipur 2026",
+  tagline: "Capital, Strategy and Scale for Non-Education Businesses",
   city: "Jaipur",
   cityLong: "Jaipur, Rajasthan",
   date: "20th September",
@@ -42,18 +43,25 @@ export const NAV_LINKS = [
 ];
 
 export const HERO_TICKER = [
-  "Startup Pitches",
-  "Investment Conversations",
+  "Founder Pitches",
+  "Capital Connect",
   "Business Networking",
-  "Student Ideas",
-  "E-Sales",
+  "Early Ideas",
+  "Strategy Sessions",
   "Innovation",
 ];
 
-export const INTRO_WORDS = ["IDEAS", "STARTUPS", "NETWORKING", "INVESTMENT", "INNOVATION", "MENTORSHIP"];
+export const INTRO_WORDS = [
+  "IDEAS",
+  "STARTUPS",
+  "NETWORKING",
+  "CAPITAL CONNECT",
+  "INNOVATION",
+  "MENTORSHIP",
+];
 
 export const INTRO_MEDIA_CAPTION = {
-  headline: "Funding is only the beginning",
+  headline: "Capital. Capability. Connections.",
   pills: [
     "Capital",
     "Management",
@@ -85,15 +93,15 @@ export const WHY_ITEMS = [
     index: "02",
     title: "Business Networking",
     description:
-      "Founders, operators, students and investors in one place the conversations here tend to outlive the event itself.",
+      "Founders, operators, early innovators and partners in one place — the conversations here tend to outlive the event itself.",
     tags: ["Founders", "Operators", "Peers"],
   },
   {
     index: "03",
     title: "Ideas & Innovation",
     description:
-      "From early student ideas to scaling businesses see what is being built and where the energy in the event is pointing.",
-    tags: ["Ideas", "E-Sales", "New Models"],
+      "From early-stage ideas to scaling businesses — see what is being built and where the energy in the event is pointing.",
+    tags: ["Ideas", "Growth", "New Models"],
   },
   {
     index: "04",
@@ -104,18 +112,18 @@ export const WHY_ITEMS = [
   },
   {
     index: "05",
-    title: "Funding Conversations",
+    title: "Capital Connect Conversations",
     description:
-      "Where promising ideas meet opportunity. Explore what funding conversations actually look like and how to be ready for yours.",
-    tags: ["Funding", "Investment", "Readiness"],
+      "Where promising ideas meet opportunity. Explore how deal-specific introductions work and how to be ready for yours — with independent evaluation at every step.",
+    tags: ["Capital Connect", "Readiness", "Evaluation"],
   },
 ];
 
 export const EXPERIENCE_STEPS = [
   {
     index: "01",
-    title: "Beyond Funding",
-    description: "Capital can be combined with practical business support.",
+    title: "Beyond Capital Alone",
+    description: "Capital connect can be combined with practical business support.",
   },
   {
     index: "02",
@@ -153,12 +161,12 @@ export const EXPERIENCE_HIGHLIGHTS = [
   {
     index: "04",
     title: "Expert Clinic",
-    description: "Personalized advice from industry specialists.",
+    description: "Personalized guidance from industry specialists.",
   },
   {
     index: "05",
-    title: "Investment Conversations",
-    description: "Connect with investors and explore next steps.",
+    title: "Capital Connect Sessions",
+    description: "Deal-specific introductions — each participant decides independently.",
   },
 ];
 
@@ -170,17 +178,17 @@ export const WHAT_TO_EXPECT = [
 ];
 
 export const EXPERIENCE_CLOSING_LINE =
-  "From arrival to opportunity — BMI is designing an experience built for serious founders and growth focused businesses.";
+  "From arrival to opportunity — BMI is designing an experience built for serious founders and growth focused non-education businesses.";
 
 export const CATEGORIES = [
   {
     id: "student",
     index: "01",
-    title: "Student",
-    tagline: "For ambitious students & emerging ideas",
+    title: "Early Innovator",
+    tagline: "For ambitious early-stage ideas from non-education sectors",
     description:
-      "Walk in with your idea however early it is. This is where it meets its first audience and its first real questions.",
-    cta: "Register as student",
+      "Walk in with your idea however early it is. This is where it meets its first audience and its first real questions — focused on non-education businesses.",
+    cta: "Register as early innovator",
   },
   {
     id: "visitor",
@@ -188,7 +196,7 @@ export const CATEGORIES = [
     title: "Visitor",
     tagline: "For those who want to be in the event",
     description:
-      "No pitch, no pressure. Just the best seats in the house for ideas, investments and honest conversations.",
+      "No pitch, no pressure. Just the best seats in the house for ideas, capital-connect conversations and honest business dialogue.",
     cta: "Register as visitor",
   },
   {
@@ -197,7 +205,7 @@ export const CATEGORIES = [
     title: "Entrepreneur",
     tagline: "For founders building something real",
     description:
-      "Show your business to investors, operators and peers. Come for the pitch leave with the connections.",
+      "Show your business to operators, peers and interested participants. Come for the pitch — leave with the connections.",
     cta: "Register as entrepreneur",
   },
   {
@@ -218,9 +226,8 @@ export const CATEGORY_SHORT = {
   businessTycoon: "Champion the next generation",
 };
 
-// Single source of truth for registration fees per category — demo/
-// configurable values, change here only. Student stays free; the other
-// three are paid. Amounts are in INR.
+// Single source of truth for registration fees per category.
+// Fees are for event participation only — not investment or capital contribution.
 export const REGISTRATION_FEES = {
   student: 0,
   visitor: 500,
@@ -228,15 +235,11 @@ export const REGISTRATION_FEES = {
   businessTycoon: 2000,
 };
 
-// Placeholder payment UPI target for the demo QR — swap for the real
-// payee/VPA once a payment gateway is wired up by the backend team.
 export const PAYMENT_UPI_ID = "bmipresents@upi";
 
-// Floating WhatsApp button target — swap WHATSAPP_NUMBER for the real
-// contact number (international format, digits only, no + or spaces,
-// e.g. "919876543210") once it's confirmed.
 export const WHATSAPP_NUMBER = "919752430783";
-export const WHATSAPP_MESSAGE = "Hello! I'm interested in the BMI Startup & Business Event in Jaipur. I need help with registration. Please guide me.";
+export const WHATSAPP_MESSAGE =
+  "Hello! I'm interested in the BMI Business Growth Forum in Jaipur. I need help with registration. Please guide me.";
 
 export const FUNDING_AUDIENCE = [
   {
@@ -271,8 +274,8 @@ export const BMI_SUPPORT_MODEL = {
   items: [
     {
       index: "01",
-      title: "Potential Investment",
-      description: "Stage appropriate capital support by BMI.",
+      title: "Stage-Appropriate Capital Connect",
+      description: "Deal-specific introductions after screening — no pooled funds or guaranteed outcomes.",
     },
     {
       index: "02",
@@ -300,23 +303,23 @@ export const BMI_SUPPORT_MODEL = {
 export const HOW_IT_WORKS = [
   {
     index: "01",
-    title: "Register",
-    description: "Tell us you're coming pick the category that matches how you want to show up.",
+    title: "Apply",
+    description: "Register and pick the category that matches how you want to show up.",
   },
   {
     index: "02",
-    title: "Choose your category",
-    description: "Students, Visitor, Entrepreneur and Business Tycoon. Each path has its own place in the event.",
+    title: "Screen",
+    description: "We review sector fit and compliance — non-education focus and conflict checks.",
   },
   {
     index: "03",
-    title: "Share your details",
-    description: "A short form. Your idea, your business, or simply your interest in being there.",
+    title: "Evaluate",
+    description: "Share your idea, business, or interest. Selected paths may proceed to deeper review.",
   },
   {
     index: "04",
-    title: "Join the experience",
-    description: "We confirm your seat. You show up on the 20th September and make the event count.",
+    title: "Connect & Grow",
+    description: "Join the forum on 20th September — network, learn, and explore next steps.",
   },
 ];
 
@@ -328,22 +331,22 @@ export const QA_FAQ = [
   {
     question: "Who can apply to pitch?",
     answer:
-      "Founders, startups and operating businesses with a clear idea, product, service or growth opportunity can apply. Applications are reviewed based on relevance and readiness.",
+      "Founders, startups and operating businesses in non-education sectors with a clear idea, product, service or growth opportunity can apply. Applications are reviewed based on relevance, readiness and compliance screening.",
   },
   {
     question: "Is there an application fee?",
     answer:
-      "Any applicable registration or participation fee will be communicated clearly during the registration process.",
+      "Any applicable registration or participation fee will be communicated clearly during the registration process. Fees are for event participation only — not an investment or capital contribution.",
   },
   {
     question: "How are startups selected?",
     answer:
-      "Applications are reviewed based on stage, clarity, business potential, execution readiness and fit with the event's evaluation criteria.",
+      "Applications are reviewed based on stage, clarity, business potential, execution readiness, sector fit and the event's evaluation criteria. Restricted education/coaching sectors may be held or declined.",
   },
   {
-    question: "Do investors get materials in advance?",
+    question: "Do interested participants get materials in advance?",
     answer:
-      "Relevant venture information may be shared with selected investors and evaluators before scheduled pitch or discussion sessions, where appropriate.",
+      "Relevant venture information may be shared with selected evaluators before scheduled pitch or discussion sessions, where appropriate. Every participant decides independently.",
   },
   {
     question: "Can I attend without pitching?",
@@ -351,7 +354,7 @@ export const QA_FAQ = [
       "Yes. Participants may attend for learning, networking, expert interactions and business conversations without pitching, depending on the selected registration category.",
   },
   {
-    question: "Is the summit streamed?",
+    question: "Is the forum streamed?",
     answer:
       "Streaming or digital access details will be announced separately if available.",
   },
@@ -361,32 +364,31 @@ export const HIGHLIGHTS = [
   "Startup Ideas",
   "Business Insights",
   "Networking",
-  "Funding Opportunities",
+  "Capital Connect",
   "Scaling Businesses",
-  "E-Sales",
-  "Student Ideas",
+  "Strategy",
+  "Early Ideas",
   "Innovation",
 ];
 
 // ─────────────────────────────────────────────────────────────
 // EVENT AGENDA — proposed schedule, subject to change.
-// Single source of truth: edit time/title/description here only.
 // ─────────────────────────────────────────────────────────────
 
 export const EVENT_AGENDA = [
   { time: "09:00 AM", title: "Registration & Founder Coffee", description: "Networking and welcome refreshments" },
   { time: "09:45 AM", title: "BMI Launch AV", description: "The journey begins" },
-  { time: "10:00 AM", title: "Opening & BMI Vision", description: "Setting the vision for a new era of entrepreneurship" },
-  { time: "10:20 AM", title: "Keynote: Brajesh Maheshwari", description: "From Vision to Execution" },
+  { time: "10:00 AM", title: "Opening & BMI Vision", description: "Setting the vision for responsible business growth" },
+  { time: "10:20 AM", title: "Keynote: Brajesh Maheshwari", description: "Business Building, Leadership and Growth Thinking" },
   { time: "10:45 AM", title: "Aman Maheshwari Session", description: "The New Generation of Entrepreneurship" },
   { time: "11:05 AM", title: "Business Leaders Panel", description: "Industry insights, opportunities and the road ahead" },
-  { time: "11:45 AM", title: "BMI Idea Lab", description: "Student innovators pitch their ideas" },
+  { time: "11:45 AM", title: "BMI Idea Lab", description: "Early innovators pitch non-education ideas" },
   { time: "12:20 PM", title: "BMI Build — Startup Pitches", description: "Early stage startups pitch to experts" },
   { time: "01:30 PM", title: "Founder & Business Networking Lunch", description: "Connections over curated lunch" },
   { time: "02:30 PM", title: "Vikas Patel Session", description: "AI for Business: From Hype to Execution" },
   { time: "03:00 PM", title: "BMI Scale — Business Presentations", description: "Operating businesses present growth opportunities" },
   { time: "04:00 PM", title: "Expert Clinics & Networking", description: "1:1 expert interactions and ecosystem connections" },
-  { time: "04:30 PM", title: "BMI Investment Event", description: "Top founders and businesses in closed door evaluation" },
+  { time: "04:30 PM", title: "BMI Capital Connect Session", description: "Top founders and businesses in closed-door evaluation" },
   { time: "05:30 PM", title: "Recognition & Diligence Selections", description: "Shortlisted ventures announced for next stage" },
   { time: "06:00 PM", title: "BMI Future Roadmap & Closing", description: "What's next for founders and the ecosystem" },
 ];
@@ -409,12 +411,12 @@ export const EXPERIENCE_SPECIAL = [
   },
   {
     index: "04",
-    title: "Investment Opportunities",
-    description: "Get evaluated for potential investment and support.",
+    title: "Deal-Specific Opportunities",
+    description: "Get evaluated for capital-connect and support — independent decisions only.",
   },
   {
     index: "05",
-    title: "Beyond Funding",
+    title: "Beyond Capital Alone",
     description: "Access management, technology, operations and market support.",
   },
 ];
@@ -427,11 +429,10 @@ export const EVENT_VALUE_STRIP = [
 ];
 
 // ─────────────────────────────────────────────────────────────
-// SECTOR FOCUS — high-growth sectors, shown as cards on the
-// final CTA section. Single source of truth: edit here only.
+// SECTOR FOCUS — non-education high-growth sectors.
 // ─────────────────────────────────────────────────────────────
 
-export const SECTOR_FOCUS_HEADING = "Investing in India's tomorrow.";
+export const SECTOR_FOCUS_HEADING = "Building India's tomorrow.";
 
 export const SECTOR_FOCUS = [
   {
@@ -498,20 +499,54 @@ export const SECTOR_FOCUS = [
 
 // ─────────────────────────────────────────────────────────────
 // REGISTRATION FORM — field definitions per category.
-// Backend-ready: each field maps to a plain payload key on submit.
+// Includes SHA screening fields on every track.
 // ─────────────────────────────────────────────────────────────
 
-// Fallback options for the Entrepreneur/Business Tycoon category
-// dropdowns, used only when a field's own `options` (e.g. from
-// form_config in Supabase) isn't provided. Admins can later replace
-// or extend this list from the backend without any code change —
-// RegistrationForm renders whatever `field.options` array it's given.
-// Both dropdowns share this exact list, including "Other".
-export const CATEGORY_OPTIONS = ["AI & Tech", "Healthcare", "Manufacturing", "Agritech", "Other"];
+export const CATEGORY_OPTIONS = [
+  "AI & Tech",
+  "Healthcare",
+  "Manufacturing",
+  "Agritech",
+  "SaaS & Digital",
+  "Consumer & FMCG",
+  "Energy & Climate",
+  "Fintech",
+  "Logistics",
+  "Mobility & EV",
+  "Retail & D2C",
+  "Other",
+];
 
-// Kept as an alias so any other import of the old name still resolves
-// to the same shared list.
 export const BUSINESS_CATEGORY_OPTIONS = CATEGORY_OPTIONS;
+
+export const YES_NO_OPTIONS = ["No", "Yes"];
+
+/** Shared SHA screening fields appended to every category form. */
+export const COMPLIANCE_FIELDS = [
+  {
+    name: "businessSector",
+    label: "Business Sector",
+    type: "select",
+    required: true,
+    options: CATEGORY_OPTIONS,
+  },
+  {
+    name: "educationConnection",
+    label:
+      "Are you connected with coaching, test-prep, education, edtech or student services?",
+    type: "select",
+    required: true,
+    options: YES_NO_OPTIONS,
+  },
+  {
+    name: "allenConnection",
+    label:
+      "Do you have any current or past relation with Allen / ACIPL as employee, faculty, student, vendor, consultant, partner or ex-employee?",
+    type: "select",
+    required: true,
+    options: YES_NO_OPTIONS,
+  },
+];
 
 export const FORM_FIELDS = {
   student: [
@@ -528,8 +563,9 @@ export const FORM_FIELDS = {
       type: "textarea",
       required: true,
       rows: 4,
-      hint: "Your idea or what you hope to gain — two or three lines is plenty.",
+      hint: "Your idea (non-education sector) or what you hope to gain — two or three lines is plenty.",
     },
+    ...COMPLIANCE_FIELDS,
   ],
   entrepreneur: [
     { name: "founderName", label: "Founder Name", type: "text", required: true, autoComplete: "name" },
@@ -548,6 +584,7 @@ export const FORM_FIELDS = {
       hint: "What you build, who it serves, and the traction so far.",
     },
     { name: "website", label: "Website / LinkedIn (optional)", type: "url", required: false },
+    ...COMPLIANCE_FIELDS,
   ],
   businessTycoon: [
     { name: "contactPerson", label: "Contact Person Name", type: "text", required: true, autoComplete: "name" },
@@ -565,6 +602,7 @@ export const FORM_FIELDS = {
       rows: 4,
       hint: "What your business builds, and how you champion growth and innovation.",
     },
+    ...COMPLIANCE_FIELDS,
   ],
   visitor: [
     { name: "fullName", label: "Full Name", type: "text", required: true, autoComplete: "name" },
@@ -572,5 +610,6 @@ export const FORM_FIELDS = {
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
     { name: "role", label: "Role", type: "text", required: true },
+    ...COMPLIANCE_FIELDS,
   ],
 };
