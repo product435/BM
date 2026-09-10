@@ -60,7 +60,7 @@ INSERT INTO event_intro (
     'Funding is only the beginning',
     '["CAPITAL","MANAGEMENT","TECHNOLOGY","OPERATIONS","NETWORK","GROWTH","CONVERSATIONS","REAL CONNECTIONS"]',
     'Jaipur, Rajasthan',
-    '[{"value":"04","label":"WAYS TO PARTICIPATE"},{"value":"06+","label":"VOICES IN THE EVENT"},{"value":"01","label":"CITY — JAIPUR"},{"value":"TBA","label":"VENUE — ANNOUNCED SOON"}]',
+    '[{"value":"04","label":"WAYS TO PARTICIPATE"},{"value":"06+","label":"VOICES IN THE EVENT"},{"value":"01","label":"CITY — JAIPUR"},{"value":"STARDOM RESORT","label":"Jaipur, Rajasthan"}]',
     'Venue and capacity figures are being finalized details will be confirmed ahead of the event.'
 )
 ON CONFLICT (id) DO UPDATE SET 

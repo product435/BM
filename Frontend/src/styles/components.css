@@ -282,6 +282,44 @@
   color: var(--ink-950);
 }
 
+/* The Venue stat ("Stardom Resort") is always the last of the 4
+   INTRO_STATS entries — targeted by position, not a new class, so
+   the shared .intro-stat-value rule above (used by the 04/06+/01
+   numeric stats) is untouched; font-family, font-weight, color and
+   (on desktop, below) line-height all still come directly from that
+   shared rule, which is what actually makes this "the same stat
+   value style" rather than a lookalike copy — only font-size differs.
+
+   Desktop only: the numeric stats' own font-size (up to 49.6px) does
+   not fit "Stardom Resort" on one line in its actual column — measured
+   directly on the real rendered .intro-stat-value element (not a
+   synthetic copy, which under-measured the real letter-spacing/kerning
+   and gave a false "it fits" reading the first time this was tried):
+   the venue column's available text width is ~191px at 1024px and
+   plateaus at ~265px from about 1366px up, and the largest font-size
+   that stays under that width at each of those points is ~26px and
+   ~36.6px respectively. clamp(1.5rem, 2.4vw, 2.25rem) = 24px-36px
+   stays safely under both measured limits at every width in between,
+   so "Stardom Resort" reliably stays on one line without a hardcoded
+   fixed width or negative margin. line-height 1 matches the numeric
+   stats exactly now that this never wraps on desktop. */
+.intro-stat:last-child .intro-stat-value {
+  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
+  line-height: 1;
+}
+
+/* Mobile keeps its own separately-tuned size from the earlier
+   "reduce the oversized venue value on mobile" fix — line-height
+   1.15 (not the desktop rule's 1) still applies there since
+   "Stardom"/"Resort" can wrap to 2 lines at these narrower widths;
+   unchanged here to avoid any mobile regression. */
+@media (max-width: 640px) {
+  .intro-stat:last-child .intro-stat-value {
+    font-size: clamp(1.375rem, 5vw, 1.5rem);
+    line-height: 1.15;
+  }
+}
+
 .intro-stat-value em {
   font-style: italic;
   color: var(--emerald-700);
@@ -2051,8 +2089,21 @@
   color: var(--stone-600);
 }
 
+/* grid-template-columns: minmax(0, 1fr) — without an explicit column
+   track, a `display: grid` container's single implicit column
+   defaults to `auto`, which sizes to its content's own intrinsic
+   (max-content) width rather than being constrained to the
+   container's actual available width. That was invisible here as
+   long as every child (fields, the submit button, etc.) had a modest
+   intrinsic width, but .reg-field-grid — itself a 2-column grid —
+   has real intrinsic width, and an unconstrained auto column let it
+   stretch .reg-form (and everything inside it) wider than
+   .reg-panel's own content box, overflowing the page at narrow
+   viewports. minmax(0, 1fr) forces the column to respect the
+   container's real width instead. */
 .reg-form {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.9rem;
 }
 
@@ -2063,6 +2114,7 @@
 @media (max-width: 1024px) {
   .reg-form-collapse {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 0fr;
     opacity: 0;
     transition: grid-template-rows 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
@@ -2070,6 +2122,7 @@
 
   .reg-form-collapse>* {
     min-height: 0;
+    min-width: 0;
     overflow: hidden;
   }
 
@@ -2080,13 +2133,40 @@
   }
 }
 
+/* Registration fields — 2-column grid on both desktop and mobile
+   (deliberately not stacked at any width; see the narrow-viewport
+   tier below for the only adjustment made there: smaller gap/
+   font/padding, not a column-count change). minmax(0, 1fr) on both
+   columns is what actually keeps this safe at narrow widths — a bare
+   `1fr` track has an implicit min-width based on its content's
+   intrinsic size, which is exactly what lets a long unbroken label
+   or value push a track (and the whole grid) wider than the form,
+   causing horizontal overflow; minmax(0, 1fr) removes that floor so
+   the track can shrink to the column's actual share of the grid and
+   wrapping/ellipsis rules on the field's own content do the rest. */
+.reg-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1.5rem;
+  row-gap: 1.9rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 /* Floating-label field */
 .field {
   position: relative;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .field-input {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   background: transparent;
   border: 0;
   border-bottom: 1px solid var(--line-dark);
@@ -2140,11 +2220,28 @@
    overflow-y: auto lets content beyond the visible height scroll
    vertically, inside the field's own border, rather than being
    clipped or pushing the layout. */
-textarea.field-input {
+/* .field-textarea: a dedicated, textarea-only class (applied
+   alongside .field-input in RegistrationForm.jsx only when the field
+   actually renders as a <textarea>) rather than relying solely on the
+   tag-qualified `textarea.field-input` selector. Both approaches carry
+   the same specificity in practice and this codebase's own live
+   testing (dev server, preview server, production build; desktop and
+   mobile; Student/Entrepreneur/Business Tycoon) found no overlap with
+   the tag-qualified version — but a dedicated class removes any doubt
+   about selector/cascade ambiguity and matches the class-name pattern
+   requested, so the fix is self-contained and doesn't depend on
+   `textarea` + `.field-input` both being present on the same element
+   in a specific order. Every property below is additive to the shared
+   `.field-input` base rule (width, background, border, color, font),
+   not a replacement of it — this only fixes the sizing/wrapping
+   behavior specific to a multi-line field. */
+.field-textarea {
   box-sizing: border-box;
+  width: 100%;
   resize: vertical;
   height: 6.6rem;
   padding-top: 1.55rem;
+  line-height: 1.5;
   overflow-x: hidden;
   overflow-y: auto;
   white-space: pre-wrap;
@@ -2157,10 +2254,10 @@ textarea.field-input {
    edge). Mobile keeps resize: vertical from the base rule above, so
    touch users can still manually grow the field further if they want
    — this is purely about disabling the drag-to-resize handle's visual
-   affordance on desktop/mouse input, not about height (height is now
-   the same 6.6rem on both, set once in the base rule above). */
+   affordance on desktop/mouse input, not about height (height is the
+   same 6.6rem on both, set once in the base rule above). */
 @media (min-width: 641px) {
-  textarea.field-input {
+  .field-textarea {
     resize: none;
   }
 }
@@ -2203,6 +2300,7 @@ textarea.field-input {
   position: absolute;
   left: 0;
   top: 1.35rem;
+  max-width: 100%;
   color: var(--stone-400);
   font-size: 0.95rem;
   pointer-events: none;
@@ -2210,8 +2308,28 @@ textarea.field-input {
   transition: transform 0.3s ease, color 0.3s ease, font-size 0.3s ease;
 }
 
+/* The floated/active state used to force the label onto a single
+   line with an ellipsis — that read fine for short labels, but on a
+   real focused field (e.g. Submit correctly auto-focusing the first
+   invalid field, "Full Name") a label as short as "Full Name *" was
+   still measured getting truncated to "FULL NAME…" at mobile's
+   narrow 2-column widths, and longer labels like "Business Category"
+   or "Contact Person Name" truncated into unreadable fragments
+   ("BUSINESS …", "CONTACT …"). Wrapping up to 2 lines instead keeps
+   every label fully readable; -webkit-line-clamp (not a plain
+   max-height) is what stops a label beyond 2 lines from silently
+   overflowing its box, and .field-input's own padding-top (below,
+   mobile-specific) is sized to leave room for those 2 lines so the
+   floated label never runs into the input's own typed value/baseline
+   underneath it. */
 .field-input:focus~.field-label,
-.field-input:not(:placeholder-shown)~.field-label {
+.field-input:not(:placeholder-shown)~.field-label,
+.field-label--floated {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  overflow: hidden;
   transform: translateY(-1rem) scale(0.68);
   transform-origin: left top;
   letter-spacing: 0.2em;
@@ -2220,18 +2338,17 @@ textarea.field-input {
   color: var(--brass-300);
 }
 
-/* Category dropdowns (Industry / Category, Business Category): a
-   <select> has no :placeholder-shown state for the input/textarea
-   floating-label trick above to key off, so its label is kept
-   permanently in the floated position instead — same end style as
-   every other filled field, just without the animation. */
-.field-label--floated {
-  transform: translateY(-1rem) scale(0.68);
-  transform-origin: left top;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: var(--brass-300);
+/* Mobile only: the narrowest 2-column labels ("Contact Person Name")
+   are 3 whole words and don't fit a 2-line clamp even after
+   wrapping — confirmed live: 2 lines dropped "Name *" entirely
+   behind an ellipsis. 3 lines fits every label in this form at
+   mobile's column widths; padding-top below is sized to match. */
+@media (max-width: 640px) {
+  .field-input:focus~.field-label,
+  .field-input:not(:placeholder-shown)~.field-label,
+  .field-label--floated {
+    -webkit-line-clamp: 3;
+  }
 }
 
 .field.has-error .field-label--floated {
@@ -2473,6 +2590,81 @@ select.field-input option:focus {
   height: 0.4rem;
   background: currentColor;
   flex: none;
+}
+
+/* Mobile tuning for the 2-column registration field grid — kept as
+   ONE block at the end of this section, after every base rule it
+   overrides (.reg-field-grid, .field-input, .field-textarea,
+   .field-label, .category-select-trigger). This positioning is not
+   cosmetic: a media query adds no specificity of its own, so at
+   equal specificity the LAST rule in source order wins regardless of
+   which one is wrapped in @media — three separate overrides here
+   were previously scattered earlier in the file (nearer each
+   property's own first mention) and got silently discarded by a
+   later unconditional base rule for the same property, which is
+   exactly what caused real typed text to visibly overlap 2-3-line
+   floated labels on mobile. Consolidating everything after its base
+   rules removes that whole class of bug rather than patching each
+   instance separately.
+
+   The 2-column layout itself is never switched to a single column
+   here — only gap, font size, input padding and label sizing are
+   trimmed so two columns of labels like "College / Institution" and
+   "Short Description" stay readable without the row heights or side
+   gutters ballooning on a narrow screen.
+
+   font-size is reduced further here (0.72rem, down from the base
+   0.95rem) specifically for the floated/active label state, and
+   letter-spacing is tightened from 0.2em to 0.08em — together these
+   meaningfully shrink a 3-word label's rendered width/height instead
+   of just wrapping it, which is what let the previous fix's 3-line
+   clamp only barely fit even the longest label ("Contact Person
+   Name *") without still crowding the input beneath it. padding-top
+   is increased to reserve real room for that shorter-but-still-
+   multi-line label above the input/textarea's own typed value. */
+@media (max-width: 640px) {
+  .reg-field-grid {
+    column-gap: 0.9rem;
+    row-gap: 1.4rem;
+  }
+
+  .field-input {
+    padding: 2.6rem 0 0.65rem;
+    font-size: 0.9rem;
+  }
+
+  /* Height (not just padding-top) is raised here too — the shared
+     mobile padding-top above already reserves room for the floated
+     label, but on a fixed-height textarea that same padding also
+     eats into the space available for actually-typed content before
+     the browser auto-scrolls the textarea to keep the caret visible.
+     That auto-scroll moves the content, not the padding, so once it
+     kicks in the label — which sits outside the textarea's own
+     scrollable area — ends up visually overlapping whatever text the
+     scroll brings to the top, no matter how much padding-top is set
+     (confirmed live: even 3.4rem of padding-top didn't stop it, since
+     the real problem was the box being too short for 2-3 real
+     sentences in the first place, not the padding amount). 7.3rem
+     leaves room for label clearance plus about 3 lines of typed
+     content — enough for the hint's own "two or three lines is
+     plenty" guidance — without triggering that scroll in normal use;
+     resize: vertical (desktop's own resize:none override elsewhere is
+     unaffected) still lets the user grow it further for longer text. */
+  .field-textarea {
+    height: 7.3rem;
+    padding-top: 2.6rem;
+  }
+
+  .field-input:focus~.field-label,
+  .field-input:not(:placeholder-shown)~.field-label,
+  .field-label--floated {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* Category dropdown trigger's own padding-right (for the chevron)
+     is untouched — only the shared top/bottom padding above applies,
+     inherited via the .field-input class every trigger also carries. */
 }
 
 /* Registration Fees — read-only display field, styled like the

@@ -70,7 +70,7 @@ export const INTRO_STATS = [
   { value: "04", label: "Ways to participate" },
   { value: "06+", label: "Voices in the event" },
   { value: "01", label: "City — Jaipur" },
-  { value: "TBA", label: "Venue — announced soon" },
+  { value: "Stardom Resort", label: "Venue — Jaipur Rajasthan" },
 ];
 
 export const WHY_ITEMS = [

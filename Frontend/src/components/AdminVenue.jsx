@@ -10,7 +10,7 @@ const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 export default function AdminVenue() {
   const { C } = React.useContext(AdminThemeContext);
-  
+
   const inputStyle = {
     width: '100%',
     padding: '10px 12px',
@@ -23,11 +23,11 @@ export default function AdminVenue() {
     fontFamily: SANS,
   };
 
-  const labelStyle = { 
-    display: 'block', 
-    fontSize: '12px', 
-    color: C.stone400, 
-    marginBottom: '6px' 
+  const labelStyle = {
+    display: 'block',
+    fontSize: '12px',
+    color: C.stone400,
+    marginBottom: '6px'
   };
 
   const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ export default function AdminVenue() {
     image_caption: 'The Pink City — tradition with an eye on tomorrow',
     event_date: '20th',
     location: 'Jaipur',
-    venue_status: 'To be announced',
+    venue_status: 'Stardom Resort',
     participation_text: 'By registration',
     venue_note: 'Precise location will be shared with confirmed attendees to maintain the privacy of the gathering.'
   });
@@ -81,7 +81,7 @@ export default function AdminVenue() {
   const handleSave = async (e) => {
     e.preventDefault();
     setUploading(true);
-    
+
     let imageUrl = formData.image_url;
 
     if (fileToUpload) {
@@ -96,11 +96,11 @@ export default function AdminVenue() {
         setUploading(false);
         return;
       }
-      
+
       const { data: { publicUrl } } = supabase.storage
         .from('hero_media')
         .getPublicUrl(fileName);
-        
+
       imageUrl = publicUrl;
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
     }
@@ -117,7 +117,7 @@ export default function AdminVenue() {
       setMessage({ type: 'success', text: 'Venue content saved successfully!' });
       setFileToUpload(null);
     }
-    
+
     setUploading(false);
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
   };
@@ -126,7 +126,7 @@ export default function AdminVenue() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', background: C.ink950 }}>
       <main style={{ flex: 1, padding: '32px' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          
+
           <div>
             <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>CMS</p>
             <h2 style={{ fontFamily: SERIF, fontSize: '20px', color: C.ivory50, fontWeight: 600 }}>The Venue Management</h2>
@@ -135,7 +135,7 @@ export default function AdminVenue() {
           <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ flex: 1, background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px' }}>
               <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                
+
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
                   <div>
                     <label style={labelStyle}>Location</label>
@@ -177,7 +177,7 @@ export default function AdminVenue() {
                     <input name="participation_text" value={formData.participation_text} onChange={handleInputChange} style={inputStyle} />
                   </div>
                 </div>
-                
+
                 <div>
                   <label style={labelStyle}>Venue Footer Note</label>
                   <input name="venue_note" value={formData.venue_note} onChange={handleInputChange} style={inputStyle} />
@@ -199,7 +199,7 @@ export default function AdminVenue() {
                             <img src={previewImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           )
                         ) : (
-                           <ImageIcon size={20} color={C.stone500} />
+                          <ImageIcon size={20} color={C.stone500} />
                         )}
                       </div>
                       <div style={{ flex: 1 }}>
@@ -232,12 +232,12 @@ export default function AdminVenue() {
           <div style={{ marginTop: '20px' }}>
             <h3 style={{ fontFamily: SERIF, fontSize: '18px', color: C.ivory50, marginBottom: '16px' }}>Live Preview</h3>
             <div style={{ border: `1px solid ${C.brass500}`, borderRadius: '4px', overflow: 'hidden', position: 'relative', background: C.ink950 }}>
-               <JaipurSection 
-                 onRegister={() => {}} 
-                 onExploreCategories={() => {}}
-                 venueData={{...formData, image_url: previewImage}}
-               />
-               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
+              <JaipurSection
+                onRegister={() => { }}
+                onExploreCategories={() => { }}
+                venueData={{ ...formData, image_url: previewImage }}
+              />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
             </div>
           </div>
 

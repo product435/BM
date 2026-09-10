@@ -954,79 +954,82 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
               onSubmit={handleSubmit}
               noValidate
             >
-              {fields.map((field, fieldIndex) => {
-                const isLastField = fieldIndex === fields.length - 1;
-                const error = errors[field.name];
-                const isSelect = field.type === "select";
-                const inputProps = {
-                  id: `reg-${field.name}`,
-                  name: field.name,
-                  type: field.type === "textarea" || isSelect ? undefined : field.type,
-                  placeholder: isSelect ? undefined : " ",
-                  value: values[field.name] ?? "",
-                  onChange: handleChange(field),
-                  onBlur: handleBlur(field),
-                  onFocus: handleFocus(field),
-                  "aria-invalid": Boolean(error),
-                  "aria-describedby": error ? `reg-${field.name}-error` : undefined,
-                  autoComplete: field.autoComplete,
-                  inputMode: field.type === "tel" ? "numeric" : field.type === "email" ? "email" : undefined,
-                  maxLength: field.type === "tel" ? 10 : undefined,
-                };
-                const Tag = field.type === "textarea" ? "textarea" : isSelect ? "select" : "input";
+              <div className="reg-field-grid">
+                {fields.map((field) => {
+                  const error = errors[field.name];
+                  const isSelect = field.type === "select";
+                  const inputProps = {
+                    id: `reg-${field.name}`,
+                    name: field.name,
+                    type: field.type === "textarea" || isSelect ? undefined : field.type,
+                    placeholder: isSelect ? undefined : " ",
+                    value: values[field.name] ?? "",
+                    onChange: handleChange(field),
+                    onBlur: handleBlur(field),
+                    onFocus: handleFocus(field),
+                    "aria-invalid": Boolean(error),
+                    "aria-describedby": error ? `reg-${field.name}-error` : undefined,
+                    autoComplete: field.autoComplete,
+                    inputMode: field.type === "tel" ? "numeric" : field.type === "email" ? "email" : undefined,
+                    maxLength: field.type === "tel" ? 10 : undefined,
+                  };
+                  const Tag = field.type === "textarea" ? "textarea" : isSelect ? "select" : "input";
 
-                return (
-                  <div className={`field ${error ? "has-error" : ""}`.trim()} key={field.name}>
-                    {isSelect ? (
-                      <CategorySelect
-                        field={field}
-                        value={values[field.name] ?? ""}
-                        error={error}
-                        onSelect={(opt) =>
-                          handleChange(field)({ target: { value: opt } })
-                        }
-                        onBlur={handleBlur(field)}
-                        onFocus={handleFocus(field)}
-                        onTriggerMount={(node) => {
-                          if (!firstErrorRef.current) firstErrorRef.current = {};
-                          firstErrorRef.current[field.name] = node;
-                        }}
-                      />
-                    ) : (
-                      <Tag
-                        className="field-input"
-                        rows={field.rows}
-                        ref={(node) => {
-                          if (!firstErrorRef.current) firstErrorRef.current = {};
-                          firstErrorRef.current[field.name] = node;
-                        }}
-                        {...inputProps}
-                      />
-                    )}
-                    <label className={`field-label ${isSelect ? "field-label--floated" : ""}`.trim()} htmlFor={`reg-${field.name}`}>
-                      {field.label}
-                      {field.required ? " *" : ""}
-                    </label>
-                    {error ? (
-                      <p className="field-error" id={`reg-${field.name}-error`}>
-                        {error}
-                      </p>
-                    ) : field.hint ? (
-                      <p className="field-hint">{field.hint}</p>
-                    ) : null}
-                    {isLastField ? (
-                      <div className="reg-fee-block">
-                        <div className="field field--display">
-                          <p className="field-label field-label--static">Registration Fees *</p>
-                          <p className="reg-fee-value">
-                            {fee === 0 ? "Free" : `₹${fee.toLocaleString("en-IN")}`}
-                          </p>
-                        </div>
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              })}
+                  return (
+                    <div
+                      className={`field ${error ? "has-error" : ""}`.trim()}
+                      key={field.name}
+                    >
+                      {isSelect ? (
+                        <CategorySelect
+                          field={field}
+                          value={values[field.name] ?? ""}
+                          error={error}
+                          onSelect={(opt) =>
+                            handleChange(field)({ target: { value: opt } })
+                          }
+                          onBlur={handleBlur(field)}
+                          onFocus={handleFocus(field)}
+                          onTriggerMount={(node) => {
+                            if (!firstErrorRef.current) firstErrorRef.current = {};
+                            firstErrorRef.current[field.name] = node;
+                          }}
+                        />
+                      ) : (
+                        <Tag
+                          className={`field-input ${Tag === "textarea" ? "field-textarea" : ""}`.trim()}
+                          rows={field.rows}
+                          ref={(node) => {
+                            if (!firstErrorRef.current) firstErrorRef.current = {};
+                            firstErrorRef.current[field.name] = node;
+                          }}
+                          {...inputProps}
+                        />
+                      )}
+                      <label className={`field-label ${isSelect ? "field-label--floated" : ""}`.trim()} htmlFor={`reg-${field.name}`}>
+                        {field.label}
+                        {field.required ? " *" : ""}
+                      </label>
+                      {error ? (
+                        <p className="field-error" id={`reg-${field.name}-error`}>
+                          {error}
+                        </p>
+                      ) : field.hint ? (
+                        <p className="field-hint">{field.hint}</p>
+                      ) : null}
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="reg-fee-block">
+                <div className="field field--display">
+                  <p className="field-label field-label--static">Registration Fees *</p>
+                  <p className="reg-fee-value">
+                    {fee === 0 ? "Free" : `₹${fee.toLocaleString("en-IN")}`}
+                  </p>
+                </div>
+              </div>
 
               {showTeamSection ? (
                 <div className="reg-team">

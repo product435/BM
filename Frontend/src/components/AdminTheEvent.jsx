@@ -10,7 +10,7 @@ const SANS = '"Archivo","Helvetica Neue",sans-serif';
 
 export default function AdminTheEvent() {
   const { C } = React.useContext(AdminThemeContext);
-  
+
   const inputStyle = {
     width: '100%',
     padding: '10px 12px',
@@ -23,11 +23,11 @@ export default function AdminTheEvent() {
     fontFamily: SANS,
   };
 
-  const labelStyle = { 
-    display: 'block', 
-    fontSize: '12px', 
-    color: C.stone400, 
-    marginBottom: '6px' 
+  const labelStyle = {
+    display: 'block',
+    fontSize: '12px',
+    color: C.stone400,
+    marginBottom: '6px'
   };
 
   const sectionHeadingStyle = {
@@ -52,7 +52,7 @@ export default function AdminTheEvent() {
       { value: '04', label: 'WAYS TO PARTICIPATE' },
       { value: '06+', label: 'VOICES IN THE EVENT' },
       { value: '01', label: 'CITY — JAIPUR' },
-      { value: 'TBA', label: 'VENUE — ANNOUNCED SOON' }
+      { value: 'Stardom Resort', label: 'VENUE — Jaipur, Rajasthan' }
     ],
     footer_note: 'Venue and capacity figures are being finalized details will be confirmed ahead of the event.'
   });
@@ -111,7 +111,7 @@ export default function AdminTheEvent() {
   const handleSave = async (e) => {
     e.preventDefault();
     setUploading(true);
-    
+
     let imageUrl = formData.image_url;
 
     if (fileToUpload) {
@@ -126,11 +126,11 @@ export default function AdminTheEvent() {
         setUploading(false);
         return;
       }
-      
+
       const { data: { publicUrl } } = supabase.storage
         .from('hero_media')
         .getPublicUrl(fileName);
-        
+
       imageUrl = publicUrl;
       setFormData(prev => ({ ...prev, image_url: publicUrl }));
     }
@@ -163,7 +163,7 @@ export default function AdminTheEvent() {
       setFileToUpload(null);
       setPreviewData(payload); // Update live preview
     }
-    
+
     setUploading(false);
     setTimeout(() => setMessage({ type: '', text: '' }), 3000);
   };
@@ -172,7 +172,7 @@ export default function AdminTheEvent() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflowY: 'auto', background: C.ink950 }}>
       <main style={{ flex: 1, padding: '32px' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '28px' }}>
-          
+
           <div>
             <p style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: C.stone500, fontWeight: 700, marginBottom: '4px' }}>CMS</p>
             <h2 style={{ fontFamily: SERIF, fontSize: '20px', color: C.ivory50, fontWeight: 600 }}>The Event Management</h2>
@@ -181,7 +181,7 @@ export default function AdminTheEvent() {
           <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} style={{ flex: 1, background: C.ink800, border: `1px solid ${C.lineDark}`, borderRadius: '3px', padding: '28px' }}>
               <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                
+
                 {/* Introduction Text Block */}
                 <div>
                   <h3 style={sectionHeadingStyle}>Introduction Section</h3>
@@ -238,7 +238,7 @@ export default function AdminTheEvent() {
                               <img src={previewImage} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             )
                           ) : (
-                             <ImageIcon size={20} color={C.stone500} />
+                            <ImageIcon size={20} color={C.stone500} />
                           )}
                         </div>
                         <div style={{ flex: 1 }}>
@@ -263,17 +263,17 @@ export default function AdminTheEvent() {
                       <div key={index} style={{ background: C.ink900, padding: '12px', borderRadius: '3px', border: `1px solid ${C.lineDark}` }}>
                         <p style={{ fontSize: '10px', color: C.stone500, marginBottom: '8px' }}>Stat {index + 1}</p>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                          <input 
-                            value={stat.value} 
-                            onChange={(e) => handleStatChange(index, 'value', e.target.value)} 
-                            style={inputStyle} 
-                            placeholder="Value (e.g. 04 or TBA)" 
+                          <input
+                            value={stat.value}
+                            onChange={(e) => handleStatChange(index, 'value', e.target.value)}
+                            style={inputStyle}
+                            placeholder="Value (e.g. 04 or TBA)"
                           />
-                          <input 
-                            value={stat.label} 
-                            onChange={(e) => handleStatChange(index, 'label', e.target.value)} 
-                            style={inputStyle} 
-                            placeholder="Label (e.g. WAYS TO PARTICIPATE)" 
+                          <input
+                            value={stat.label}
+                            onChange={(e) => handleStatChange(index, 'label', e.target.value)}
+                            style={inputStyle}
+                            placeholder="Label (e.g. WAYS TO PARTICIPATE)"
                           />
                         </div>
                       </div>
@@ -311,9 +311,9 @@ export default function AdminTheEvent() {
           <div style={{ marginTop: '20px', paddingBottom: '40px' }}>
             <h3 style={{ fontFamily: SERIF, fontSize: '18px', color: C.ivory50, marginBottom: '16px' }}>Live Preview</h3>
             <div style={{ border: `1px solid ${C.brass500}`, borderRadius: '4px', overflow: 'hidden', position: 'relative', background: C.ink950 }}>
-               {/* We pass previewData down. If it's null, EventIntro will just fetch its own or use defaults. */}
-               <EventIntro previewData={previewData} />
-               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
+              {/* We pass previewData down. If it's null, EventIntro will just fetch its own or use defaults. */}
+              <EventIntro previewData={previewData} />
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100, pointerEvents: 'none', boxShadow: 'inset 0 0 0 4px rgba(198,164,98,0.5)' }} />
             </div>
           </div>
 

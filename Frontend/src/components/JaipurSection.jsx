@@ -15,7 +15,7 @@ export default function JaipurSection({
     image_caption: "The Pink City — tradition with an eye on tomorrow",
     event_date: "20th September",
     location: "Jaipur",
-    venue_status: "To be announced",
+    venue_status: "Stardom Resort",
     participation_text: "By registration",
     venue_note: "Precise location will be shared with confirmed attendees to maintain the privacy of the gathering."
   };
