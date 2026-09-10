@@ -30,7 +30,6 @@ const SANS = '"Archivo","Helvetica Neue",sans-serif';
 const NAV = [
   { name: 'Dashboard',        icon: LayoutDashboard },
   { name: 'Registrations',    icon: Users           },
-  { name: 'Review',           icon: ClipboardCheck  },
   { name: 'Payments',         icon: CreditCard      },
   { name: 'Event Registration', icon: ClipboardCheck},
   { name: 'Q&A Session',      icon: HelpCircle      },
@@ -529,7 +528,7 @@ export default function AdminDashboard() {
                                 {isUnread && <span style={{ marginTop: '5px', width: '6px', height: '6px', borderRadius: '50%', background: C.rose400, flexShrink: 0 }} />}
                                 <div style={{ minWidth: 0 }}>
                                   <p style={{ fontSize: '13px', color: C.ivory50, fontWeight: isUnread ? 600 : 400, marginBottom: '3px' }}>
-                                    New {trackLabel(row.track)} registration — {row.name}
+                                    New {trackLabel(row.track)} registration — {typeof row.name === 'object' && row.name !== null ? (row.name.name || 'Unknown') : row.name}
                                   </p>
                                   <p style={{ fontSize: '11px', color: C.stone500 }}>{timeAgo(row.created_at)}</p>
                                 </div>

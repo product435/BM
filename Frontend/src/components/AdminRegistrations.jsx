@@ -123,7 +123,8 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
 
   const filteredData = useMemo(() => {
     return data.filter(item => {
-      const matchSearch = item.name.toLowerCase().includes(search.toLowerCase()) || 
+      const itemName = typeof item.name === 'object' && item.name !== null ? (item.name.name || '') : (item.name || '');
+      const matchSearch = itemName.toLowerCase().includes(search.toLowerCase()) || 
                           (item.registration_id && item.registration_id.toLowerCase().includes(search.toLowerCase()));
       const matchTrack = filterTrack === 'All' || item.track.includes(filterTrack);
       const matchStatus = filterStatus === 'All' || item.status === filterStatus;
@@ -267,7 +268,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                   >
                     <td style={{ padding: '16px', fontSize: '12px', color: C.stone400 }}>{app.registration_id}</td>
                     <td style={{ padding: '16px' }}>
-                      <div style={{ fontSize: '14px', fontWeight: 600, color: C.ivory50, marginBottom: '2px' }}>{app.name}</div>
+                      <div style={{ fontSize: '14px', fontWeight: 600, color: C.ivory50, marginBottom: '2px' }}>{typeof app.name === 'object' && app.name !== null ? (app.name.name || 'Unknown') : app.name}</div>
                       <div style={{ fontSize: '12px', color: C.stone500 }}>{app.email}</div>
                     </td>
                     <td style={{ padding: '16px', fontSize: '13px', color: C.stone400 }}>{app.track}</td>
@@ -326,7 +327,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
               <div style={{ padding: '24px 32px', borderBottom: `1px solid ${C.cardBorder}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <p style={{ fontSize: '11px', letterSpacing: '0.1em', color: C.brass400, textTransform: 'uppercase', fontWeight: 600, marginBottom: '4px' }}>{selectedApp.registration_id}</p>
-                  <h3 style={{ fontFamily: SERIF, fontSize: '24px', color: C.ivory50, fontWeight: 600 }}>{selectedApp.name}</h3>
+                  <h3 style={{ fontFamily: SERIF, fontSize: '24px', color: C.ivory50, fontWeight: 600 }}>{typeof selectedApp.name === 'object' && selectedApp.name !== null ? (selectedApp.name.name || 'Unknown') : selectedApp.name}</h3>
                 </div>
                 <button onClick={() => setSelectedApp(null)} style={{ background: 'transparent', border: 'none', color: C.stone400, cursor: 'pointer' }}><X size={20} /></button>
               </div>
@@ -363,7 +364,7 @@ export default function AdminRegistrations({ openRegistrationId, onOpenRegistrat
                         ) : key.toLowerCase() === 'video' ? (
                           <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: C.brass400, textDecoration: 'none' }}><Video size={14}/> Watch</a>
                         ) : (
-                          <span style={{ fontSize: '14px', color: C.ivory50, fontWeight: 500 }}>{val}</span>
+                          <span style={{ fontSize: '14px', color: C.ivory50, fontWeight: 500 }}>{typeof val === 'object' && val !== null ? JSON.stringify(val) : val}</span>
                         )}
                       </div>
                     )) : (
