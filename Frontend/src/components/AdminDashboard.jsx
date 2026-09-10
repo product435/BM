@@ -17,6 +17,7 @@ import AdminEventExperience from './AdminEventExperience';
 import AdminQASession from './AdminQASession';
 import AdminTheEvent from './AdminTheEvent';
 import AdminEventRegistration from './AdminEventRegistration';
+import AdminPayments from './AdminPayments';
 
 import { AdminThemeContext } from '../context/AdminThemeContext';
 
@@ -617,7 +618,9 @@ export default function AdminDashboard() {
         </header>
 
         {/* Content area */}
-        {active === 'Registrations' ? (
+        {active === 'Payments' ? (
+          <AdminPayments />
+        ) : active === 'Registrations' ? (
           <AdminRegistrations
             openRegistrationId={openRegistrationId}
             onOpenRegistrationHandled={() => setOpenRegistrationId(null)}
