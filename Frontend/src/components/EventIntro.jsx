@@ -37,7 +37,7 @@ export default function EventIntro({ previewData }) {
         .select("*")
         .eq("id", 1)
         .single();
-      
+
       if (introData && !error) {
         setData(introData);
       }
@@ -48,20 +48,20 @@ export default function EventIntro({ previewData }) {
 
   // Use dynamic data if available, fallback to constants
   const eyebrow = data?.eyebrow || "01 — The Event";
-  
+
   // Safe HTML parsing for the title since we allow <span class="t-italic">
   const titleHtml = data?.title || `More than an event. <span class="t-italic t-emerald">A place</span> where ambition meets opportunity.`;
-  
+
   const paragraph1 = data?.paragraph_1 || `${EVENT.org} Business Growth Forum brings together **promising ideas**, executing startups, operating businesses, entrepreneurs, industry experts and **strategic partners** on one curated platform — focused on non-education sectors. Selected ventures may receive access to management guidance, technology, networks, operational support and deal-specific capital connect.`;
   const paragraph2 = data?.paragraph_2 || `One city. One powerful gathering. A space to connect, learn, collaborate and create what comes next — with independent evaluation at every step.`;
-  
+
   const introWords = data?.intro_words || INTRO_WORDS;
   const imageUrl = data?.image_url || IMAGES.networking;
   const mediaHeadline = data?.media_headline || INTRO_MEDIA_CAPTION.headline;
   const mediaPills = data?.media_pills || INTRO_MEDIA_CAPTION.pills;
   const mediaLocation = data?.media_location || `${EVENT.city}, Rajasthan`;
   const stats = data?.stats || INTRO_STATS;
-  const footerNote = data?.footer_note || "Venue and capacity figures are being finalized details will be confirmed ahead of the event.";
+  const footerNote = data?.footer_note || "";
 
   return (
     <section className="intro section" id="about" aria-labelledby="about-title">

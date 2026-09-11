@@ -46,7 +46,7 @@ export const COMPLIANCE_PAGE = {
     {
       heading: "Independent platform",
       body: [
-        "BMI (BM Investment) is an independent non-education business growth platform. It provides practical strategy, structured evaluation, mentorship, capital-connect introductions, and business networking for selected entrepreneurs and businesses.",
+        "BMI (BM Investment) is an independent non-education business growth platform. It provides practical strategy, structured evaluation, mentorship, capital connect introductions, and business networking for selected entrepreneurs and businesses.",
         INDEPENDENCE_DISCLAIMER,
       ],
     },
@@ -60,7 +60,7 @@ export const COMPLIANCE_PAGE = {
     {
       heading: "Capital connect — not a fund",
       body: [
-        "BMI may facilitate deal-specific introductions between screened founders and interested participants. Every participant must independently evaluate each opportunity and complete separate documentation.",
+        "BMI may facilitate deal specific introductions between screened founders and interested participants. Every participant must independently evaluate each opportunity and complete separate documentation.",
         CAPITAL_CONNECT_DISCLAIMER,
         "Nothing on this website constitutes investment advice, a solicitation to invest, or an offer of securities.",
       ],

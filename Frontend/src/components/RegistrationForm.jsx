@@ -363,6 +363,8 @@ function withCategoryDropdowns(fieldsByCategory) {
 // label content (contains "descri"), the same durable, rename-
 // tolerant approach used for the category field above.
 const DESCRIPTION_HINTS = {
+  student: "Your idea (non-education sector) or what you hope to gain — two or three lines is plenty.",
+  visitor: "What brings you to the event, or what you're hoping to explore — two or three lines is plenty.",
   entrepreneur: "What you build, who it serves, and the traction so far.",
   businessTycoon: "What your business builds, and how you champion growth and innovation.",
 };
@@ -375,6 +377,30 @@ function withDescriptionHints(fieldsByCategory) {
       if (!hint || !/descri/i.test(field.label || "")) return field;
       if (field.hint) return field;
       return { ...field, hint };
+    });
+  });
+  return normalized;
+}
+
+// Live form_config data (admin-edited via the form builder) has been
+// found drifting a "Short Description"-style field's own `type` back
+// to the default "text" — reproduced live on Visitor: the Supabase
+// row renders it as a single-line input instead of a multi-line
+// textarea, so typed text overflows sideways instead of wrapping, and
+// it never gets its helper hint (the input path doesn't carry one).
+// This is the exact same class of live-data drift already handled by
+// withCategoryDropdowns/withDescriptionHints above — matched the same
+// durable, rename-tolerant way (label contains "descri", not the
+// field's possibly-admin-renamed `name`) rather than trusting
+// whatever `type` the live row happens to carry, since a description
+// field is never meant to be single-line anywhere in this form.
+function withTextareaDescriptions(fieldsByCategory) {
+  const normalized = {};
+  Object.keys(fieldsByCategory).forEach((categoryId) => {
+    normalized[categoryId] = (fieldsByCategory[categoryId] || []).map((field) => {
+      if (!/descri/i.test(field.label || "")) return field;
+      if (field.type === "textarea") return field;
+      return { ...field, type: "textarea", rows: field.rows || 4 };
     });
   });
   return normalized;
@@ -545,7 +571,7 @@ export default function RegistrationForm({ initialCategory, onCategoryChanged, d
   const activeCategories = dynamicCategories || CATEGORIES;
   // Prefer CMS fields when present, but always inject SHA compliance fields.
   const activeFields = withComplianceFields(
-    withDescriptionHints(withCategoryDropdowns(dynamicFields || FORM_FIELDS))
+    withDescriptionHints(withTextareaDescriptions(withCategoryDropdowns(dynamicFields || FORM_FIELDS)))
   );
 
   const CATEGORY_LABEL = activeCategories.reduce((acc, c) => ({ ...acc, [c.id]: c.title }), {});

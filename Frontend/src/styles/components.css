@@ -6,6 +6,15 @@
 .intro {
   background: var(--ivory-50);
   color: var(--ink-950);
+  /* Scoped to this section only — .section's own shared padding-block
+     (globals.css) stays untouched for every other section. The stats
+     row (.intro-stats) already carries its own top border/padding
+     that reads as a natural stopping point, so the section's full
+     shared bottom padding on top of that left visibly more empty
+     space below the row than above it before the next section
+     starts; trimmed down modestly (and, per this follow-up pass, a
+     little further still) rather than drastically. */
+  padding-bottom: clamp(2.6rem, 5.4vw, 4.6rem);
 }
 
 .intro-grid {
@@ -264,7 +273,24 @@
   margin-top: clamp(2.6rem, 5vw, 4.6rem);
 }
 
+/* All four columns (04 / 06+ / 01 / Stardom Resort) share this exact
+   same flex-column structure — no per-column special-casing. The
+   "Venue" column used to drift out of alignment with its siblings
+   because its .intro-stat-value rendered at a deliberately smaller
+   font-size (to fit "Stardom Resort" on one line) than the other
+   three's shared, much larger font-size — different font-sizes
+   produce different line-box heights, which shifted where the value
+   text's baseline (and therefore the caption below it) landed even
+   though every column's own top padding was identical. Giving
+   .intro-stat-value a fixed min-height (sized to the largest of the
+   two font-sizes' own line box) and bottom-aligning its text with
+   flex, instead of letting each column's height come from its own
+   font-size, pins every column's value baseline to the same slot
+   regardless of how large that column's own text renders — so the
+   caption row below always starts at the same position too. */
 .intro-stat {
+  display: flex;
+  flex-direction: column;
   padding: 1.8rem 1.4rem 0.4rem;
   border-left: 1px solid var(--line-light);
 }
@@ -275,6 +301,9 @@
 }
 
 .intro-stat-value {
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(2rem, 3.6vw, 3.1rem);
   font-family: var(--font-display);
   font-size: clamp(2rem, 3.6vw, 3.1rem);
   font-weight: 420;
@@ -285,38 +314,45 @@
 /* The Venue stat ("Stardom Resort") is always the last of the 4
    INTRO_STATS entries — targeted by position, not a new class, so
    the shared .intro-stat-value rule above (used by the 04/06+/01
-   numeric stats) is untouched; font-family, font-weight, color and
-   (on desktop, below) line-height all still come directly from that
-   shared rule, which is what actually makes this "the same stat
-   value style" rather than a lookalike copy — only font-size differs.
+   numeric stats) is untouched; font-family, color, min-height and
+   the flex/align-items bottom-alignment all still come directly from
+   that shared rule, which is what actually keeps this column's
+   baseline locked to the same slot as its siblings.
 
-   Desktop only: the numeric stats' own font-size (up to 49.6px) does
-   not fit "Stardom Resort" on one line in its actual column — measured
-   directly on the real rendered .intro-stat-value element (not a
-   synthetic copy, which under-measured the real letter-spacing/kerning
-   and gave a false "it fits" reading the first time this was tried):
-   the venue column's available text width is ~191px at 1024px and
-   plateaus at ~265px from about 1366px up, and the largest font-size
-   that stays under that width at each of those points is ~26px and
-   ~36.6px respectively. clamp(1.5rem, 2.4vw, 2.25rem) = 24px-36px
-   stays safely under both measured limits at every width in between,
-   so "Stardom Resort" reliably stays on one line without a hardcoded
-   fixed width or negative margin. line-height 1 matches the numeric
-   stats exactly now that this never wraps on desktop. */
+   white-space: nowrap is the actual fix for the two-line wrap (a
+   previous size-only attempt still measured wider than the column
+   at some widths and wrapped to "Stardom" / "Resort" anyway, which
+   pushed this column's own height past its siblings' shared
+   min-height and dropped "VENUE" a full line below "CITY — JAIPUR").
+   Forcing nowrap removes that risk outright regardless of exact
+   column width.
+
+   Sizing this up to visually match 04/06+/01 (a longer string, so it
+   can't just take their same font-size without wrapping/overflowing
+   the ~191px-wide column at 1024px) leans on two levers besides
+   font-size: font-weight bumped from the shared 420 to 620 adds the
+   bulk of the "big and bold" read at a smaller physical size, and a
+   tightened letter-spacing condenses the string's own rendered width
+   so a larger font-size still clears the same measured column-width
+   ceiling as before with nowrap active. */
 .intro-stat:last-child .intro-stat-value {
-  font-size: clamp(1.5rem, 2.4vw, 2.25rem);
-  line-height: 1;
+  font-size: clamp(1.3rem, 2.15vw, 2rem);
+  font-weight: 620;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
-/* Mobile keeps its own separately-tuned size from the earlier
-   "reduce the oversized venue value on mobile" fix — line-height
-   1.15 (not the desktop rule's 1) still applies there since
-   "Stardom"/"Resort" can wrap to 2 lines at these narrower widths;
-   unchanged here to avoid any mobile regression. */
+/* Mobile: nowrap (inherited from the rule above) plus the same
+   weight/letter-spacing treatment, sized to still fit "Stardom
+   Resort" on one line at the narrowest supported width (~360px).
+   min-height on .intro-stat-value (shared rule above, sized off the
+   04/06+/01 columns' own mobile font-size) still gives this single
+   line of text a slot at least as tall as its siblings need, so it
+   can't grow taller than them and drop its caption out of row. */
 @media (max-width: 640px) {
   .intro-stat:last-child .intro-stat-value {
-    font-size: clamp(1.375rem, 5vw, 1.5rem);
-    line-height: 1.15;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    line-height: 1;
   }
 }
 
@@ -2152,11 +2188,37 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  /* align-items: start (grid's default is `stretch`) is the actual
+     structural fix for the label/error overlap bug: with `stretch`,
+     every .field in a row is forced to the SAME height as the
+     row's tallest cell (e.g. a 3-line wrapped screening-question
+     label next to a 1-line "Short Description" label), and
+     .field-label's `position: absolute; top: 1.35rem` is measured
+     from that stretched box — NOT from the field's own natural
+     content height. That let a short field's label/error end up
+     positioned using headroom that belonged to its taller row
+     neighbor, rendering it visually on top of the next row's
+     content. `start` makes each .field size to its own natural
+     content height instead, so its own label/input/error always
+     stack in that field's own real box, and one row's height can
+     never bleed into a neighboring row's text position. */
+  align-items: start;
 }
 
-/* Floating-label field */
+/* Floating-label field. Every field (plain input, textarea, select,
+   and the custom category-select) is a self-contained flex column —
+   label, then input, then optional hint/error — so label/input/
+   hint/error always stack in normal document flow inside this one
+   box and can never overlap a sibling field's content, regardless of
+   how many lines a label or error wraps to. Floating-label fields
+   still visually float their label over the input via
+   .field-label's own absolute positioning (kept for the focus/filled
+   animation), but that absolute box is anchored to THIS flex column
+   only, which now always sizes to its own real content. */
 .field {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -2235,12 +2297,29 @@
    `.field-input` base rule (width, background, border, color, font),
    not a replacement of it — this only fixes the sizing/wrapping
    behavior specific to a multi-line field. */
+/* margin-top (not padding-top) pushes the TEXTAREA'S OWN BOX down
+   below the floated label, rather than reserving room for the label
+   inside the box. This distinction matters specifically because this
+   field scrolls its own content (overflow-y: auto, a deliberate fixed
+   height instead of auto-grow): padding-top only protects the FIRST
+   visible line — once typed text exceeds the box height and the
+   browser auto-scrolls the textarea to keep the caret in view, every
+   later line scrolls up through that padding-top region too, so a
+   padding-based gap (confirmed live, via a real typed-overflow test)
+   stops giving any protection the moment scrolling starts, and typed
+   text renders flush against the top of the scrollable box — which
+   geometrically overlaps the label sitting there. margin-top instead
+   moves the whole scrollable box's top edge below the label, so the
+   label and the textarea's rectangle never intersect at any scroll
+   position — scrolling inside the box can never reach content the
+   label sits over, because the label isn't over the box at all. */
 .field-textarea {
   box-sizing: border-box;
   width: 100%;
   resize: vertical;
   height: 6.6rem;
-  padding-top: 1.55rem;
+  margin-top: 1.4rem;
+  padding-top: 0.65rem;
   line-height: 1.5;
   overflow-x: hidden;
   overflow-y: auto;
@@ -2330,12 +2409,42 @@
   -webkit-line-clamp: 2;
   white-space: normal;
   overflow: hidden;
+  line-height: 1.35;
   transform: translateY(-1rem) scale(0.68);
   transform-origin: left top;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 600;
   color: var(--brass-300);
+}
+
+/* Category dropdowns (Industry / Category, Business Category, and
+   every COMPLIANCE_FIELDS dropdown) no longer need a guessed
+   padding-top here — their label now sits in normal flex flow (see
+   .field:has(> .category-select) below) and pushes this trigger down
+   by its own real, unbounded height instead of relying on the
+   trigger's padding to reserve room for it. Only the same small
+   single-line breathing room every other field's padding-top gives
+   its own label is kept. */
+.category-select-trigger {
+  padding-top: 1rem;
+}
+
+/* This label is no longer position: absolute (see
+   .field:has(> .category-select) below), so it no longer needs
+   -webkit-line-clamp to stop it from silently overflowing a box it
+   doesn't share space with — clamping it was the actual cause of the
+   two longest screening-question labels ("Are you connected with
+   coaching, test-prep…", "Do you have any current or past relation
+   with…") getting cut off with "…" instead of showing in full.
+   Un-clamping here lets them wrap onto as many lines as the label
+   actually needs; the trigger below still can't overlap it, because
+   flex column layout (not a padding guess) is what separates them
+   now. */
+.field:has(> .category-select) .field-label--floated {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
 }
 
 /* Mobile only: the narrowest 2-column labels ("Contact Person Name")
@@ -2484,6 +2593,14 @@ select.field-input option:focus {
   padding-right: 1.5rem;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1.5 2 6 6.5 10.5 2' stroke='%23a49a84' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
+  /* The label used to sit INSIDE this trigger's own padded box
+     (position: absolute, overlapping its top), which is why `center`
+     alone used to land the chevron above the text instead of beside
+     it — a top-offset had to compensate for the label's reserved
+     space. Now that the label sits outside the trigger in normal flex
+     flow (see .field:has(> .category-select) below), the trigger's
+     box only ever contains its own single line of text, so `center`
+     correctly centers the chevron on that text again. */
   background-position: right 0.1rem center;
   background-size: 0.7rem;
   cursor: pointer;
@@ -2551,6 +2668,60 @@ select.field-input option:focus {
   padding-bottom: 0.5rem;
 }
 
+/* Category-select fields (Industry/Category, Business Category, and
+   every COMPLIANCE_FIELDS dropdown — Business Sector and the two
+   screening questions) needed a fixed guessed padding-top on
+   .category-select-trigger to keep its permanently-floated label from
+   overlapping "Select category" below it (see the removed comment
+   this replaced). That only ever worked up to the exact line count
+   the guess was sized for — the two longest screening-question
+   labels genuinely need more than 2 lines to show in full at some
+   widths, and -webkit-line-clamp: 2/3 was truncating them with "…"
+   rather than let them wrap further, which is the actual bug being
+   fixed here.
+
+   Flex column + DOM-order override replaces the whole
+   padding-top-guess approach: the label goes back to sitting in
+   NORMAL FLOW (not position: absolute) so it genuinely occupies
+   real, unbounded height for however many lines it wraps to — the
+   trigger below it is a true flex sibling, not overlapping content
+   the label happens to be padded to avoid. `order` puts the label
+   first visually even though it's the LAST child in the DOM (the
+   sibling-combinator selectors above still need it after the trigger
+   to detect state), so this needs no JSX change. */
+.field:has(> .category-select) {
+  display: flex;
+  flex-direction: column;
+}
+
+.field:has(> .category-select) > .category-select {
+  order: 2;
+}
+
+.field:has(> .category-select) > .field-label {
+  order: 1;
+  position: static;
+  margin-bottom: 0.35rem;
+}
+
+/* Root cause of the error-message-over-label overlap on every
+   dropdown field (Business Sector, the two screening questions,
+   Industry/Category, Business Category): .field-label and
+   .category-select are explicitly reordered above (order: 1 / 2) so
+   the label renders before the trigger despite being last in the
+   DOM, but the error/hint <p> — the actual LAST DOM child — was
+   never given an order of its own. An unset `order` defaults to 0,
+   which put it FIRST in visual flex order, ahead of both the
+   order:1 label and the order:2 trigger — rendering it directly on
+   top of the label instead of below the trigger where it belongs.
+   order: 3 places it after both, restoring normal label → select →
+   error stacking in the flex column, with no absolute positioning or
+   negative offsets involved anywhere in this fix. */
+.field:has(> .category-select) > .field-error,
+.field:has(> .category-select) > .field-hint {
+  order: 3;
+}
+
 /* Root cause of the mobile clipping this whole component exists to
    avoid: once a category is chosen, this field renders inside
    .reg-form-collapse.is-open, whose direct child (.reg-form) gets
@@ -2568,7 +2739,7 @@ select.field-input option:focus {
 }
 
 .field-hint {
-  margin-top: 0.6rem;
+  margin-top: 0.35rem;
   font-size: 0.74rem;
   color: var(--stone-500);
   line-height: 1.5;
@@ -2633,26 +2804,24 @@ select.field-input option:focus {
     font-size: 0.9rem;
   }
 
-  /* Height (not just padding-top) is raised here too — the shared
-     mobile padding-top above already reserves room for the floated
-     label, but on a fixed-height textarea that same padding also
-     eats into the space available for actually-typed content before
-     the browser auto-scrolls the textarea to keep the caret visible.
-     That auto-scroll moves the content, not the padding, so once it
-     kicks in the label — which sits outside the textarea's own
-     scrollable area — ends up visually overlapping whatever text the
-     scroll brings to the top, no matter how much padding-top is set
-     (confirmed live: even 3.4rem of padding-top didn't stop it, since
-     the real problem was the box being too short for 2-3 real
-     sentences in the first place, not the padding amount). 7.3rem
-     leaves room for label clearance plus about 3 lines of typed
-     content — enough for the hint's own "two or three lines is
-     plenty" guidance — without triggering that scroll in normal use;
-     resize: vertical (desktop's own resize:none override elsewhere is
-     unaffected) still lets the user grow it further for longer text. */
+  /* Confirmed live (typed-overflow test at 375px, screenshotted with
+     the textarea and label boxes outlined): padding-top NEVER stops
+     this overlap, at any size, because padding-top only protects the
+     box's first visible line — once typed content exceeds the fixed
+     height and the browser auto-scrolls the textarea to keep the
+     caret in view, later lines scroll straight through the
+     padding-top region and render flush against the box's top edge,
+     which is exactly where the label sits. margin-top (see the base
+     .field-textarea rule) is the real fix — it moves the textarea's
+     own rectangle below the label instead of reserving space inside
+     it, so the two can never geometrically overlap regardless of
+     scroll position. Only the mobile-specific margin-top delta is
+     restated here (mobile's floated label sits slightly lower/taller
+     than desktop's); height and padding-top are inherited unchanged
+     from the base rule. */
   .field-textarea {
     height: 7.3rem;
-    padding-top: 2.6rem;
+    margin-top: 1.9rem;
   }
 
   .field-input:focus~.field-label,
@@ -2662,9 +2831,13 @@ select.field-input option:focus {
     letter-spacing: 0.08em;
   }
 
-  /* Category dropdown trigger's own padding-right (for the chevron)
-     is untouched — only the shared top/bottom padding above applies,
-     inherited via the .field-input class every trigger also carries. */
+  /* No mobile-specific .category-select-trigger override needed any
+     more — now that its label sits outside the trigger in normal flex
+     flow instead of position: absolute overlapping it (see
+     .field:has(> .category-select) below), the trigger's own padding
+     and chevron position never depended on the label's line count in
+     the first place, so the base rule's values already work
+     correctly at every width. */
 }
 
 /* Registration Fees — read-only display field, styled like the

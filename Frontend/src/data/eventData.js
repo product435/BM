@@ -93,14 +93,14 @@ export const WHY_ITEMS = [
     index: "02",
     title: "Business Networking",
     description:
-      "Founders, operators, early innovators and partners in one place — the conversations here tend to outlive the event itself.",
+      "Founders, operators, early innovators and partners in one place the conversations here tend to outlive the event itself.",
     tags: ["Founders", "Operators", "Peers"],
   },
   {
     index: "03",
     title: "Ideas & Innovation",
     description:
-      "From early-stage ideas to scaling businesses — see what is being built and where the energy in the event is pointing.",
+      "From early stage ideas to scaling businesses see what is being built and where the energy in the event is pointing.",
     tags: ["Ideas", "Growth", "New Models"],
   },
   {
@@ -114,7 +114,7 @@ export const WHY_ITEMS = [
     index: "05",
     title: "Capital Connect Conversations",
     description:
-      "Where promising ideas meet opportunity. Explore how deal-specific introductions work and how to be ready for yours — with independent evaluation at every step.",
+      "Where promising ideas meet opportunity. Explore how deal specific introductions work and how to be ready for yours with independent evaluation at every step.",
     tags: ["Capital Connect", "Readiness", "Evaluation"],
   },
 ];
@@ -166,7 +166,7 @@ export const EXPERIENCE_HIGHLIGHTS = [
   {
     index: "05",
     title: "Capital Connect Sessions",
-    description: "Deal-specific introductions — each participant decides independently.",
+    description: "Deal specific introductions each participant decides independently.",
   },
 ];
 
@@ -185,9 +185,9 @@ export const CATEGORIES = [
     id: "student",
     index: "01",
     title: "Early Innovator",
-    tagline: "For ambitious early-stage ideas from non-education sectors",
+    tagline: "For ambitious early stage ideas from non-education sectors",
     description:
-      "Walk in with your idea however early it is. This is where it meets its first audience and its first real questions — focused on non-education businesses.",
+      "Walk in with your idea however early it is. This is where it meets its first audience and its first real questions focused on non-education businesses.",
     cta: "Register as early innovator",
   },
   {
@@ -196,7 +196,7 @@ export const CATEGORIES = [
     title: "Visitor",
     tagline: "For those who want to be in the event",
     description:
-      "No pitch, no pressure. Just the best seats in the house for ideas, capital-connect conversations and honest business dialogue.",
+      "No pitch, no pressure. Just the best seats in the house for ideas, capital connect conversations and honest business dialogue.",
     cta: "Register as visitor",
   },
   {
@@ -205,7 +205,7 @@ export const CATEGORIES = [
     title: "Entrepreneur",
     tagline: "For founders building something real",
     description:
-      "Show your business to operators, peers and interested participants. Come for the pitch — leave with the connections.",
+      "Show your business to operators, peers and interested participants. Come for the pitch leave with the connections.",
     cta: "Register as entrepreneur",
   },
   {
@@ -237,7 +237,7 @@ export const REGISTRATION_FEES = {
 
 export const PAYMENT_UPI_ID = "bmipresents@upi";
 
-export const WHATSAPP_NUMBER = "919752430783";
+export const WHATSAPP_NUMBER = "917568809284";
 export const WHATSAPP_MESSAGE =
   "Hello! I'm interested in the BMI Business Growth Forum in Jaipur. I need help with registration. Please guide me.";
 
@@ -274,8 +274,8 @@ export const BMI_SUPPORT_MODEL = {
   items: [
     {
       index: "01",
-      title: "Stage-Appropriate Capital Connect",
-      description: "Deal-specific introductions after screening — no pooled funds or guaranteed outcomes.",
+      title: "Stage Appropriate Capital Connect",
+      description: "Deal specific introductions after screening — no pooled funds or guaranteed outcomes.",
     },
     {
       index: "02",
@@ -309,7 +309,7 @@ export const HOW_IT_WORKS = [
   {
     index: "02",
     title: "Screen",
-    description: "We review sector fit and compliance — non-education focus and conflict checks.",
+    description: "We review sector fit and compliance non-education focus and conflict checks.",
   },
   {
     index: "03",
@@ -610,6 +610,14 @@ export const FORM_FIELDS = {
     { name: "phone", label: "Phone Number", type: "tel", required: true, autoComplete: "tel" },
     { name: "city", label: "City", type: "text", required: true },
     { name: "role", label: "Role", type: "text", required: true },
+    {
+      name: "description",
+      label: "Short Description",
+      type: "textarea",
+      required: false,
+      rows: 4,
+      hint: "What brings you to the event, or what you're hoping to explore — two or three lines is plenty.",
+    },
     ...COMPLIANCE_FIELDS,
   ],
 };

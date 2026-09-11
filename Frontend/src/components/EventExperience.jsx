@@ -31,7 +31,7 @@ export default function EventExperience() {
             className="sec-head--inline"
           />
           <p className="exp-note">
-            More than capital alone — a structured ecosystem built around
+            More than capital alone a structured ecosystem built around
             evaluation, expertise, support and meaningful business
             connections for non-education ventures.
           </p>

@@ -30,8 +30,8 @@ export default function FundingOpportunity({ onRegister }) {
             <p className="funding-copy">
               BMI supports selected non-education ideas and businesses with the
               right blend of <strong>capital connect, capability, and connections</strong>{" "}
-              to help them grow and scale — through screening, evaluation and
-              deal-specific introductions.
+              to help them grow and scale through screening, evaluation and
+              deal specific introductions.
             </p>
             <p className="funding-copy" style={{ marginTop: "0.75rem", fontSize: "0.875rem", opacity: 0.85 }}>
               {CAPITAL_CONNECT_DISCLAIMER}

@@ -6,6 +6,7 @@ import { WHATSAPP_MESSAGE, WHATSAPP_NUMBER } from "../data/eventData.js";
 export default function Contact() {
   const { title, eyebrow, intro, email, note } = CONTACT_PAGE;
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const whatsappDisplay = `+${WHATSAPP_NUMBER.slice(0, 2)} ${WHATSAPP_NUMBER.slice(2, 7)} ${WHATSAPP_NUMBER.slice(7)}`;
 
   return (
     <LegalLayout eyebrow={eyebrow} title={title}>
@@ -19,7 +20,7 @@ export default function Contact() {
       <p style={{ marginBottom: "0.75rem", lineHeight: 1.65 }}>
         <strong>WhatsApp:</strong>{" "}
         <a href={whatsappHref} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>
-          Message us
+          {whatsappDisplay}
         </a>
       </p>
       <p style={{ marginTop: "1.5rem", fontSize: "0.875rem", opacity: 0.75, lineHeight: 1.55 }}>{note}</p>
