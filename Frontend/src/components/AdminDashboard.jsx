@@ -112,7 +112,16 @@ export default function AdminDashboard() {
   const { C, theme, toggleTheme } = React.useContext(AdminThemeContext);
   const [active, setActive] = useState('Dashboard');
   const [stats, setStats] = useState(null);
+  const [adminEmail, setAdminEmail] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        setAdminEmail(user.email);
+      }
+    });
+  }, []);
 
   // ── Sidebar toggle state ──────────────────────────────────────
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(() => {
@@ -427,7 +436,7 @@ export default function AdminDashboard() {
             {(isSidebarExpanded || isMobile) && (
               <div style={{ overflow: 'hidden' }}>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: C.ivory50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Admin User</p>
-                <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@bminvestment.com</p>
+                <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{adminEmail || 'Loading...'}</p>
               </div>
             )}
           </div>
@@ -587,7 +596,7 @@ export default function AdminDashboard() {
                         </div>
                         <div style={{ overflow: 'hidden' }}>
                           <p style={{ fontSize: '13px', fontWeight: 600, color: C.ivory50, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Admin User</p>
-                          <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>admin@bminvestment.com</p>
+                          <p style={{ fontSize: '11px', color: C.stone500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{adminEmail || 'Loading...'}</p>
                         </div>
                       </div>
                     </div>
